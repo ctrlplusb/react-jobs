@@ -1,4 +1,4 @@
-# React Jobs 🕴
+# react-jobs 🕴
 
 Attach asynchronous tasks to your components, with SSR support.
 

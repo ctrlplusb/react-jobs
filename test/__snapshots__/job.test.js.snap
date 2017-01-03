@@ -1,0 +1,43 @@
+exports[`job() rendering should render the OnError component 1`] = `
+<FooWithJob
+  bar="baz">
+  <OnError
+    bar="baz">
+    <div>
+      Oh no!
+    </div>
+  </OnError>
+</FooWithJob>
+`;
+
+exports[`job() rendering should render the OnWorking component 1`] = `
+<FooWithJob
+  bar="baz">
+  <OnWorking
+    bar="baz">
+    <div>
+      Busy...
+    </div>
+  </OnWorking>
+</FooWithJob>
+`;
+
+exports[`job() rendering should render the default error component 1`] = `
+<FooWithJob>
+  <div>
+    Job Failed
+  </div>
+</FooWithJob>
+`;
+
+exports[`job() rendering should render the wrapped component when the work is complete 1`] = `<FooWithJob />`;
+
+exports[`job() rendering should render the wrapped component when the work is complete 2`] = `
+<FooWithJob>
+  <Foo>
+    <div>
+      Foo
+    </div>
+  </Foo>
+</FooWithJob>
+`;

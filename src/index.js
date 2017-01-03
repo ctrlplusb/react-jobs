@@ -1,11 +1,8 @@
 /* @flow */
+/* eslint-disable import/prefer-default-export */
 
-import helloWorld from './helloWorld';
-import goodbyeWorld from './goodbyeWorld';
-import MyComponent from './MyComponent';
+import job from './job';
 
 export {
-  helloWorld,
-  goodbyeWorld,
-  MyComponent,
+  job,
 };

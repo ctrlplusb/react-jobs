@@ -1,7 +1,7 @@
 {
-  "name": "npm-library-starter",
+  "name": "react-jobs",
   "version": "0.0.1",
-  "description": "Starter kit for npm libraries.",
+  "description": "Attach asynchronous tasks to your components, with SSR support.",
   "license": "MIT",
   "main": "commonjs/index.js",
   "files": [
@@ -14,9 +14,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ctrlplusb/npm-library-starter.git"
+    "url": "https://github.com/ctrlplusb/react-jobs.git"
   },
-  "homepage": "https://github.com/ctrlplusb/npm-library-starter#readme",
+  "homepage": "https://github.com/ctrlplusb/react-jobs#readme",
   "author": "Sean Matheson <sean@ctrlplusb.com>",
   "keywords": [
     "library"
@@ -36,7 +36,7 @@
     "test:coverage:deploy": "yarn run coverage && codecov"
   },
   "peerDependencies": {
-    "react": ">=15.0.0"
+    "react": ">=14.0.0 || >=15.0.0"
   },
   "devDependencies": {
     "app-root-dir": "1.0.2",

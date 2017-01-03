@@ -1,15 +1,11 @@
-> This is a starter kit for an npm library.  See the [STARTER](/docs/STARTER.md) docs for more information on how it is configured and how you should use it.  Delete this message and customise the readme below to your own needs.
+# React Jobs 🕴
 
-# Your Library Name
+Attach asynchronous tasks to your components, with SSR support.
 
-A one liner description of your library.
-
-___BADGES: EDIT THESE TO USE THE URLS FOR EACH SERVICE CONFIGURED FOR YOUR OWN LIBRARY, THEN REMOVE THIS MESSAGE___
-
-[![npm](https://img.shields.io/npm/v/npm-library-starter.svg?style=flat-square)](http://npm.im/npm-library-starter)
-[![MIT License](https://img.shields.io/npm/l/npm-library-starter.svg?style=flat-square)](http://opensource.org/licenses/MIT)
-[![Travis](https://img.shields.io/travis/ctrlplusb/npm-library-starter.svg?style=flat-square)](https://travis-ci.org/ctrlplusb/npm-library-starter)
-[![Codecov](https://img.shields.io/codecov/c/github/ctrlplusb/npm-library-starter.svg?style=flat-square)](https://codecov.io/github/ctrlplusb/npm-library-starter)
+[![npm](https://img.shields.io/npm/v/react-jobs.svg?style=flat-square)](http://npm.im/react-jobs)
+[![MIT License](https://img.shields.io/npm/l/react-jobs.svg?style=flat-square)](http://opensource.org/licenses/MIT)
+[![Travis](https://img.shields.io/travis/ctrlplusb/react-jobs.svg?style=flat-square)](https://travis-ci.org/ctrlplusb/react-jobs)
+[![Codecov](https://img.shields.io/codecov/c/github/ctrlplusb/react-jobs.svg?style=flat-square)](https://codecov.io/github/ctrlplusb/react-jobs)
 
 ## TOCs
 
@@ -18,14 +14,8 @@ ___BADGES: EDIT THESE TO USE THE URLS FOR EACH SERVICE CONFIGURED FOR YOUR OWN L
 
 ## Introduction
 
-An introduction to your library...
+Coming soon.
 
 ## FAQs
 
-___A common question around your library?___
-
-The answer to the question.
-
-___A common question around your library?___
-
-The answer to the question.
+> Let me know your questions...

@@ -2,6 +2,13 @@
 
 No practical release has been made as of yet, not even a dirty alpha.
 
+Todo:
+
+ - [X] job declaration API
+ - [ ] SSR helper
+ - [ ] docs
+ - [ ] examples
+
 ---
 
 # react-jobs 🕴

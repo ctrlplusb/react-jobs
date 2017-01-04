@@ -31,13 +31,13 @@ Attach sync/async "jobs" to your components, with SSR support.
 This library takes heavy inspiration from the amazing [`react-apollo`](https://github.com/apollostack/react-apollo) library to provide you with a generic mechanism of attaching "jobs" to your React Components.
 
 You can use these "jobs" to do any of the following:
- - Execute a sync/async side effect when your component renders, also letting your component know when an async side effect has completed.
  - Resolve additional data for your components in a sync/async manner.
+ - Execute a sync/async side effect when your component renders, also letting your component know when an async side effect has completed.
  - ?
 
 It provides you with a simple `function` API which allows you to easily provide mechanisms like data caching or integrations with 3rd party libraries (e.g. Redux).
 
-We additionally provide you with a mechanism of handling your asynchronous jobs when rendering on the server (i.e. SSR/universal/isomorphic apps).
+We additionally provide you with a mechanism to process asynchronous jobs when doing server rendering (i.e. within SSR/universal/isomorphic apps).
 
 ## Installation
 

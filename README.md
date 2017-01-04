@@ -1,3 +1,9 @@
+## ___WIP___
+
+No practical release has been made as of yet, not even a dirty alpha. 
+
+---
+
 # react-jobs 🕴
 
 Attach asynchronous work to your components, with SSR support.

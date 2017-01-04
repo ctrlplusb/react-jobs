@@ -134,19 +134,19 @@ function Products({ job, categoryID }) {
   // the work you attached to your component.
 
   if (job.inProgress) {
-    // If the work is still being processed (i.e. the Promise
-    // is not yet resolved) then the `job.inProgress` boolean flag
-    // value will be set to `true`.
+    // This will only be true when you return a Promise from
+    // your work function below.  So when returning the
+    // cache result inProgress will be `false`.
     return <div>Retrieving...</div>;
   }
 
   if (job.error) {
-    // If an error occurred whilst trying to execute your work
-    // then the `job.error` will contain the error.
     return <div>Oh noes!</div>;
   }
 
   // Yay! We have the results!
+  // This could have come from our cache or from the
+  // Promise resolution.
   return (
     <div>
       {
@@ -161,10 +161,6 @@ function Products({ job, categoryID }) {
 let jobResultCache = null;
 
 export default job(
-  // Provide a function defining the work that needs to be done.
-  // This function will be provided the props passed to your
-  // component and must return a Promise which resolves with
-  // the results.
   function work(props) {
     if (jobResultCache) {
       // Our cache is populated, so we will simply return

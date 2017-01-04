@@ -3,24 +3,19 @@
 import React, { Component } from 'react';
 import { getDisplayName } from './utils';
 
-type Args = {
-  work: Function,
-};
+type Work = (props : Object) => any;
 
 type State = {
+  inProgress: boolean,
   result?: any,
   error?: any,
 };
 
 type Props = Object;
 
-export default function job(args : Args) {
-  if (typeof args !== 'object') {
-    throw new Error('You must provide an options object to job()');
-  }
-  const { work } = args;
+export default function job(work : Work) {
   if (typeof work !== 'function') {
-    throw new Error('You must provide a work function to the job\'s options');
+    throw new Error('You must provide a function to a react-jobs job declaration.');
   }
 
   return function WrapComponentWithJob(WrappedComponent : Function) {
@@ -30,32 +25,31 @@ export default function job(args : Args) {
 
       constructor(props : Props) {
         super(props);
-        this.state = {};
+        this.state = { inProgress: false };
       }
 
       componentWillMount() {
-        const inProgress = work();
-        if (typeof inProgress === 'undefined' || typeof inProgress.then !== 'function') {
-          throw new Error('work(props) should return a Promise.');
+        const x = work(this.props);
+
+        if (typeof x === 'undefined' || typeof x.then !== 'function') {
+          // Synchronous result.
+          this.setState({ result: x });
+        } else {
+          // Asynchronous result.
+          this.setState({ inProgress: true });
+
+          // Resolve the promise...
+          x
+            .then((result) => { this.setState({ inProgress: false, result }); })
+            .catch((error) => {
+              console.warn('Job failed:\n', error); // eslint-disable-line no-console
+              this.setState({ inProgress: false, error });
+            });
         }
-        inProgress.then(
-          (result) => { this.setState({ result }); },
-          (error) => {
-            console.warn('Job failed:\n', error); // eslint-disable-line no-console
-            this.setState({ error });
-          },
-        );
       }
 
       render() {
-        const { result, error } = this.state;
-
-        const jobProp = {
-          loading: !result && !error,
-          result,
-          error,
-        };
-
+        const jobProp = Object.assign({}, this.state);
         return <WrappedComponent {...this.props} job={jobProp} />;
       }
     }

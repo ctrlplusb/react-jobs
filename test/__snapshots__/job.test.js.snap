@@ -1,0 +1,15 @@
+exports[`job() rendering should set the "result" immediately if the work does not return a promise 1`] = `
+<FooWithJob>
+  <Foo
+    job={
+      Object {
+        "inProgress": false,
+        "result": "bob",
+      }
+    }>
+    <div>
+      Foo
+    </div>
+  </Foo>
+</FooWithJob>
+`;

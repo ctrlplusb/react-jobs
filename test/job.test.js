@@ -13,7 +13,6 @@ const resolveAfter = (time : number, result : any = null) => new Promise(resolve
 const rejectAfter = (time : number, error : any) => new Promise((resolve, reject) => {
   setTimeout(() => reject(error || new Error('poop')), time);
 });
-const validOptions = { work: () => resolveAfter(1) };
 const workTime = 10; // ms
 const Foo = () => <div>Foo</div>;
 
@@ -22,34 +21,24 @@ describe('job()', () => {
 
   describe('options', () => {
     it('returns a function', () => {
-      const actual = typeof job({ work: () => undefined });
+      const actual = typeof job(() => undefined);
       const expected = 'function';
       expect(actual).toEqual(expected);
     });
 
-    it('should throw if no options are provided', () => {
-      // $FlowIgnore: we expect this to flow error
-      expect(() => job()).toThrowError(/must provide an options object/);
-    });
-
-    it('should throw if invalid type provided as options', () => {
-      // $FlowIgnore: we expect this to flow error
-      expect(() => job(1)).toThrowError(/must provide an options object/);
-    });
-
     it('should throws if no work is provided', () => {
       // $FlowIgnore: we expect this to flow error
-      expect(() => job({})).toThrowError(/must provide a work function/);
+      expect(() => job()).toThrowError(/provide a function to a react-jobs/);
     });
 
     it('should throws if the work is invalid', () => {
       // $FlowIgnore: we expect this to flow error
-      expect(() => job({ work: 1 })).toThrowError(/must provide a work function/);
+      expect(() => job(1)).toThrowError(/provide a function to a react-jobs/);
     });
   });
 
   describe('higher order component', () => {
-    const hoc = job(validOptions);
+    const hoc = job(() => resolveAfter(1));
     const actual = hoc(Foo);
 
     it('should return a "class" component', () => {
@@ -67,37 +56,44 @@ describe('job()', () => {
   });
 
   describe('rendering', () => {
-    it('throws if the work does not return a promise', () => {
-      const InvalidFooWithJob = job({ work: () => () => undefined })(Foo);
-      expect(() => shallow(<InvalidFooWithJob />))
-        .toThrowError(/work\(props\) should return a Promise/);
+    it('should set the "result" immediately if the work does not return a promise', () => {
+      const FooWithJob = job(() => 'bob')(Foo);
+      expect(mount(<FooWithJob />)).toMatchSnapshot();
     });
 
-    it('should set "loading" when processing work', () => {
-      const FooWithJob = job({ work: () => resolveAfter(workTime) })(Foo);
+    it('should provide the props to the work function', () => {
+      const expected = { foo: 'bar', baz: 'qux' };
+      let actual;
+      const FooWithJob = job((props) => { actual = props; })(Foo);
+      mount(<FooWithJob {...expected} />);
+      expect(actual).toMatchObject(expected);
+    });
+
+    it('should set "inProgress" when processing work', () => {
+      const FooWithJob = job(() => resolveAfter(workTime))(Foo);
       const actual = shallow(<FooWithJob />).find(Foo).props();
-      const expected = { job: { loading: true, result: undefined, error: undefined } };
+      const expected = { job: { inProgress: true } };
       expect(actual).toMatchObject(expected);
     });
 
     it('should set "result" when work completes successfully', () => {
-      const FooWithJob = job({ work: () => resolveAfter(workTime, 'result') })(Foo);
+      const FooWithJob = job(() => resolveAfter(workTime, 'result'))(Foo);
       const renderWrapper = mount(<FooWithJob />);
       // Allow enough time for work to complete
       return resolveAfter(workTime + 5).then(() => {
         const actual = renderWrapper.find(Foo).props();
-        const expected = { job: { loading: false, result: 'result', error: undefined } };
+        const expected = { job: { inProgress: false, result: 'result' } };
         expect(actual).toMatchObject(expected);
       });
     });
 
     it('should set "error" when work fails', () => {
-      const FooWithJob = job({ work: () => rejectAfter(workTime, 'error') })(Foo);
+      const FooWithJob = job(() => rejectAfter(workTime, 'error'))(Foo);
       const renderWrapper = mount(<FooWithJob />);
       // Allow enough time for work to complete
       return resolveAfter(workTime + 5).then(() => {
         const actual = renderWrapper.find(Foo).props();
-        const expected = { job: { loading: false, result: undefined, error: 'error' } };
+        const expected = { job: { inProgress: false, error: 'error' } };
         expect(actual).toMatchObject(expected);
       });
     });

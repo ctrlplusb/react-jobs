@@ -20,7 +20,7 @@ Attach sync/async "jobs" to your components, with SSR support.
   - [Usage](#usage)
   - [Examples](#examples)
     - [Simple Async Example](#simple-async-example)
-    - [Simple Caching Async Example](#simple-caching-async-example)
+    - [Simple Async Example with Caching](#simple-async-example-with-caching)
     - [Redux Example](#redux-example)
   - [API](#api)
     - [job](#job)
@@ -118,7 +118,7 @@ export default job(
 
 ```
 
-### Simple Caching Async Example
+### Simple Async Example with Caching
 
 In the below example we implement a very simple caching strategy within our "job" declaration.  Using a caching strategy you get the following benefits:
 

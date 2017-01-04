@@ -5,7 +5,7 @@ export default function job(args) {
   if (typeof args !== 'object') {
     throw new Error('You must provide an options object to job()');
   }
-  const { work, OnError, OnWorking } = args;
+  const { work } = args;
   if (typeof work !== 'function') {
     throw new Error('You must provide a work function to the job\'s options');
   }
@@ -34,17 +34,13 @@ export default function job(args) {
       render() {
         const { result, error } = this.state;
 
-        if (error) {
-          return OnError ? <OnError {...this.props} /> : <div>Job Failed</div>;
-        }
+        const jobProp = {
+          loading: !result && !error,
+          result,
+          error,
+        };
 
-        if (result) {
-          return <WrappedComponent {...result} />;
-        }
-
-        return OnWorking
-          ? <OnWorking {...this.props} />
-          : null;
+        return <WrappedComponent {...this.props} job={jobProp} />;
       }
     }
     ComponentWithJob.displayName = `${getDisplayName(WrappedComponent)}WithJob`;

@@ -1,5 +1,8 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
+import { warningsAsErrors } from './__helpers__';
+
+// Under Test.
 import job from '../src/job';
 
 const resolveAfter = (time : number, props : Object = {}) => new Promise(resolve =>
@@ -11,10 +14,10 @@ const rejectAfter = (time : number, error : any) => new Promise((resolve, reject
 const validOptions = { work: () => resolveAfter(1) };
 const workTime = 10; // ms
 const Foo = () => <div>Foo</div>;
-const OnError = () => <div>Oh no!</div>;
-const OnWorking = () => <div>Busy...</div>;
 
 describe('job()', () => {
+  warningsAsErrors();
+
   describe('options', () => {
     it('returns a function', () => {
       const actual = typeof job({ work: () => undefined });
@@ -62,38 +65,33 @@ describe('job()', () => {
         .toThrowError(/work\(props\) should return a Promise/);
     });
 
-    it('should render the wrapped component when the work is complete', () => {
+    it('should set "loading" when processing work', () => {
       const FooWithJob = job({ work: () => resolveAfter(workTime) })(Foo);
-      // Initial render (i.e. kicks off work)
+      const actual = shallow(<FooWithJob />).find(Foo).props();
+      const expected = { job: { loading: true, result: undefined, error: undefined } };
+      expect(actual).toMatchObject(expected);
+    });
+
+    it('should set "result" when work completes successfully', () => {
+      const FooWithJob = job({ work: () => resolveAfter(workTime, 'result') })(Foo);
       const renderWrapper = mount(<FooWithJob />);
-      expect(renderWrapper).toMatchSnapshot();
-      // Allow enough time for work to complete, then the wrapped component should
-      // be rendered with the provided props.
+      // Allow enough time for work to complete
       return resolveAfter(workTime + 5).then(() => {
-        expect(renderWrapper).toMatchSnapshot();
+        const actual = renderWrapper.find(Foo).props();
+        const expected = { job: { loading: false, result: 'result', error: undefined } };
+        expect(actual).toMatchObject(expected);
       });
     });
 
-    it('should render the default error component', () => {
-      const FooWithJob = job({ work: () => rejectAfter(1) })(Foo);
+    it('should set "error" when work fails', () => {
+      const FooWithJob = job({ work: () => rejectAfter(workTime, 'error') })(Foo);
       const renderWrapper = mount(<FooWithJob />);
-      return resolveAfter(2).then(() => {
-        expect(renderWrapper).toMatchSnapshot();
+      // Allow enough time for work to complete
+      return resolveAfter(workTime + 5).then(() => {
+        const actual = renderWrapper.find(Foo).props();
+        const expected = { job: { loading: false, result: undefined, error: 'error' } };
+        expect(actual).toMatchObject(expected);
       });
-    });
-
-    it('should render the OnError component', () => {
-      const FooWithJob = job({ work: () => rejectAfter(1), OnError })(Foo);
-      const renderWrapper = mount(<FooWithJob bar="baz" />);
-      return resolveAfter(2).then(() => {
-        expect(renderWrapper).toMatchSnapshot();
-      });
-    });
-
-    it('should render the OnWorking component', () => {
-      const FooWithJob = job({ work: () => resolveAfter(workTime), OnWorking })(Foo);
-      const renderWrapper = mount(<FooWithJob bar="baz" />);
-      expect(renderWrapper).toMatchSnapshot();
     });
   });
 });

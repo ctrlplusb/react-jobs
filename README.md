@@ -117,6 +117,12 @@ export default job(
 )(Products);
 ```
 
+This component can then be used like so:
+
+```jsx
+<Products categoryID={1} />
+```
+
 ### Simple Async Example with Caching
 
 In the below example we implement a very simple caching strategy within our "job" declaration.  Using a caching strategy you get the following benefits:
@@ -179,6 +185,12 @@ export default job(
       });
   }
 )(Products);
+```
+
+This component can then be used like so:
+
+```jsx
+<Products categoryID={1} />
 ```
 
 This is of course a naive example, but it simply serves to illustrate how easy it is to cache your requests.  You could write your own helper functions to encapsulate some of this behaviour and extend it with other behaviours such as time based cache destruction.

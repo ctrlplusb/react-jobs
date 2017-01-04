@@ -69,7 +69,7 @@ Below are a few example use cases on how to use this library.
 
 ### Simple Async Example
 
-In the example below we will use the `fetch` API (you'll need to [polyfill it](https://github.com/github/fetch) for older browsers) to retrieve data from an API endpoint.
+In the naive example below we will use the `fetch` API (you'll need to [polyfill it](https://github.com/github/fetch) for older browsers) to retrieve data from an API endpoint.
 
 ```js
 import React from 'react';
@@ -107,15 +107,14 @@ function Products({ job, categoryID }) {
 export default job(
   // Provide a function defining the work that needs to be done.
   // This function will be provided the props passed to your
-  // component and must return a Promise which resolves with
-  // the results.
-  (props) =>
+  // component and must return a Promise for any asynchronous work.
+  function work(props) {
     // Fetch the products for the given `categoryID` prop,
-    fetch(`/products/category/${props.categoryID}`)
-    // then return the response as JSON.
-    .then(response => response.json()),
+    return fetch(`/products/category/${props.categoryID}`)
+      // then convert the response to JSON.
+      .then(response => response.json());
+  }
 )(Products);
-
 ```
 
 ### Simple Async Example with Caching
@@ -166,7 +165,7 @@ export default job(
   // This function will be provided the props passed to your
   // component and must return a Promise which resolves with
   // the results.
-  (props) => {
+  function work(props) {
     if (jobResultCache) {
       // Our cache is populated, so we will simply return
       // the result.
@@ -181,10 +180,9 @@ export default job(
         const result = response.json();
         jobResultCache = result;
         return result;
-      })
-  },
+      });
+  }
 )(Products);
-
 ```
 
 This is of course a naive example, but it simply serves to illustrate how easy it is to cache your requests.  You could write your own helper functions to encapsulate some of this behaviour and extend it with other behaviours such as time based cache destruction.

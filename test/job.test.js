@@ -1,3 +1,5 @@
+/* @flow */
+
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 import { warningsAsErrors } from './__helpers__';
@@ -5,8 +7,8 @@ import { warningsAsErrors } from './__helpers__';
 // Under Test.
 import job from '../src/job';
 
-const resolveAfter = (time : number, props : Object = {}) => new Promise(resolve =>
-  setTimeout(() => resolve(props), time),
+const resolveAfter = (time : number, result : any = null) => new Promise(resolve =>
+  setTimeout(() => resolve(result), time),
 );
 const rejectAfter = (time : number, error : any) => new Promise((resolve, reject) => {
   setTimeout(() => reject(error || new Error('poop')), time);
@@ -26,18 +28,22 @@ describe('job()', () => {
     });
 
     it('should throw if no options are provided', () => {
+      // $FlowIgnore: we expect this to flow error
       expect(() => job()).toThrowError(/must provide an options object/);
     });
 
     it('should throw if invalid type provided as options', () => {
+      // $FlowIgnore: we expect this to flow error
       expect(() => job(1)).toThrowError(/must provide an options object/);
     });
 
     it('should throws if no work is provided', () => {
+      // $FlowIgnore: we expect this to flow error
       expect(() => job({})).toThrowError(/must provide a work function/);
     });
 
     it('should throws if the work is invalid', () => {
+      // $FlowIgnore: we expect this to flow error
       expect(() => job({ work: 1 })).toThrowError(/must provide a work function/);
     });
   });
@@ -47,9 +53,11 @@ describe('job()', () => {
     const actual = hoc(Foo);
 
     it('should return a "class" component', () => {
+      // You can do the below to check for a class component.
+      // @see http://bit.ly/2hSf2be
       expect(typeof actual).toEqual('function');
-      // https://github.com/facebook/react/blob/master/src/renderers/shared/stack/reconciler/ReactCompositeComponent.js#L66
       expect(actual.prototype).toBeDefined();
+      // $FlowIgnore
       expect(actual.prototype.isReactComponent).toBeTruthy();
     });
 

@@ -1,7 +1,20 @@
+/* @flow */
+
 import React, { Component } from 'react';
 import { getDisplayName } from './utils';
 
-export default function job(args) {
+type Args = {
+  work: Function,
+};
+
+type State = {
+  result?: any,
+  error?: any,
+};
+
+type Props = Object;
+
+export default function job(args : Args) {
   if (typeof args !== 'object') {
     throw new Error('You must provide an options object to job()');
   }
@@ -10,9 +23,12 @@ export default function job(args) {
     throw new Error('You must provide a work function to the job\'s options');
   }
 
-  return function WrapComponentWithJob(WrappedComponent) {
+  return function WrapComponentWithJob(WrappedComponent : Function) {
     class ComponentWithJob extends Component {
-      constructor(props) {
+      props: Props;
+      state: State;
+
+      constructor(props : Props) {
         super(props);
         this.state = {};
       }

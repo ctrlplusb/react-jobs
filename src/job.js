@@ -53,11 +53,11 @@ export default function job(work : Work) {
         this.handleWork(this.props);
       }
 
-      componentWillReceiveProps(nextProps) {
+      componentWillReceiveProps(nextProps : Props) {
         this.handleWork(nextProps);
       }
 
-      handleWork(props) {
+      handleWork(props : Props) {
         const context : ProviderContext = this.context;
         const workResult = work(props);
 

@@ -2,7 +2,8 @@
 
 import React, { Component, PropTypes } from 'react';
 import { getDisplayName, isPromise } from './utils';
-import type { ProviderContext } from './sharedTypes';
+import type { ServerProviderContext } from './server/types';
+import type { ClientProviderContext } from './types';
 
 type Work = (props : Object) => any;
 
@@ -16,6 +17,8 @@ type State = {
 
 type Props = Object;
 
+type ProviderContext = ServerProviderContext | ClientProviderContext;
+
 export default function job(work : Work) {
   if (typeof work !== 'function') {
     throw new Error('You must provide a function to a react-jobs job declaration.');
@@ -24,25 +27,40 @@ export default function job(work : Work) {
   // Oh I love you closures!
   let jobID = null;
 
+  function withJobID(WrappedComponent) {
+    const ComponentWithJobID = (props : Object, context : ProviderContext) => {
+      if (!jobID) {
+        jobID = context.reactJobs.nextJobID();
+      }
+      return <WrappedComponent {...props} jobID={jobID} />;
+    };
+    ComponentWithJobID.displayName = `${getDisplayName(WrappedComponent)}WithJobID`;
+    ComponentWithJobID.contextTypes = { reactJobs: PropTypes.object };
+    return ComponentWithJobID;
+  }
+
   return function WrapComponentWithJob(WrappedComponent : Function) {
     class ComponentWithJob extends Component {
       props: Props;
       state: State;
 
-      constructor(props : Props, context : ?ProviderContext) {
-        super(props);
-        if (context && context.reactJobs) {
-          if (!jobID) {
-            jobID = context.reactJobs.nextJobID();
-          } else {
-            const jobResults = context.reactJobs.getJobResults(jobID);
-            if (jobResults) {
-              this.state = Object.assign(
-                {},
-                jobResults,
-                { resolved: true },
-              );
-            }
+      constructor(props : Props, context : ProviderContext) {
+        super(props, context);
+        if (context.reactJobsClient) {
+          if (context.reactJobsClient.isJobResolved(this.props.jobID)) {
+            // We are rehydrating on the client, therefore we will ignore this
+            // render parse.
+            return;
+          }
+        }
+        if (context.reactJobsServer) {
+          const jobResults = context.reactJobsServer.getJobResults(this.props.jobID);
+          if (jobResults) {
+            this.state = Object.assign(
+              {},
+              jobResults,
+              { resolved: true },
+            );
           }
         }
         if (!this.state) {
@@ -66,8 +84,8 @@ export default function job(work : Work) {
               this.setState({ inProgress: false, error });
             })
             .then(() => {
-              if (jobID) {
-                context.reactJobs.registerJobResults(jobID, this.state);
+              if (context.reactJobsServer) {
+                context.reactJobsServer.registerJobResults(this.props.jobID, this.state);
               }
             });
 
@@ -94,6 +112,6 @@ export default function job(work : Work) {
     }
     ComponentWithJob.displayName = `${getDisplayName(WrappedComponent)}WithJob`;
     ComponentWithJob.contextTypes = { reactJobs: PropTypes.object };
-    return ComponentWithJob;
+    return withJobID(ComponentWithJob);
   };
 }

@@ -1,0 +1,3 @@
+exports[`integration SSR 1`] = `"<div data-reactroot="" data-reactid="1" data-react-checksum="1334186935">Hello world!</div>"`;
+
+exports[`integration works 1`] = `"<div data-reactroot="" data-reactid="1" data-react-checksum="1984762928">In progress...</div>"`;

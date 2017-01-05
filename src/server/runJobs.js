@@ -1,7 +1,7 @@
 /* @flow */
 
 import { Children, Element } from 'react';
-import { isPromise } from './utils';
+import { isPromise } from '../utils';
 
 type React$Element = Element<*>;
 type Context = { [key: string]: any; };
@@ -122,7 +122,7 @@ export default function runJobs(
 
   // no queries found, nothing to do
   if (!jobs.length) {
-    return Promise.resolve(null);
+    return Promise.resolve();
   }
 
   // wait on each query that we found, re-rendering the subtree when it's done
@@ -131,5 +131,5 @@ export default function runJobs(
     job.then(() => runJobs(element, context, false)),
   );
 
-  return Promise.all(mappedJobs).then(() => null);
+  return Promise.all(mappedJobs).then(() => undefined);
 }

@@ -1,9 +1,9 @@
 /* @flow */
 
-import JobsProvider from './JobsProvider';
+import ClientProvider from './ClientProvider';
 import job from './job';
 
 export default {
-  JobsProvider,
+  ClientProvider,
   job,
 };

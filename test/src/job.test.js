@@ -2,10 +2,11 @@
 
 import React from 'react';
 import { shallow, mount } from 'enzyme';
-import { Foo, resolveAfter, rejectAfter, warningsAsErrors } from './__helpers__';
+import { Foo, resolveAfter, rejectAfter, warningsAsErrors } from '../__helpers__';
+import ServerProvider from '../../src/server/ServerProvider';
 
 // Under Test.
-import job from '../src/job';
+import job from '../../src/job';
 
 const workTime = 10; // ms
 
@@ -49,9 +50,9 @@ describe('job()', () => {
   });
 
   describe('rendering', () => {
-    it('should set the "result" immediately if the work does not return a promise', () => {
+    it.only('should set the "result" immediately if the work does not return a promise', () => {
       const FooWithJob = job(() => 'bob')(Foo);
-      expect(mount(<FooWithJob />)).toMatchSnapshot();
+      expect(mount(<ServerProvider><FooWithJob /></ServerProvider>)).toMatchSnapshot();
     });
 
     it('should provide the props to the work function', () => {

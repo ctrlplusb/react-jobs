@@ -2,11 +2,11 @@
 
 import React from 'react';
 import { mount } from 'enzyme';
-import { ServerProvider, job } from '../../../src/server';
+import { ServerProvider, job } from '../../../src/ssr';
 import { Foo, resolveAfter } from '../../__helpers__';
 
 // Under test.
-import runJobs from '../../../src/server/runJobs';
+import runJobs from '../../../src/ssr/runJobs';
 
 const workTime = 10; // ms
 

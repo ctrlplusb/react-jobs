@@ -2,10 +2,10 @@
 
 import React, { PropTypes } from 'react';
 import { mount } from 'enzyme';
-import type { ClientProviderContext } from '../../../src/server/types';
+import type { ClientProviderContext } from '../../../src/ssr/types';
 
 // Under test.
-import ClientProvider from '../../../src/server/ClientProvider';
+import ClientProvider from '../../../src/ssr/ClientProvider';
 
 describe('<ClientProvider />', () => {
   describe('context', () => {

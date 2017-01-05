@@ -9,11 +9,11 @@ import {
   job,
   runJobs,
   createRenderContext,
-} from '../src/server';
+} from '../src/ssr';
 import type {
   RehydrateState,
   RenderContext,
-} from '../src/server/types';
+} from '../src/ssr/types';
 
 const workTime = 10;
 

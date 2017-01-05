@@ -5,7 +5,7 @@ import { getDisplayName, isPromise } from './utils';
 import type {
   ProviderContext,
   JobState,
-} from './server/types';
+} from './ssr/types';
 
 type Work = (props : Object) => any;
 

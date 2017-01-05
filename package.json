@@ -82,7 +82,7 @@
   },
   "config": {
     "ghooks": {
-      "pre-commit": "yarn run check"
+      "pre-commit": "yarn run lint"
     }
   },
   "jest": {

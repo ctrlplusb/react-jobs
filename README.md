@@ -1,6 +1,6 @@
 ## ___WIP___
 
-No practical release has been made as of yet, not even a dirty alpha.
+This library is in a complete state of flux at the moment.  I haven't done any releases, not even an alpha.  I am evolving the API through a test process.  This message will disappear after it settles enough for an alpha release.  Until then I wouldn't pay too much attention to this library. :)
 
 Todo:
 

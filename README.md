@@ -112,11 +112,11 @@ TODO...
 
 ## API
 
-### `ClientProvider`
+### `jobs`
 
 TODO
 
-### `jobs`
+### `ClientProvider`
 
 TODO
 

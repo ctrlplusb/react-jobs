@@ -1,8 +1,7 @@
 /* @flow */
 
 import { Children, Component, Element, PropTypes } from 'react';
-import type { ServerProviderContext, RenderContext } from './types';
-import type { JobState } from '../types';
+import type { ServerProviderContext, RenderContext, JobState } from './types';
 
 type React$Element = Element<*>;
 

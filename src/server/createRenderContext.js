@@ -1,7 +1,6 @@
 /* @flow */
 
-import type { RenderContext } from './types';
-import type { JobState } from '../types';
+import type { RenderContext, JobState } from './types';
 
 export default function createRenderContext() : RenderContext {
   const jobsState = {};

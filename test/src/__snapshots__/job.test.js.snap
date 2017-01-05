@@ -1,22 +1,16 @@
 exports[`job() rendering should set the "result" immediately if the work does not return a promise 1`] = `
-<ServerProvider>
-  <FooWithJobWithJobID>
-    <FooWithJob
-      jobID={1}>
-      <Foo
-        job={
-          Object {
-            "error": undefined,
-            "inProgress": false,
-            "result": "bob",
-          }
-        }
-        jobID={1}>
-        <div>
-          bob
-        </div>
-      </Foo>
-    </FooWithJob>
-  </FooWithJobWithJobID>
-</ServerProvider>
+<FooWithJob>
+  <Foo
+    job={
+      Object {
+        "error": undefined,
+        "inProgress": false,
+        "result": "bob",
+      }
+    }>
+    <div>
+      bob
+    </div>
+  </Foo>
+</FooWithJob>
 `;

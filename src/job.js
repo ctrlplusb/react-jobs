@@ -2,45 +2,23 @@
 
 import React, { Component, PropTypes } from 'react';
 import { getDisplayName, isPromise } from './utils';
-import type { ServerProviderContext } from './server/types';
-import type { ClientProviderContext, JobState } from './types';
+import type {
+  ProviderContext,
+  JobState,
+} from './server/types';
 
 type Work = (props : Object) => any;
 
 type State = JobState & { executingJob?: Promise<any> };
 
 type Props = {
-  jobID: number,
+  jobID?: number,
   [key: string]: any,
 };
-
-type ProviderContext = ServerProviderContext & ClientProviderContext;
 
 export default function job(work : Work) {
   if (typeof work !== 'function') {
     throw new Error('You must provide a function to a react-jobs job declaration.');
-  }
-
-  // Oh I love you closures!
-  let jobID = null;
-
-  function withJobID(WrappedComponent) {
-    const ComponentWithJobID = (props : Object, context : ProviderContext) => {
-      if (!jobID) {
-        if (context.reactJobsClient) {
-          jobID = context.reactJobsClient.nextJobID();
-        } else if (context.reactJobsServer) {
-          jobID = context.reactJobsServer.nextJobID();
-        }
-      }
-      return <WrappedComponent {...props} jobID={jobID} />;
-    };
-    ComponentWithJobID.displayName = `${getDisplayName(WrappedComponent)}WithJobID`;
-    ComponentWithJobID.contextTypes = {
-      reactJobsClient: PropTypes.object,
-      reactJobsServer: PropTypes.object,
-    };
-    return ComponentWithJobID;
   }
 
   return function WrapComponentWithJob(WrappedComponent : Function) {
@@ -87,7 +65,7 @@ export default function job(work : Work) {
               return 'ouchy';
             })
             .then(() => {
-              if (context.reactJobsServer) {
+              if (this.props.jobID && context.reactJobsServer) {
                 context.reactJobsServer.registerJobState(
                   this.props.jobID,
                   this.getJobState(),
@@ -125,6 +103,6 @@ export default function job(work : Work) {
       reactJobsClient: PropTypes.object,
       reactJobsServer: PropTypes.object,
     };
-    return withJobID(ComponentWithJob);
+    return ComponentWithJob;
   };
 }

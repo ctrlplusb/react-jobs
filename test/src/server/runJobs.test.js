@@ -2,8 +2,7 @@
 
 import React from 'react';
 import { mount } from 'enzyme';
-import ServerProvider from '../../../src/server/ServerProvider';
-import job from '../../../src/job';
+import { ServerProvider, job } from '../../../src/server';
 import { Foo, resolveAfter } from '../../__helpers__';
 
 // Under test.

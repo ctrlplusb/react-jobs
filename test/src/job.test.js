@@ -3,7 +3,6 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import { Foo, resolveAfter, rejectAfter, warningsAsErrors } from '../__helpers__';
-import ServerProvider from '../../src/server/ServerProvider';
 
 // Under Test.
 import job from '../../src/job';
@@ -43,7 +42,7 @@ describe('job()', () => {
   describe('rendering', () => {
     it('should set the "result" immediately if the work does not return a promise', () => {
       const FooWithJob = job(() => 'bob')(Foo);
-      expect(mount(<ServerProvider><FooWithJob /></ServerProvider>)).toMatchSnapshot();
+      expect(mount(<FooWithJob />)).toMatchSnapshot();
     });
 
     it('should provide the props to the work function', () => {

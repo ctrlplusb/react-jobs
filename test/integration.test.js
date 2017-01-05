@@ -3,13 +3,17 @@
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { Foo, resolveAfter, rejectAfter } from './__helpers__';
-import ClientProvider from '../src/ClientProvider';
-import ServerProvider from '../src/server/ServerProvider';
-import job from '../src/job';
-import runJobs from '../src/server/runJobs';
-import createRenderContext from '../src/server/createRenderContext';
-import type { RehydrateState } from '../src/types';
-import type { RenderContext } from '../src/server/types';
+import {
+  ClientProvider,
+  ServerProvider,
+  job,
+  runJobs,
+  createRenderContext,
+} from '../src/server';
+import type {
+  RehydrateState,
+  RenderContext,
+} from '../src/server/types';
 
 const workTime = 10;
 

@@ -11,6 +11,7 @@ branches:
 node_js:
   - '7'
 script:
+  - yarn run flow:defs
   - yarn run check
 after_success:
   - yarn run test:coverage:deploy

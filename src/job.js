@@ -50,8 +50,16 @@ export default function job(work : Work) {
           }
         }
 
+        this.handleWork(this.props);
+      }
+
+      componentWillReceiveProps(nextProps) {
+        this.handleWork(nextProps);
+      }
+
+      handleWork(props) {
         const context : ProviderContext = this.context;
-        const workResult = work(this.props);
+        const workResult = work(props);
 
         if (isPromise(workResult)) {
           workResult
@@ -65,9 +73,9 @@ export default function job(work : Work) {
               return 'ouchy';
             })
             .then(() => {
-              if (this.props.jobID && context.reactJobsServer) {
+              if (props.jobID && context.reactJobsServer) {
                 context.reactJobsServer.registerJobState(
-                  this.props.jobID,
+                  props.jobID,
                   this.getJobState(),
                 );
               }

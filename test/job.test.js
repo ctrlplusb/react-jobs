@@ -2,19 +2,12 @@
 
 import React from 'react';
 import { shallow, mount } from 'enzyme';
-import { warningsAsErrors } from './__helpers__';
+import { Foo, resolveAfter, rejectAfter, warningsAsErrors } from './__helpers__';
 
 // Under Test.
 import job from '../src/job';
 
-const resolveAfter = (time : number, result : any = null) => new Promise(resolve =>
-  setTimeout(() => resolve(result), time),
-);
-const rejectAfter = (time : number, error : any) => new Promise((resolve, reject) => {
-  setTimeout(() => reject(error || new Error('poop')), time);
-});
 const workTime = 10; // ms
-const Foo = () => <div>Foo</div>;
 
 describe('job()', () => {
   warningsAsErrors();

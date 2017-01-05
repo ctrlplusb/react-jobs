@@ -25,12 +25,15 @@ Attach sync/async "jobs" to your components, with SSR support.
   - [Introduction](#introduction)
   - [Installation](#installation)
   - [Usage](#usage)
+    - [Server Side Rendering](#server-side-rendering)
   - [Examples](#examples)
     - [Simple Async Example](#simple-async-example)
     - [Simple Async Example with Caching](#simple-async-example-with-caching)
     - [Redux Example](#redux-example)
   - [API](#api)
+    - [JobsProvider](#jobsprovider)
     - [job](#job)
+    - [runJobs](#runJobs)
   - [FAQs](#faqs)
 
 ## Introduction
@@ -67,6 +70,10 @@ To get started you need to import our `job` function.
 ```js
 import { job } from 'react-jobs';
 ```
+
+TODO...
+
+### Server Side Rendering
 
 TODO...
 
@@ -208,7 +215,15 @@ TODO
 
 ## API
 
+### `JobsProvider`
+
+TODO
+
 ### `jobs`
+
+TODO
+
+### `runJobs`
 
 TODO
 

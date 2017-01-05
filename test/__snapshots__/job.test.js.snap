@@ -3,12 +3,13 @@ exports[`job() rendering should set the "result" immediately if the work does no
   <Foo
     job={
       Object {
+        "error": undefined,
         "inProgress": false,
         "result": "bob",
       }
     }>
     <div>
-      Foo
+      bob
     </div>
   </Foo>
 </FooWithJob>

@@ -18,10 +18,12 @@ Attach "jobs" to your components, with SSR support.
   - [Introduction](#introduction)
   - [Installation](#installation)
   - [Usage](#usage)
-    - [Server Side Rendering](#server-side-rendering)
+  - [Server Side Rendering Usage](#server-side-rendering-usage)
   - [API](#api)
-    - [JobsProvider](#jobsprovider)
     - [job](#job)
+    - [ClientProvider](#clientprovider)
+    - [ServerProvider](#serverprovider)
+    - [createRenderContext](#createRenderContext)
     - [runJobs](#runJobs)
   - [FAQs](#faqs)
   - [Credits](#credits)
@@ -51,6 +53,8 @@ yarn add react-jobs
 ```
 
 ## Usage
+
+Below we will detail how to use this library for the typical _browser_-only use.
 
 In the naive example below we will use the `fetch` API (you'll need to [polyfill it](https://github.com/github/fetch) for older browsers) to retrieve data from an API endpoint.
 
@@ -106,7 +110,9 @@ This component can then be used like so:
 <Products categoryID={1} />
 ```
 
-### Server Side Rendering
+## Server Side Rendering Usage
+
+Below we will detail how to use this library for a _server side rendering_ application.
 
 TODO...
 

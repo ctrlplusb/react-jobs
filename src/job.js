@@ -3,21 +3,18 @@
 import React, { Component, PropTypes } from 'react';
 import { getDisplayName, isPromise } from './utils';
 import type { ServerProviderContext } from './server/types';
-import type { ClientProviderContext } from './types';
+import type { ClientProviderContext, JobState } from './types';
 
 type Work = (props : Object) => any;
 
-type State = {
-  resolved?: boolean,
-  inProgress: boolean,
-  result?: any,
-  error?: any,
-  executingWork? : Promise<any>,
+type State = JobState & { executingJob?: Promise<any> };
+
+type Props = {
+  jobID: number,
+  [key: string]: any,
 };
 
-type Props = Object;
-
-type ProviderContext = ServerProviderContext | ClientProviderContext;
+type ProviderContext = ServerProviderContext & ClientProviderContext;
 
 export default function job(work : Work) {
   if (typeof work !== 'function') {
@@ -30,12 +27,19 @@ export default function job(work : Work) {
   function withJobID(WrappedComponent) {
     const ComponentWithJobID = (props : Object, context : ProviderContext) => {
       if (!jobID) {
-        jobID = context.reactJobs.nextJobID();
+        if (context.reactJobsClient) {
+          jobID = context.reactJobsClient.nextJobID();
+        } else if (context.reactJobsServer) {
+          jobID = context.reactJobsServer.nextJobID();
+        }
       }
       return <WrappedComponent {...props} jobID={jobID} />;
     };
     ComponentWithJobID.displayName = `${getDisplayName(WrappedComponent)}WithJobID`;
-    ComponentWithJobID.contextTypes = { reactJobs: PropTypes.object };
+    ComponentWithJobID.contextTypes = {
+      reactJobsClient: PropTypes.object,
+      reactJobsServer: PropTypes.object,
+    };
     return ComponentWithJobID;
   }
 
@@ -46,72 +50,81 @@ export default function job(work : Work) {
 
       constructor(props : Props, context : ProviderContext) {
         super(props, context);
-        if (context.reactJobsClient) {
-          if (context.reactJobsClient.isJobResolved(this.props.jobID)) {
-            // We are rehydrating on the client, therefore we will ignore this
-            // render parse.
-            return;
-          }
-        }
-        if (context.reactJobsServer) {
-          const jobResults = context.reactJobsServer.getJobResults(this.props.jobID);
-          if (jobResults) {
-            this.state = Object.assign(
-              {},
-              jobResults,
-              { resolved: true },
-            );
-          }
-        }
-        if (!this.state) {
-          this.state = { inProgress: false };
-        }
+        this.state = { inProgress: false };
       }
 
       componentWillMount() {
-        if (this.state.resolved) {
-          return;
+        if (this.context.reactJobsClient) {
+          const ssrRehydrateState = this.context
+            .reactJobsClient
+            .popJobRehydrationForSRR(this.props.jobID);
+          if (ssrRehydrateState) {
+            this.setState(ssrRehydrateState);
+            return;
+          }
+        }
+
+        if (this.context.reactJobsServer) {
+          const jobState = this.context.reactJobsServer.getJobState(this.props.jobID);
+          if (jobState) {
+            this.setState(jobState);
+            return;
+          }
         }
 
         const context : ProviderContext = this.context;
-        const x = work(this.props);
+        const workResult = work(this.props);
 
-        if (isPromise(x)) {
-          const executingWork = x
-            .then((result) => { this.setState({ inProgress: false, result }); return result; })
+        if (isPromise(workResult)) {
+          workResult
+            .then((result) => {
+              this.setState({ inProgress: false, result });
+              return result;
+            })
             .catch((error) => {
               console.warn('Job failed:\n', error); // eslint-disable-line no-console
               this.setState({ inProgress: false, error });
+              return 'ouchy';
             })
             .then(() => {
               if (context.reactJobsServer) {
-                context.reactJobsServer.registerJobResults(this.props.jobID, this.state);
+                context.reactJobsServer.registerJobState(
+                  this.props.jobID,
+                  this.getJobState(),
+                );
               }
             });
 
           // Asynchronous result.
-          this.setState({ inProgress: true, executingWork });
+          this.setState({ inProgress: true, executingJob: workResult });
         } else {
           // Synchronous result.
-          this.setState({ result: x });
+          this.setState({ result: workResult });
         }
       }
 
       getExecutingJob() {
-        if (!this.state.executingWork) {
+        if (!this.state.executingJob) {
           return undefined;
         }
-        return this.state.executingWork;
+        return this.state.executingJob;
+      }
+
+      getJobState() : JobState {
+        const { inProgress, result, error } = this.state;
+        return { inProgress, result, error };
       }
 
       render() {
-        const { inProgress, result, error } = this.state;
-        const jobProp = { inProgress, result, error };
-        return <WrappedComponent {...this.props} job={jobProp} />;
+        const jobState = this.getJobState();
+        return <WrappedComponent {...this.props} job={jobState} />;
       }
     }
     ComponentWithJob.displayName = `${getDisplayName(WrappedComponent)}WithJob`;
-    ComponentWithJob.contextTypes = { reactJobs: PropTypes.object };
+    ComponentWithJob.contextTypes = {
+      reactJobsClient: PropTypes.object,
+      reactJobsServer: PropTypes.object,
+    };
     return withJobID(ComponentWithJob);
   };
 }

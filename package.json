@@ -46,7 +46,7 @@
     "babel-jest": "18.0.0",
     "babel-loader": "6.2.10",
     "babel-polyfill": "6.20.0",
-    "babel-preset-env": "1.1.4",
+    "babel-preset-env": "1.1.5",
     "babel-preset-latest": "6.16.0",
     "babel-preset-react": "6.16.0",
     "babel-preset-stage-3": "6.17.0",
@@ -78,7 +78,7 @@
     "sinon": "1.17.7",
     "webpack": "2.2.0-rc.3",
     "webpack-dev-middleware": "1.9.0",
-    "webpack-hot-middleware": "2.14.0"
+    "webpack-hot-middleware": "2.15.0"
   },
   "config": {
     "ghooks": {

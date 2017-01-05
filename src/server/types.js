@@ -1,9 +1,11 @@
 /* @flow */
 
+import type { RehydrateState, JobState } from '../types';
+
 export type ReactJobsContext = {
   nextJobID: () => number,
-  registerJobResults: (jobID: number, results: any) => void,
-  getJobResults: (jobID: number) => any,
+  registerJobState: (number, JobState) => void,
+  getJobState: number => any,
 };
 
 export type ServerProviderContext = {
@@ -11,7 +13,6 @@ export type ServerProviderContext = {
 };
 
 export type RenderContext = {
-  setCurrentJobID: number => void,
-  registerResolvedJob: number => void,
-  getState: () => Object,
+  registerJobState: (number, JobState) => void,
+  getState: () => RehydrateState,
 };

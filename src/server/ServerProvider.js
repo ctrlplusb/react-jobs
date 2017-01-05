@@ -2,16 +2,17 @@
 
 import { Children, Component, Element, PropTypes } from 'react';
 import type { ServerProviderContext, RenderContext } from './types';
+import type { JobState } from '../types';
 
 type React$Element = Element<*>;
 
 type Props = {
   children?: React$Element,
-  renderContext: RenderContext,
+  renderContext?: RenderContext,
 };
 
 let currentjobID = 0;
-const jobResults = {};
+const jobStates : { [key : number] : JobState } = {};
 
 class ServerProvider extends Component {
   props: Props;
@@ -21,20 +22,15 @@ class ServerProvider extends Component {
       reactJobsServer: {
         nextJobID: () => {
           currentjobID += 1;
-
-          if (this.props.renderContext) {
-            this.props.renderContext.setCurrentJobID(currentjobID);
-          }
-
           return currentjobID;
         },
-        registerJobResults: (jobID: number, results: any) => {
-          jobResults[jobID] = results;
+        registerJobState: (jobID: number, jobState: JobState) => {
+          jobStates[jobID] = jobState;
           if (this.props.renderContext) {
-            this.props.renderContext.registerResolvedJob(jobID);
+            this.props.renderContext.registerJobState(jobID, jobState);
           }
         },
-        getJobResults: (jobID: number) => jobResults[jobID],
+        getJobState: (jobID: number) => jobStates[jobID],
       },
     };
 
@@ -47,7 +43,7 @@ class ServerProvider extends Component {
 }
 
 ServerProvider.childContextTypes = {
-  reactJobs: PropTypes.object.isRequired,
+  reactJobsServer: PropTypes.object.isRequired,
 };
 
 export default ServerProvider;

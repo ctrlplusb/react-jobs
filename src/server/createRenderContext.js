@@ -1,21 +1,17 @@
 /* @flow */
 
-import type { RenderContext } from '../sharedTypes';
+import type { RenderContext } from './types';
+import type { JobState } from '../types';
 
 export default function createRenderContext() : RenderContext {
-  let currentjobID = 0;
-  const resolvedJobs = {};
+  const jobsState = {};
   return {
-    setCurrentJobID: (jobID) => {
-      currentjobID = jobID;
-    },
-    registerResolvedJob: (jobID) => {
-      resolvedJobs[jobID] = true;
+    registerJobState: (jobID, state : JobState) => {
+      jobsState[jobID] = state;
     },
     getState() {
       return {
-        currentjobID,
-        resolvedJobs,
+        jobsState,
       };
     },
   };

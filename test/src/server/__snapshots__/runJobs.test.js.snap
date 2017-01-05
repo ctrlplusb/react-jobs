@@ -1,5 +1,5 @@
 exports[`runJobs() should render simple job with success 1`] = `
-<JobProvider>
+<ServerProvider>
   <FooWithJobWithJobID>
     <FooWithJob
       jobID={1}>
@@ -8,15 +8,15 @@ exports[`runJobs() should render simple job with success 1`] = `
           Object {
             "error": undefined,
             "inProgress": false,
-            "result": "bob",
+            "result": "Hello world!",
           }
         }
         jobID={1}>
         <div>
-          bob
+          Hello world!
         </div>
       </Foo>
     </FooWithJob>
   </FooWithJobWithJobID>
-</JobProvider>
+</ServerProvider>
 `;

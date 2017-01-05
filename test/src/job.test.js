@@ -1,7 +1,7 @@
 /* @flow */
 
 import React from 'react';
-import { shallow, mount } from 'enzyme';
+import { mount } from 'enzyme';
 import { Foo, resolveAfter, rejectAfter, warningsAsErrors } from '../__helpers__';
 import ServerProvider from '../../src/server/ServerProvider';
 
@@ -33,24 +33,15 @@ describe('job()', () => {
 
   describe('higher order component', () => {
     const hoc = job(() => resolveAfter(1));
-    const actual = hoc(Foo);
+    const Actual = hoc(Foo);
 
-    it('should return a "class" component', () => {
-      // You can do the below to check for a class component.
-      // @see http://bit.ly/2hSf2be
-      expect(typeof actual).toEqual('function');
-      expect(actual.prototype).toBeDefined();
-      // $FlowIgnore
-      expect(actual.prototype.isReactComponent).toBeTruthy();
-    });
-
-    it('should set the expected displayName', () => {
-      expect(actual.displayName).toEqual('FooWithJob');
+    it('should return a renderable component', () => {
+      expect(() => mount(<Actual />)).not.toThrowError();
     });
   });
 
   describe('rendering', () => {
-    it.only('should set the "result" immediately if the work does not return a promise', () => {
+    it('should set the "result" immediately if the work does not return a promise', () => {
       const FooWithJob = job(() => 'bob')(Foo);
       expect(mount(<ServerProvider><FooWithJob /></ServerProvider>)).toMatchSnapshot();
     });
@@ -65,7 +56,7 @@ describe('job()', () => {
 
     it('should set "inProgress" when processing work', () => {
       const FooWithJob = job(() => resolveAfter(workTime))(Foo);
-      const actual = shallow(<FooWithJob />).find(Foo).props();
+      const actual = mount(<FooWithJob />).find(Foo).props();
       const expected = { job: { inProgress: true } };
       expect(actual).toMatchObject(expected);
     });

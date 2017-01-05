@@ -2,40 +2,62 @@
 
 import React from 'react';
 import { renderToString } from 'react-dom/server';
-import { Foo, resolveAfter } from './__helpers__';
+import { Foo, resolveAfter, rejectAfter } from './__helpers__';
 import ClientProvider from '../src/ClientProvider';
 import ServerProvider from '../src/server/ServerProvider';
 import job from '../src/job';
 import runJobs from '../src/server/runJobs';
 import createRenderContext from '../src/server/createRenderContext';
+import type { RehydrateState } from '../src/types';
 import type { RenderContext } from '../src/server/types';
 
 const workTime = 10;
 
+const createComponents = () => ({
+  Hello: job(() => resolveAfter(workTime, 'Hello world!'))(Foo),
+  Goodbye: job(() => resolveAfter(workTime, 'Goodbye world!'))(Foo),
+  Fail: job(() => rejectAfter(workTime, 'Oh noes!'))(Foo),
+});
+
+const createApp = () => {
+  const { Hello, Goodbye, Fail } = createComponents();
+  return () => (
+    <div>
+      <Hello />
+      <Goodbye />
+      <Fail />
+    </div>
+  );
+};
+
 const createServerApp = (renderContext : RenderContext) => {
-  const FooWithJob = job(() => resolveAfter(workTime, 'Hello world!'))(Foo);
+  const App = createApp();
   return (
     <ServerProvider renderContext={renderContext}>
-      <FooWithJob />
+      <App />
     </ServerProvider>
   );
 };
 
-const createClientApp = (state : Object) => {
-  const FooWithJob = job(() => resolveAfter(workTime, 'Hello world!'))(Foo);
+const createClientApp = (ssrState : RehydrateState) => {
+  const App = createApp();
   return (
-    <ClientProvider state={state}>
-      <FooWithJob />
+    <ClientProvider ssrState={ssrState}>
+      <App />
     </ClientProvider>
   );
 };
 
 describe('integration', () => {
-  it.only('works', () => {
+  it('works', () => {
     const serverRenderContext = createRenderContext();
     const serverApp = createServerApp(serverRenderContext);
-
     return runJobs(serverApp)
+      .then(
+        () => undefined,
+        // We don't want errors to bail out the test.
+        () => undefined,
+      )
       .then(() => {
         // "Server" render
         const serverRender = renderToString(serverApp);
@@ -46,6 +68,11 @@ describe('integration', () => {
         const clientApp = createClientApp(state);
         const clientRender = renderToString(clientApp);
         expect(clientRender).toEqual(serverRender);
+
+        // The second "Client" render should be async as we only use the
+        // server hydration state once.
+        const clientSecondRender = renderToString(clientApp);
+        expect(clientSecondRender).toMatchSnapshot();
       });
   });
 });

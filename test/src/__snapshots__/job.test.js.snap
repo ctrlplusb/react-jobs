@@ -1,5 +1,5 @@
 exports[`job() rendering should set the "result" immediately if the work does not return a promise 1`] = `
-<JobProvider>
+<ServerProvider>
   <FooWithJobWithJobID>
     <FooWithJob
       jobID={1}>
@@ -18,5 +18,5 @@ exports[`job() rendering should set the "result" immediately if the work does no
       </Foo>
     </FooWithJob>
   </FooWithJobWithJobID>
-</JobProvider>
+</ServerProvider>
 `;

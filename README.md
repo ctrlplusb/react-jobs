@@ -2,13 +2,6 @@
 
 This library is in a complete state of flux at the moment.  I haven't done any releases, not even an alpha.  I am evolving the API through a test process.  This message will disappear after it settles enough for an alpha release.  Until then I wouldn't pay too much attention to this library. :)
 
-Todo:
-
- - [X] job declaration API
- - [ ] SSR helper
- - [ ] docs
- - [ ] examples
-
 ---
 
 # react-jobs 🕴
@@ -31,19 +24,17 @@ Attach "jobs" to your components, with SSR support.
     - [job](#job)
     - [runJobs](#runJobs)
   - [FAQs](#faqs)
+  - [Credits](#credits)
 
 ## Introduction
 
-This library takes heavy inspiration from the amazing [`react-apollo`](https://github.com/apollostack/react-apollo) library to provide you with a generic mechanism of attaching "jobs" to your React Components.
+This library provides you with a generic mechanism of attaching "jobs" to your React Components, and includes support for server rendering (i.e. within SSR/universal/isomorphic apps).
 
 You can use these "jobs" to do any of the following:
  - Resolve additional data for your components in a sync/async manner.
- - Execute a sync/async side effect when your component renders, also letting your component know when an async side effect has completed.
  - ?
 
-It provides you with a simple `function` API which allows you to easily provide mechanisms like data caching or integrations with 3rd party libraries (e.g. Redux).
-
-We additionally provide you with a mechanism to process asynchronous jobs when doing server rendering (i.e. within SSR/universal/isomorphic apps).
+It provides you with a simple `function` and `Promise` based API which allows you to easily compose additional features such as data caching or 3rd party integrations (e.g. Redux).
 
 ## Installation
 
@@ -121,11 +112,19 @@ TODO...
 
 ## API
 
-### `JobsProvider`
+### `ClientProvider`
 
 TODO
 
 ### `jobs`
+
+TODO
+
+### `ServerProvider`
+
+TODO
+
+### `createRenderContext`
 
 TODO
 
@@ -136,3 +135,9 @@ TODO
 ## FAQs
 
 > Let me know your questions...
+
+## Credits
+
+Inspiration has been taken from the following amazing projects:
+
+  - [`react-apollo`](https://github.com/apollostack/react-apollo)

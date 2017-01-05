@@ -17,8 +17,8 @@ describe('runJobs()', () => {
     expect(actual.then).toBeTruthy();
   });
 
-  it('should render simple job with success', () => {
-    const FooWithJob = job(() => resolveAfter(workTime, 'bob'))(Foo);
+  it.only('should render simple job with success', () => {
+    const FooWithJob = job(() => resolveAfter(workTime, 'Hello world!'))(Foo);
     const app = <ServerProvider><FooWithJob /></ServerProvider>;
     return runJobs(app).then(() => {
       expect(mount(app)).toMatchSnapshot();

@@ -1,6 +1,6 @@
 {
   "name": "react-jobs",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Attach \"jobs\" to your components, with SSR support.",
   "license": "MIT",
   "main": "commonjs/index.js",

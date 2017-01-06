@@ -242,7 +242,7 @@ TODO
 
 ## FAQs
 
-> Let me know your questions...
+> As and when they arrive...
 
 ## Credits
 

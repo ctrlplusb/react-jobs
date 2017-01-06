@@ -19,10 +19,8 @@ Attach "jobs" to your components, with SSR support.
   - [Server Side Rendering Usage](#server-side-rendering-usage)
   - [API](#api)
     - [job](#job)
-    - [ClientProvider](#clientprovider)
-    - [ServerProvider](#serverprovider)
-    - [createRenderContext](#createRenderContext)
     - [runJobs](#runJobs)
+    - [rehydrateJobs](#rehydrateJobs)
   - [FAQs](#faqs)
   - [Credits](#credits)
 

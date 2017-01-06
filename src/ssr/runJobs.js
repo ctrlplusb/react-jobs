@@ -1,7 +1,11 @@
 /* @flow */
 
-import { Children, Element } from 'react';
+import React, { Children, Element } from 'react';
 import { isPromise } from '../utils';
+import ServerProvider from './ServerProvider';
+import createRunJobsExecContext from './createRunJobsExecContext';
+import { STATE_IDENTIFIER } from './constants';
+import type { RehydrateState } from './types';
 
 type React$Element = Element<*>;
 type Context = { [key: string]: any; };
@@ -12,6 +16,11 @@ type ElementJob = {
   element: React$Element,
   context: Context,
 }
+type RunJobsResult = {
+  app: React$Element,
+  state: RehydrateState,
+  STATE_IDENTIFIER: string,
+};
 
 // Recurse an React Element tree, running visitor on each element.
 // If visitor returns `false`, don't call the element's render function
@@ -89,7 +98,7 @@ export function walkTree(
 
 function getJobs(
   rootElement : React$Element,
-  rootContext : Context,
+  rootContext : Object,
   fetchRoot : boolean = true,
 ) : ElementJob[] {
   const jobs = [];
@@ -114,22 +123,48 @@ function getJobs(
 }
 
 export default function runJobs(
-  rootElement : React$Element,
-  rootContext : Context = {},
-  fetchRoot : boolean = true,
-) {
-  const jobs = getJobs(rootElement, rootContext, fetchRoot);
-
-  // no queries found, nothing to do
-  if (!jobs.length) {
-    return Promise.resolve();
+  rootElement : Element<any>,
+  rootContext : Object = {},
+  isRoot : boolean = true,
+) : Promise<RunJobsResult> {
+  let processingElement;
+  if (isRoot) {
+    const runJobsExecContext = createRunJobsExecContext();
+    rootContext.runJobsExecContext = runJobsExecContext; // eslint-disable-line no-param-reassign
+    processingElement = (
+      <ServerProvider runJobsExecContext={runJobsExecContext}>
+        {rootElement}
+      </ServerProvider>
+    );
+  } else {
+    processingElement = rootElement;
   }
 
-  // wait on each query that we found, re-rendering the subtree when it's done
+  const resolveResult = () => ({
+    app: processingElement,
+    state: rootContext.runJobsExecContext.getState(),
+    STATE_IDENTIFIER,
+  });
+
+  const jobs = getJobs(processingElement, rootContext, isRoot);
+
+  // No jobs found, nothing to do.
+  if (!jobs.length) {
+    return Promise.resolve(resolveResult());
+  }
+
+  // Wait on each job that we found, re-rendering the subtree when they are done.
   const mappedJobs = jobs.map(({ job, element, context }) =>
-    // we've just grabbed the query for element so don't try and get it again
-    job.then(() => runJobs(element, context, false)),
+    job.then(() => runJobs(
+      element,
+      context,
+      // We've just grabbed the job for element so don't try and get it again
+      false,
+    )),
   );
 
-  return Promise.all(mappedJobs).then(() => undefined);
+  return Promise.all(mappedJobs)
+    // Swallow errors.
+    .catch(() => undefined)
+    .then(() => resolveResult());
 }

@@ -1,35 +1,43 @@
 /* @flow */
 
-import { Children, Component, Element, PropTypes } from 'react';
-import type { ServerProviderContext, RenderContext, JobState } from './types';
-
-type React$Element = Element<*>;
+import React, { Component, PropTypes } from 'react';
+import ClientProvider from './ClientProvider';
+import type {
+  ServerProviderChildContext,
+  JobsState,
+  JobState,
+  React$Element,
+  RunJobsExecutionContext,
+} from './types';
 
 type Props = {
-  children?: React$Element,
-  renderContext?: RenderContext,
+  children? : React$Element,
+  runJobsExecContext? : RunJobsExecutionContext,
 };
 
-let currentjobID = 0;
-const jobStates : { [key : number] : JobState } = {};
-
 class ServerProvider extends Component {
-  props: Props;
+  props : Props;
+  jobStates : JobsState;
+
+  constructor(props : Props) {
+    super(props);
+    if (props.runJobsExecContext) {
+      this.jobStates = props.runJobsExecContext.getState().jobsState;
+    } else {
+      this.jobStates = {};
+    }
+  }
 
   getChildContext() {
-    const context : ServerProviderContext = {
+    const context : ServerProviderChildContext = {
       reactJobsServer: {
-        nextJobID: () => {
-          currentjobID += 1;
-          return currentjobID;
-        },
-        registerJobState: (jobID: number, jobState: JobState) => {
-          jobStates[jobID] = jobState;
-          if (this.props.renderContext) {
-            this.props.renderContext.registerJobState(jobID, jobState);
+        registerJobState: (jobID : number, jobState : JobState) => {
+          this.jobStates[jobID] = jobState;
+          if (this.context.runJobsExecContext) {
+            this.context.runJobsExecContext.registerJobState(jobID, jobState);
           }
         },
-        getJobState: (jobID: number) => jobStates[jobID],
+        getJobState: (jobID : number) => this.jobStates[jobID],
       },
     };
 
@@ -37,10 +45,17 @@ class ServerProvider extends Component {
   }
 
   render() {
-    return Children.only(this.props.children);
+    return (
+      <ClientProvider>
+        {this.props.children}
+      </ClientProvider>
+    );
   }
 }
 
+ServerProvider.contextTypes = {
+  reactJobsRunner: PropTypes.object,
+};
 ServerProvider.childContextTypes = {
   reactJobsServer: PropTypes.object.isRequired,
 };

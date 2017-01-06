@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { mount } from 'enzyme';
-import { Foo, resolveAfter, rejectAfter, warningsAsErrors } from '../__helpers__';
+import { Foo, resolveAfter, rejectAfter, warningsAsErrors } from '../helpers';
 
 // Under Test.
 import job from '../../src/job';
@@ -64,22 +64,28 @@ describe('job()', () => {
       const FooWithJob = job(() => resolveAfter(workTime, 'result'))(Foo);
       const renderWrapper = mount(<FooWithJob />);
       // Allow enough time for work to complete
-      return resolveAfter(workTime + 5).then(() => {
-        const actual = renderWrapper.find(Foo).props();
-        const expected = { job: { inProgress: false, result: 'result' } };
-        expect(actual).toMatchObject(expected);
-      });
+      return resolveAfter(workTime + 5)
+        .then(() => {
+          const actual = renderWrapper.find(Foo).props();
+          const expected = { job: { inProgress: false, result: 'result' } };
+          expect(actual).toMatchObject(expected);
+        })
+        // swallow other errors
+        .catch(() => undefined);
     });
 
     it('should set "error" when work fails', () => {
       const FooWithJob = job(() => rejectAfter(workTime, 'error'))(Foo);
       const renderWrapper = mount(<FooWithJob />);
       // Allow enough time for work to complete
-      return resolveAfter(workTime + 5).then(() => {
-        const actual = renderWrapper.find(Foo).props();
-        const expected = { job: { inProgress: false, error: 'error' } };
-        expect(actual).toMatchObject(expected);
-      });
+      return resolveAfter(workTime + 5)
+        .then(() => {
+          const actual = renderWrapper.find(Foo).props();
+          const expected = { job: { inProgress: false, error: 'error' } };
+          expect(actual).toMatchObject(expected);
+        })
+        // swallow other errors
+        .catch(() => undefined);
     });
   });
 });

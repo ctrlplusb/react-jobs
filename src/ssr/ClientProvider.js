@@ -1,19 +1,20 @@
 /* @flow */
 
-import { Children, Component, Element, PropTypes } from 'react';
-import type { ClientProviderContext, RehydrateState } from './types';
-
-type React$Element = Element<*>;
+import { Children, Component, PropTypes } from 'react';
+import type {
+  ClientProviderChildContext,
+  RehydrateState,
+  React$Element,
+} from './types';
 
 type Props = {
   children?: React$Element,
   ssrState?: RehydrateState,
 };
 
-let currentjobID = 0;
-
 class ClientProvider extends Component {
   props: Props;
+  jobCounter: number;
   ssrState: ?RehydrateState;
 
   constructor(props : Props) {
@@ -21,14 +22,15 @@ class ClientProvider extends Component {
     if (props.ssrState) {
       this.ssrState = props.ssrState;
     }
+    this.jobCounter = 0;
   }
 
   getChildContext() {
-    const context : ClientProviderContext = {
+    const context : ClientProviderChildContext = {
       reactJobsClient: {
         nextJobID: () => {
-          currentjobID += 1;
-          return currentjobID;
+          this.jobCounter += 1;
+          return this.jobCounter;
         },
         popJobRehydrationForSRR: (jobID) => {
           if (this.ssrState) {

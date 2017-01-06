@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { mount } from 'enzyme';
-import { ServerProvider, job } from '../../../src/ssr';
-import { Foo, resolveAfter } from '../../__helpers__';
+import { job } from '../../../src/ssr';
+import { Foo, resolveAfter } from '../../helpers';
 
 // Under test.
 import runJobs from '../../../src/ssr/runJobs';
@@ -16,11 +16,11 @@ describe('runJobs()', () => {
     expect(actual.then).toBeTruthy();
   });
 
-  it.only('should render simple job with success', () => {
+  it('should render simple job with success', () => {
     const FooWithJob = job(() => resolveAfter(workTime, 'Hello world!'))(Foo);
-    const app = <ServerProvider><FooWithJob /></ServerProvider>;
-    return runJobs(app).then(() => {
-      expect(mount(app)).toMatchSnapshot();
+    const app = <FooWithJob />;
+    return runJobs(app).then(({ app: wrappedApp }) => {
+      expect(mount(wrappedApp)).toMatchSnapshot();
     });
   });
 });

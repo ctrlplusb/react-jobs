@@ -90,9 +90,6 @@ export default function job(work : Work) {
       }
 
       getExecutingJob() {
-        if (!this.state.executingJob) {
-          return undefined;
-        }
         return this.state.executingJob;
       }
 

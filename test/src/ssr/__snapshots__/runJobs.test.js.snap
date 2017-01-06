@@ -1,0 +1,30 @@
+exports[`runJobs() should render simple job with success 1`] = `
+<ServerProvider
+  runJobsExecContext={
+    Object {
+      "getState": [Function],
+      "registerJobState": [Function],
+    }
+  }>
+  <ClientProvider>
+    <FooWithJobWithJobID>
+      <FooWithJob
+        jobID={1}>
+        <Foo
+          job={
+            Object {
+              "error": undefined,
+              "inProgress": false,
+              "result": "Hello world!",
+            }
+          }
+          jobID={1}>
+          <div>
+            Hello world!
+          </div>
+        </Foo>
+      </FooWithJob>
+    </FooWithJobWithJobID>
+  </ClientProvider>
+</ServerProvider>
+`;

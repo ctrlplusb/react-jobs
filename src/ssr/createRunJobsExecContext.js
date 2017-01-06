@@ -1,8 +1,8 @@
 /* @flow */
 
-import type { RenderContext, JobState } from './types';
+import type { RunJobsExecutionContext, JobState } from './types';
 
-export default function createRenderContext() : RenderContext {
+export default function createRenderContext() : RunJobsExecutionContext {
   const jobsState = {};
   return {
     registerJobState: (jobID, state : JobState) => {

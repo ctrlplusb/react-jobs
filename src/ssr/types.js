@@ -1,9 +1,8 @@
 /* @flow */
 
-export type ReactJobsClientContext = {
-  nextJobID: () => number,
-  popJobRehydrationForSRR: (jobID: number) => any,
-};
+import { Element } from 'react';
+
+export type React$Element = Element<*>;
 
 export type JobState = {
   inProgress: boolean,
@@ -11,27 +10,35 @@ export type JobState = {
   error?: any,
 }
 
+export type JobsState = { [key: number] : JobState };
+
 export type RehydrateState = {
-  jobsState: { [key: number] : JobState },
+  jobsState: JobsState,
 };
 
-export type ReactJobsServerContext = {
-  nextJobID: () => number,
-  registerJobState: (number, JobState) => void,
-  getJobState: number => any,
-};
-
-export type RenderContext = {
+export type RunJobsExecutionContext = {
   registerJobState: (number, JobState) => void,
   getState: () => RehydrateState,
 };
 
-export type ClientProviderContext = {
-  reactJobsClient: ReactJobsClientContext,
+export type ReactJobsServerContext = {
+  registerJobState: (number, JobState) => void,
+  getJobState: number => any,
 };
 
-export type ServerProviderContext = {
+export type ServerProviderChildContext = {
   reactJobsServer: ReactJobsServerContext,
 };
 
-export type ProviderContext = ServerProviderContext & ClientProviderContext;
+export type ReactJobsClientContext = {
+  nextJobID: () => number,
+  popJobRehydrationForSRR: number => any,
+};
+
+export type ClientProviderChildContext = {
+  reactJobsClient: ReactJobsClientContext,
+};
+
+export type ProviderContext =
+  & ServerProviderChildContext
+  & ClientProviderChildContext;

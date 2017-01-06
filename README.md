@@ -114,7 +114,69 @@ This component can then be used like so:
 
 Below we will detail how to use this library for a _server side rendering_ application.
 
-TODO...
+We have created an "ssr" import point so that the server side rendering related modules of this library will only be bundled into your source when used.
+
+__Shared Code__
+
+Let's say you had the following React application component you want to render on the server/client:
+
+```jsx
+import React from 'react';
+// Note! We import from '/ssr'. This provides us with an extended version
+// of the job helper with SSR specific behaviours.
+import { job } from 'react-jobs/ssr';
+
+function MyApp({ job }) {
+  if (job.result) {
+    return <div>{job.result}</div>;
+  }
+  return null;
+}
+
+export default job(() => fetch('/stuff').then(r => r.json()))(MyApp);
+```
+
+__Server__
+
+```js
+import React from 'react';
+import { renderToString } from 'react-dom/server';
+import { runJobs } from 'react-jobs/ssr';
+import serialize from 'serialize-javascript';
+import MyApp from './shared/components/MyApp';
+
+export default function expressMiddleware(req, res, next) {
+  runJobs(<MyApp />).then(({ app, state, STATE_IDENTIFIER }) => {
+    const appString = renderToString(app);
+    const html = `
+      <html>
+        <head>
+          <title>Example</title>
+        </head>
+        <body>
+          <div id="app">${appString}</div>
+          <script type="text/javascript">
+            window.${STATE_IDENTIFIER} = ${serialize(state)}
+          </script>
+        </body>
+      </html>`;
+    res.send(html);
+  });
+}
+```
+
+__Client__
+
+```js
+import React from 'react';
+import { render } from 'react-dom';
+import { rehydrateJobs } from 'react-jobs/ssr';
+import MyApp from './shared/components/MyApp';
+
+rehydrateJobs(<MyApp />).then(({ app }) => {
+  render(app, document.getElementById('app'));
+});
+```
 
 ## API
 
@@ -122,19 +184,11 @@ TODO...
 
 TODO
 
-### `ClientProvider`
-
-TODO
-
-### `ServerProvider`
-
-TODO
-
-### `createRenderContext`
-
-TODO
-
 ### `runJobs`
+
+TODO
+
+### `rehydrateJobs`
 
 TODO
 

@@ -1,0 +1,3 @@
+exports[`integration full ssr app works 1`] = `"<div data-reactroot=\"\" data-reactid=\"1\" data-react-checksum=\"-513584873\"><div data-reactid=\"2\">Hello world!</div><div data-reactid=\"3\">Goodbye world!</div><div data-reactid=\"4\"><!-- react-text: 5 -->Error: <!-- /react-text --><!-- react-text: 6 -->Oh noes!<!-- /react-text --></div></div>"`;
+
+exports[`integration full ssr app works 2`] = `"<div data-reactroot=\"\" data-reactid=\"1\" data-react-checksum=\"-2088486596\"><div data-reactid=\"2\">In progress...</div><div data-reactid=\"3\">In progress...</div><div data-reactid=\"4\">In progress...</div></div>"`;

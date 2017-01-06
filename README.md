@@ -14,6 +14,7 @@ Attach "jobs" to your components, with SSR support.
 ## TOCs
 
   - [Introduction](#introduction)
+  - [Features](#features)
   - [Installation](#installation)
   - [Usage](#usage)
   - [Server Side Rendering Usage](#server-side-rendering-usage)
@@ -21,20 +22,25 @@ Attach "jobs" to your components, with SSR support.
     - [job](#job)
     - [runJobs](#runJobs)
     - [rehydrateJobs](#rehydrateJobs)
+  - [Alternative](#alternatives)
   - [FAQs](#faqs)
   - [Credits](#credits)
 
 ## Introduction
 
-This library provides you with a generic mechanism of attaching "jobs" to your React Components, and includes support for server rendering (i.e. within SSR/universal/isomorphic apps).
+This library provides you with a generic mechanism of attaching "jobs" to your React Components, and includes support for server rendering (i.e. within SSR/universal/isomorphic apps
 
-You can use these "jobs" to do any of the following:
- - Resolve additional data for your components in a sync/async manner.
- - Handle data preloading on the server.
- - Rehydrate a server data load on the client.
- - ... more?
+## Features
 
-It provides you with a simple `function` and `Promise` based API which allows you to easily compose additional features such as data caching or 3rd party integrations (e.g. Redux).
+ - Resolve additional data/props for your components in a sync/async manner.
+ - Simple `function` and `Promise` based API which allows you to easily compose additional features such as data caching or 3rd party integrations (e.g. Redux).
+ - Separate data loading concerns from your components.
+ - Supports data preloading on the server.
+ - Supports "job" deferring on the server (i.e. insist that job only gets executed on the client/browser).
+ - Provides a simple API to rehydrate server loaded data on the client, preventing React checksum issues.
+ - Supports sync resolving if data is already loaded to avoid "loading" component flashing.
+ - Doesn't block your component from rendering, instead it passes a "job" prop to your component that represents the state of a job.  This allows you to show a "loading" component if you like, or continue rendering subtrees whilst the data loads.
+ - Splits the browser and SSR APIs so that you don't end up including the entire library in your projects unnecessarily.
 
 ## Installation
 
@@ -227,6 +233,10 @@ TODO
 TODO
 
 ### `rehydrateJobs`
+
+TODO
+
+## Alternatives
 
 TODO
 

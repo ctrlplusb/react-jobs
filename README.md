@@ -28,7 +28,7 @@ Attach "jobs" to your components, with SSR support.
 
 ## Introduction
 
-This library provides you with a generic mechanism of attaching "jobs" to your React Components, and includes support for server rendering (i.e. within SSR/universal/isomorphic apps
+This library provides you with a generic mechanism of attaching "jobs" to your React Components, and includes support for server rendering (i.e. within SSR/universal/isomorphic) apps.
 
 ## Features
 

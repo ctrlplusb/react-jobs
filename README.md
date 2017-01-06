@@ -1,6 +1,4 @@
-## ___WIP___
-
-This library is in a complete state of flux at the moment.  I haven't done any releases, not even an alpha.  I am evolving the API through a test process.  This message will disappear after it settles enough for an alpha release.  Until then I wouldn't pay too much attention to this library. :)
+> This library is in an early alpha phase until we are all 100% with the API. I would welcome any feedback. :)
 
 ---
 
@@ -34,7 +32,9 @@ This library provides you with a generic mechanism of attaching "jobs" to your R
 
 You can use these "jobs" to do any of the following:
  - Resolve additional data for your components in a sync/async manner.
- - ?
+ - Handle data preloading on the server.
+ - Rehydrate a server data load on the client.
+ - ... more?
 
 It provides you with a simple `function` and `Promise` based API which allows you to easily compose additional features such as data caching or 3rd party integrations (e.g. Redux).
 
@@ -60,12 +60,14 @@ In the naive example below we will use the `fetch` API (you'll need to [polyfill
 
 ```js
 import React from 'react';
-import { job } from 'react-jobs';
+import { job } from 'react-jobs'; // 👍
 import Product from './components/Product';
 
-function Products({ job, categoryID }) {
-  // We provide a "job" prop containing the status/results of
-  // the work you attached to your component.
+function Products(props) {
+  const {
+    job, // 👈 we provide you this prop representing the state of the "job"
+    categoryID,
+  } = props;
 
   if (job.inProgress) {
     // If the work is still being processed (i.e. the Promise
@@ -91,6 +93,8 @@ function Products({ job, categoryID }) {
   );
 }
 
+// You use the job function to attach work to your component.
+//             👇
 export default job(
   // Provide a function defining the work that needs to be done.
   // This function will be provided the props passed to your
@@ -122,10 +126,9 @@ Let's say you had the following React application component you want to render o
 
 ```jsx
 import React from 'react';
-// Note! We import from '/ssr'. This provides us with an extended version
-// of the job helper with SSR specific behaviours.
-import { job } from 'react-jobs/ssr';
+import { job } from 'react-jobs/ssr'; // ❗️ note the "/ssr"
 
+// We attach a "job" to our app component.
 function MyApp({ job }) {
   if (job.result) {
     return <div>{job.result}</div>;
@@ -133,35 +136,58 @@ function MyApp({ job }) {
   return null;
 }
 
-export default job(() => fetch('/stuff').then(r => r.json()))(MyApp);
+// Use the job the same as you would in a "browser-only" implementation.
+export default job(
+  function work(props) {
+    return fetch('/stuff').then(r => r.json())
+  }
+)(MyApp);
 ```
 
 __Server__
 
 ```js
+import { runJobs } from 'react-jobs/ssr'; // 👈
 import React from 'react';
 import { renderToString } from 'react-dom/server';
-import { runJobs } from 'react-jobs/ssr';
 import serialize from 'serialize-javascript';
 import MyApp from './shared/components/MyApp';
 
 export default function expressMiddleware(req, res, next) {
-  runJobs(<MyApp />).then(({ app, state, STATE_IDENTIFIER }) => {
-    const appString = renderToString(app);
-    const html = `
-      <html>
-        <head>
-          <title>Example</title>
-        </head>
-        <body>
-          <div id="app">${appString}</div>
-          <script type="text/javascript">
-            window.${STATE_IDENTIFIER} = ${serialize(state)}
-          </script>
-        </body>
-      </html>`;
-    res.send(html);
-  });
+  // 👇 run the jobs on your app.
+  runJobs(<MyApp />)
+    //        👇 and you get back a result object.
+    .then((runResult) => {
+      const {
+        // ❗️ The runResult includes a decorated version of your app
+        // that will have all the jobs data on it. Make sure you us
+        // this for the renderToString call.
+        app,
+        // This state object represents the job state for the
+        // render. You need to attach this to the response
+        // so that the client app can rehydrate itself with
+        // this data.
+        state,
+        // This is the identifier you should use when attaching
+        // the state to the "window" object.
+        STATE_IDENTIFIER
+      } = runResult;
+
+      const appString = renderToString(app);
+      const html = `
+        <html>
+          <head>
+            <title>Example</title>
+          </head>
+          <body>
+            <div id="app">${appString}</div>
+            <script type="text/javascript">
+              window.${STATE_IDENTIFIER} = ${serialize(state)}
+            </script>
+          </body>
+        </html>`;
+      res.send(html);
+    });
 }
 ```
 
@@ -170,12 +196,26 @@ __Client__
 ```js
 import React from 'react';
 import { render } from 'react-dom';
-import { rehydrateJobs } from 'react-jobs/ssr';
+import { rehydrateJobs } from 'react-jobs/ssr'; // 👈
 import MyApp from './shared/components/MyApp';
 
-rehydrateJobs(<MyApp />).then(({ app }) => {
-  render(app, document.getElementById('app'));
-});
+//    Provide your app component to the rehydrateJobs function
+//    so that the job data from the server is restored into your
+//    the browser render of your app. This will make sure the
+//    React checksums match with the response from the server
+// 👇 and will prevent any "double" rendering of your app.
+rehydrateJobs(<MyApp />)
+  //       👇 and you get back a result object.
+  .then((rehydrateResult) => {
+    const {
+      // ❗️ The rehydrateResult includes a decorated version of
+      // your app that will have all the jobs data on it. Make
+      // sure you us this for the render call.
+      app,
+    } = runResult;
+
+    render(app, document.getElementById('app'));
+  });
 ```
 
 ## API

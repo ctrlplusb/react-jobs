@@ -12,10 +12,6 @@ deploy:
   on:
     branch: master
     tags: true
-    repo: ctrlplusb/react-jobs
-branches:
-  only:
-  - master
 node_js:
 - '7'
 script:

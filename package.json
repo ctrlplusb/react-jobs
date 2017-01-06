@@ -34,9 +34,6 @@
     "test:coverage": "yarn run test -- --coverage",
     "test:coverage:deploy": "yarn run coverage && codecov"
   },
-  "peerDependencies": {
-    "react": ">=14.0.0 || >=15.0.0"
-  },
   "devDependencies": {
     "app-root-dir": "1.0.2",
     "babel-cli": "6.18.0",

@@ -1,4 +1,4 @@
-exports[`job() rendering should set the "result" immediately if the work does not return a promise 1`] = `
+exports[`withJob() rendering should set the "result" immediately if the work does not return a promise 1`] = `
 <FooWithJob>
   <Foo
     job={

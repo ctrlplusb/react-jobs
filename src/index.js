@@ -1,7 +1,8 @@
 /* @flow */
+/* eslint-disable import/prefer-default-export */
 
-import job from './job';
+import withJob from './withJob';
 
-export default {
-  job,
+export {
+  withJob,
 };

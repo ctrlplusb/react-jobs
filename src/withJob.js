@@ -15,12 +15,12 @@ type Props = {
   [key: string]: any,
 };
 
-export default function job(work : Work) {
+export default function withJob(work : Work) {
   if (typeof work !== 'function') {
-    throw new Error('You must provide a function to a react-jobs job declaration.');
+    throw new Error('You must provide a "createWork" function to the "withJob".');
   }
 
-  return function WrapComponentWithJob(WrappedComponent : Function) {
+  return function wrapComponentWithJob(WrappedComponent : Function) {
     class ComponentWithJob extends Component {
       props: Props;
       state: State;

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { mount } from 'enzyme';
-import { job, runJobs } from '../../../src/ssr';
+import { withJob, runJobs } from '../../../src/ssr';
 import { Foo, resolveAfter, rejectAfter } from '../../helpers';
 
 const workTime = 10; // ms
@@ -14,7 +14,7 @@ describe('runJobs()', () => {
   });
 
   it('should render a job that succeeds', () => {
-    const FooWithJob = job(() => resolveAfter(workTime, 'Hello world!'))(Foo);
+    const FooWithJob = withJob(() => resolveAfter(workTime, 'Hello world!'))(Foo);
     const app = <FooWithJob />;
     return runJobs(app).then(({ appWithJobs }) => {
       expect(mount(appWithJobs)).toMatchSnapshot();
@@ -22,7 +22,7 @@ describe('runJobs()', () => {
   });
 
   it('should render a job that fails', () => {
-    const FooWithJob = job(() => rejectAfter(workTime, 'Poop!'))(Foo);
+    const FooWithJob = withJob(() => rejectAfter(workTime, 'Poop!'))(Foo);
     const app = <FooWithJob />;
     return runJobs(app).then(({ appWithJobs }) => {
       expect(mount(appWithJobs)).toMatchSnapshot();
@@ -30,7 +30,7 @@ describe('runJobs()', () => {
   });
 
   it('should not render a job that is deferred', () => {
-    const FooWithJob = job(
+    const FooWithJob = withJob(
       () => resolveAfter(workTime, 'Hello world!'),
       { defer: true },
     )(Foo);

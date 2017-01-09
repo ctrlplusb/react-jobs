@@ -4,7 +4,7 @@ import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { Foo, resolveAfter, rejectAfter } from '../../helpers';
 import {
-  job,
+  withJob,
   runJobs,
   rehydrateJobs,
 } from '../../../src/ssr';
@@ -13,9 +13,9 @@ import { STATE_IDENTIFIER } from '../../../src/ssr/constants';
 const workTime = 10;
 
 const createComponents = () => ({
-  Hello: job(() => resolveAfter(workTime, 'Hello world!'))(Foo),
-  Goodbye: job(() => resolveAfter(workTime, 'Goodbye world!'))(Foo),
-  Fail: job(() => rejectAfter(workTime, 'Oh noes!'))(Foo),
+  Hello: withJob(() => resolveAfter(workTime, 'Hello world!'))(Foo),
+  Goodbye: withJob(() => resolveAfter(workTime, 'Goodbye world!'))(Foo),
+  Fail: withJob(() => rejectAfter(workTime, 'Oh noes!'))(Foo),
 });
 
 const createApp = () => {

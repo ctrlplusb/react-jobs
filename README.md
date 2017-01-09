@@ -7,6 +7,12 @@ Attach asynchronous/synchronous "jobs" to your components, with SSR support.
 [![Travis](https://img.shields.io/travis/ctrlplusb/react-jobs.svg?style=flat-square)](https://travis-ci.org/ctrlplusb/react-jobs)
 [![Codecov](https://img.shields.io/codecov/c/github/ctrlplusb/react-jobs.svg?style=flat-square)](https://codecov.io/github/ctrlplusb/react-jobs)
 
+```js
+export default withJob(
+  () => ({ categoryID }) => fetch(`/categories/${categoryID}`).then(r => r.json())
+)(Category)
+```
+
 ## TOCs
 
   - [Introduction](#introduction)
@@ -15,9 +21,9 @@ Attach asynchronous/synchronous "jobs" to your components, with SSR support.
   - [Usage](#usage)
   - [Server Side Rendering Usage](#server-side-rendering-usage)
   - [API](#api)
-    - [job](#job)
-    - [runJobs](#runJobs)
-    - [rehydrateJobs](#rehydrateJobs)
+    - [withJob(createWork)](#withjob-creatework)
+    - [runJobs(app)](#runjobs-app)
+    - [rehydrateJobs(app)](#rehydratejobs-app)
   - [Alternative](#alternatives)
   - [Recipes](#recipes)
     - [`redux-thunk`](#redux-thunk)
@@ -64,13 +70,13 @@ In the naive example below we will use the `fetch` API (you'll need to [polyfill
 
 ```js
 import React from 'react';
-import { job } from 'react-jobs'; // 👈 import the job helper
+import { withJob } from 'react-jobs'; // 👈 import the withJob helper
 import Product from './components/Product';
 
 function Products(props) {
   const {
     job, // 👈 Wrapping your component with a "job" will result in
-         //    this prop being provided to it.  This represents the 
+         //    this prop being provided to it.  This represents the
          //    state of the "job".
     categoryID,
   } = props;
@@ -95,7 +101,7 @@ function Products(props) {
     <div>
       {
         //      This will contain the result of the "job".
-        //      In this example we expect an array of 
+        //      In this example we expect an array of
         //   👇 products to be returned.
         job.result.map(product =>
           <Product key={product.id} item={product} />
@@ -104,19 +110,21 @@ function Products(props) {
   );
 }
 
-// You use the job function to attach work to your component.
+// You use the "withJob" function to attach work to your component.
 //             👇
-export default job(
+export default withJob(
   // Provide a function that will create a "work" function.
-  // The "work" function will be provided the props that were 
-  // passed into component and must return a Promise for 
+  // The "work" function will be provided the props that were
+  // passed into component and must return a Promise for
   // asynchronous work, and any other value for synchronous
   // work.
-  () => function work(props) {
-    // Fetch the products for the given `categoryID` prop,
-    return fetch(`/products/category/${props.categoryID}`)
-      // then convert the response to JSON.
-      .then(response => response.json());
+  function createWork() {
+    return function work(props) {
+      // Fetch the products for the given `categoryID` prop,
+      return fetch(`/products/category/${props.categoryID}`)
+        // then convert the response to JSON.
+        .then(response => response.json());
+    }
   }
 )(Products);
 ```
@@ -139,7 +147,7 @@ Let's say you had the following React application component you want to render o
 
 ```jsx
 import React from 'react';
-import { job } from 'react-jobs/ssr'; // 👈 ❗️ note the "/ssr"
+import { withJob } from 'react-jobs/ssr'; // 👈 ❗️ note the "/ssr"
 
 function MyApp({ job }) {
   if (job.result) {
@@ -148,12 +156,14 @@ function MyApp({ job }) {
   return null;
 }
 
-// Use the job the same in a similar fashion to the 
+// Use the job the same in a similar fashion to the
 // "browser-only" implementation.
-//             👇 
-export default job(
-  () => function work(props) {
-    return fetch('/stuff').then(r => r.json());
+//             👇
+export default withJob(
+  function createWork() {
+    return function work(props) {
+      return fetch('/stuff').then(r => r.json());
+    }
   }
 )(MyApp);
 ```
@@ -242,7 +252,7 @@ rehydrateJobs(app)
 
 ## API
 
-### `job(work)`
+### `withJob(createWork)`
 
 Attaches a "job", which defines some asynchronous/synchronous work that should be done, to a React component.
 
@@ -257,15 +267,15 @@ The new component class will receive an additional prop called `job`.  The `job`
 #### Importing
 
 There are two versions of this API. One for "browser-only" applications, and another for "server side rendering" applications.
- 
+
 For a "browser-only" React application use the following import:
 ```js
-import { job } from 'react-jobs';
+import { withJob } from 'react-jobs';
 ```
- 
+
 For a "server side rendering" React application use the following import:
 ```js
-import { job } from 'react-jobs/ssr';
+import { withJob } from 'react-jobs/ssr';
 ```
 
 #### Arguments
@@ -284,7 +294,7 @@ A higher-order React component class that passes the job state into your compone
 ##### Asynchronous Job
 
 ```js
-export default job(
+export default withJob(
   () => (props) => new Promise('/fetchSomething')
 )(YourComponent);
 ```
@@ -292,7 +302,7 @@ export default job(
 ##### Synchronous Job
 
 ```js
-export default job(
+export default withJob(
   () => (props) => 'foo'
 )(YourComponent);
 ```
@@ -300,7 +310,7 @@ export default job(
 ##### Defer Job on Server
 
 ```js
-export default job(
+export default withJob(
   () => (props) => new Promise('/fetchSomething'),
   { defer: true }  
 )(YourComponent);
@@ -311,7 +321,7 @@ export default job(
 ```js
 let resultCache = null;
 
-export default job(
+export default withJob(
   () => (props) => {
     if (resultCache) {
       // We have a cached result, return it.
@@ -329,7 +339,7 @@ export default job(
 )(YourComponent);
 ```
 
-### `runJobs`
+### `runJobs(app)`
 
 This is used to run jobs on the "server" side of your "server side rendering" React application.
 
@@ -369,12 +379,12 @@ runJobs(app).then(({ appWithJobs, state, STATE_IDENTIFIER }) => {
             </script>
           </body>
         </html>`;
-        
+
   // Send back the HTTP response containing the HTML...
 });
 ```
 
-### `rehydrateJobs`
+### `rehydrateJobs(app)`
 
 This is used to rehydrate jobs on the "browser" side of your "server side rendering" React application.
 
@@ -393,7 +403,7 @@ import { rehydrateJobs } from 'react-jobs/ssr';
 It returns a `Promise` that resolves an object as the result. The object contains the following properties:
 
   - `appWithJobs` _(React Element)_: Your React application now wrapped with everything it needs to render the components with jobs attached to them.  You _must_ pass this to the `ReactDOM.render` function rather than the original "app" argument otherwise your job components won't render with the jobs rehydrated to match the server response, which will result in the React checksums not matching and cause your app to be rendered again on the client.
- 
+
 #### Example
 
 ```js

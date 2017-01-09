@@ -411,7 +411,9 @@ rehydrateJobs(app).then(({ appWithJobs }) => {
 
 ## Alternatives
 
-Below are some of the alternatives along with a brief description of the differences between this library and each of them.
+Yes, I am aware there is a wide array of alternatives available. There are however some sublte/huge differences between this library and the rest.
+
+Below is a list of the alternatives along with a brief description of the differences between this library and each of them.  It's good to make yourselve familiar with all of them.  Perhaps one of them will be a better fit for your specific needs.
 
 ### [`async-props`](https://github.com/ryanflorence/async-props)
 

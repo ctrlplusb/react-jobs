@@ -18,7 +18,7 @@ type ElementJob = {
   context: Context,
 }
 type RunJobsResult = {
-  app: React$Element,
+  appWithJobs: React$Element,
   state: RehydrateState,
   STATE_IDENTIFIER: string,
 };
@@ -142,7 +142,7 @@ export default function runJobs(
   }
 
   const resolveResult = () => ({
-    app: processingElement,
+    appWithJobs: processingElement,
     state: rootContext.runJobsExecContext.getState(),
     STATE_IDENTIFIER,
   });

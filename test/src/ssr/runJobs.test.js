@@ -16,16 +16,16 @@ describe('runJobs()', () => {
   it('should render a job that succeeds', () => {
     const FooWithJob = job(() => resolveAfter(workTime, 'Hello world!'))(Foo);
     const app = <FooWithJob />;
-    return runJobs(app).then(({ app: wrappedApp }) => {
-      expect(mount(wrappedApp)).toMatchSnapshot();
+    return runJobs(app).then(({ appWithJobs }) => {
+      expect(mount(appWithJobs)).toMatchSnapshot();
     });
   });
 
   it('should render a job that fails', () => {
     const FooWithJob = job(() => rejectAfter(workTime, 'Poop!'))(Foo);
     const app = <FooWithJob />;
-    return runJobs(app).then(({ app: wrappedApp }) => {
-      expect(mount(wrappedApp)).toMatchSnapshot();
+    return runJobs(app).then(({ appWithJobs }) => {
+      expect(mount(appWithJobs)).toMatchSnapshot();
     });
   });
 
@@ -35,8 +35,8 @@ describe('runJobs()', () => {
       { defer: true },
     )(Foo);
     const app = <FooWithJob />;
-    return runJobs(app).then(({ app: wrappedApp }) => {
-      expect(mount(wrappedApp)).toMatchSnapshot();
+    return runJobs(app).then(({ appWithJobs }) => {
+      expect(mount(appWithJobs)).toMatchSnapshot();
     });
   });
 });

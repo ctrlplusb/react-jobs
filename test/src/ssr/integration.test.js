@@ -37,9 +37,9 @@ describe('integration', () => {
   it('full ssr app works', () => {
     const serverApp = createApp();
     return runJobs(serverApp)
-      .then(({ app, state, STATE_IDENTIFIER: STATE_ID }) => {
+      .then(({ appWithJobs, state, STATE_IDENTIFIER: STATE_ID }) => {
         // "Server" render
-        const serverRender = renderToString(app);
+        const serverRender = renderToString(appWithJobs);
         expect(serverRender).toMatchSnapshot();
         // Attach the state to the "window" for the client
         global.window[STATE_ID] = state;
@@ -49,10 +49,10 @@ describe('integration', () => {
         // "Client" render
         const clientApp = createApp();
         return rehydrateJobs(clientApp)
-          .then(({ app }) => {
-            const clientRender = renderToString(app);
+          .then(({ appWithJobs }) => {
+            const clientRender = renderToString(appWithJobs);
             expect(clientRender).toEqual(serverRender);
-            return app;
+            return appWithJobs;
           });
       })
       .then((clientApp) => {

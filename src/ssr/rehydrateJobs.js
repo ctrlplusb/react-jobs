@@ -7,11 +7,11 @@ import { STATE_IDENTIFIER } from './constants';
 
 export default function rehydrateJobs(app : Element<any>) {
   return new Promise((resolve) => {
-    const wrappedApp = (
+    const appWithJobs = (
       <ClientProvider ssrState={window[STATE_IDENTIFIER]}>
         {app}
       </ClientProvider>
     );
-    resolve({ app: wrappedApp });
+    resolve({ appWithJobs });
   });
 }

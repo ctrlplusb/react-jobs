@@ -28,7 +28,7 @@
     "flow": "babel-node ./tools/scripts/flow",
     "flow:coverage": "flow-coverage-report -i 'src/**/*.js' -t html -t json -t text",
     "flow:defs": "flow-typed install --overwrite",
-    "lint": "eslint modules",
+    "lint": "eslint src",
     "prepublish": "yarn run build",
     "test": "jest",
     "test:coverage": "yarn run test -- --coverage",

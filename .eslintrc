@@ -20,6 +20,9 @@
     // A .jsx extension is not required for files containing jsx.
     "react/jsx-filename-extension": 0,
     // This rule struggles with flow and class properties.
-    "react/sort-comp": 0
+    "react/sort-comp": 0,
+    // We expect consumers to have react in their projects.
+    // TODO: Make this react specific via regex.
+    "import/no-extraneous-dependencies": 0
   }
 }

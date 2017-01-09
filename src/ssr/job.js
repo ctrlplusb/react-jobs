@@ -11,8 +11,20 @@ type Context = {
   reactJobsServer?: ReactJobsServerContext,
 };
 
-const getInitialState = (context, jobID) => {
+type Options = {
+  defer: boolean
+};
+
+const defaultOptions = {
+  defer: false,
+};
+
+const getInitialState = (context, jobID, defer) => {
   const { reactJobsClient, reactJobsServer } = context;
+
+  if (defer) {
+    return { inProgress: true };
+  }
 
   if (reactJobsServer) {
     // Running on the server. If the jobs have been executed by the runJobs
@@ -33,8 +45,10 @@ const getInitialState = (context, jobID) => {
   return undefined;
 };
 
-const job = (work : any) => (Component : Function) => {
+const job = (work : any, options?: Options) => (Component : Function) => {
   let jobIDHandle = null;
+
+  const { defer } = options || defaultOptions;
 
   function withSSRBehaviour(WrappedComponent) {
     const ComponentWithJobID = (props : Object, context : Context) => {
@@ -57,7 +71,7 @@ const job = (work : any) => (Component : Function) => {
 
       // Determine if we have an state from server side processing or
       // client side rehdration.
-      const initialState = getInitialState(context, jobID);
+      const initialState = getInitialState(context, jobID, defer);
 
       // When on a server we want to call back and register the result of the
       // work so that the server can hydrate the app appropriately as well

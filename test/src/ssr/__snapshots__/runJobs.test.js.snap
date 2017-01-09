@@ -1,4 +1,91 @@
-exports[`runJobs() should render simple job with success 1`] = `
+exports[`runJobs() should not render a job that is deferred 1`] = `
+<ServerProvider
+  runJobsExecContext={
+    Object {
+      "getState": [Function],
+      "registerJobState": [Function],
+    }
+  }>
+  <ClientProvider>
+    <FooWithJobWithJobID>
+      <FooWithJob
+        jobInitState={
+          Object {
+            "inProgress": true,
+          }
+        }
+        onJobProcessed={[Function]}>
+        <Foo
+          job={
+            Object {
+              "error": undefined,
+              "inProgress": true,
+              "result": undefined,
+            }
+          }
+          jobInitState={
+            Object {
+              "inProgress": true,
+            }
+          }
+          onJobProcessed={[Function]}>
+          <div>
+            In progress...
+          </div>
+        </Foo>
+      </FooWithJob>
+    </FooWithJobWithJobID>
+  </ClientProvider>
+</ServerProvider>
+`;
+
+exports[`runJobs() should render a job that fails 1`] = `
+<ServerProvider
+  runJobsExecContext={
+    Object {
+      "getState": [Function],
+      "registerJobState": [Function],
+    }
+  }>
+  <ClientProvider>
+    <FooWithJobWithJobID>
+      <FooWithJob
+        jobInitState={
+          Object {
+            "error": "Poop!",
+            "inProgress": false,
+            "result": undefined,
+          }
+        }
+        onJobProcessed={[Function]}>
+        <Foo
+          job={
+            Object {
+              "error": "Poop!",
+              "inProgress": false,
+              "result": undefined,
+            }
+          }
+          jobInitState={
+            Object {
+              "error": "Poop!",
+              "inProgress": false,
+              "result": undefined,
+            }
+          }
+          onJobProcessed={[Function]}>
+          <div>
+            Error: 
+            Poop!
+          </div>
+        </Foo>
+      </FooWithJob>
+    </FooWithJobWithJobID>
+  </ClientProvider>
+</ServerProvider>
+`;
+
+exports[`runJobs() should render a job that succeeds 1`] = `
 <ServerProvider
   runJobsExecContext={
     Object {

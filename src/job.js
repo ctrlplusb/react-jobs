@@ -1,18 +1,16 @@
 /* @flow */
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { getDisplayName, isPromise } from './utils';
-import type {
-  ProviderContext,
-  JobState,
-} from './ssr/types';
+import type { JobState } from './ssr/types';
 
 type Work = (props : Object) => any;
 
 type State = JobState & { executingJob?: Promise<any> };
 
 type Props = {
-  jobID?: number,
+  jobInitState?: JobState,
+  onJobProcessed?: (jobState: JobState) => void,
   [key: string]: any,
 };
 
@@ -26,28 +24,17 @@ export default function job(work : Work) {
       props: Props;
       state: State;
 
-      constructor(props : Props, context : ProviderContext) {
-        super(props, context);
+      constructor(props : Props) {
+        super(props);
         this.state = { inProgress: false };
       }
 
       componentWillMount() {
-        if (this.context.reactJobsClient) {
-          const ssrRehydrateState = this.context
-            .reactJobsClient
-            .popJobRehydrationForSRR(this.props.jobID);
-          if (ssrRehydrateState) {
-            this.setState(ssrRehydrateState);
-            return;
-          }
-        }
+        const { jobInitState } = this.props;
 
-        if (this.context.reactJobsServer) {
-          const jobState = this.context.reactJobsServer.getJobState(this.props.jobID);
-          if (jobState) {
-            this.setState(jobState);
-            return;
-          }
+        if (jobInitState) {
+          this.setState(jobInitState);
+          return;
         }
 
         this.handleWork(this.props);
@@ -58,7 +45,7 @@ export default function job(work : Work) {
       }
 
       handleWork(props : Props) {
-        const context : ProviderContext = this.context;
+        const { onJobProcessed } = this.props;
         const workResult = work(props);
 
         if (isPromise(workResult)) {
@@ -70,14 +57,10 @@ export default function job(work : Work) {
             .catch((error) => {
               console.warn('Job failed:\n', error); // eslint-disable-line no-console
               this.setState({ inProgress: false, error });
-              return 'ouchy';
             })
             .then(() => {
-              if (props.jobID && context.reactJobsServer) {
-                context.reactJobsServer.registerJobState(
-                  props.jobID,
-                  this.getJobState(),
-                );
+              if (onJobProcessed) {
+                onJobProcessed(this.getJobState());
               }
             });
 
@@ -104,10 +87,6 @@ export default function job(work : Work) {
       }
     }
     ComponentWithJob.displayName = `${getDisplayName(WrappedComponent)}WithJob`;
-    ComponentWithJob.contextTypes = {
-      reactJobsClient: PropTypes.object,
-      reactJobsServer: PropTypes.object,
-    };
     return ComponentWithJob;
   };
 }

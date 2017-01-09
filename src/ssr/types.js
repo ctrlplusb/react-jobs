@@ -39,6 +39,7 @@ export type ClientProviderChildContext = {
   reactJobsClient: ReactJobsClientContext,
 };
 
-export type ProviderContext =
-  & ServerProviderChildContext
-  & ClientProviderChildContext;
+export type JobContext = {
+  reactJobsClient?: ReactJobsClientContext,
+  reactJobsServer?: ReactJobsServerContext,
+};

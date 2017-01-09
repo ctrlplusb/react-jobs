@@ -9,7 +9,14 @@ exports[`runJobs() should render simple job with success 1`] = `
   <ClientProvider>
     <FooWithJobWithJobID>
       <FooWithJob
-        jobID={1}>
+        jobInitState={
+          Object {
+            "error": undefined,
+            "inProgress": false,
+            "result": "Hello world!",
+          }
+        }
+        onJobProcessed={[Function]}>
         <Foo
           job={
             Object {
@@ -18,7 +25,14 @@ exports[`runJobs() should render simple job with success 1`] = `
               "result": "Hello world!",
             }
           }
-          jobID={1}>
+          jobInitState={
+            Object {
+              "error": undefined,
+              "inProgress": false,
+              "result": "Hello world!",
+            }
+          }
+          onJobProcessed={[Function]}>
           <div>
             Hello world!
           </div>

@@ -1,7 +1,7 @@
 {
   "name": "react-jobs",
   "version": "0.1.1",
-  "description": "Attach \"jobs\" to your components, with SSR support.",
+  "description": "Attach asynchronous/synchronous \"jobs\" to your components, with SSR support.",
   "license": "MIT",
   "main": "commonjs/index.js",
   "files": [

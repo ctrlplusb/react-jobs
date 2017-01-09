@@ -23,6 +23,8 @@ Attach asynchronous/synchronous "jobs" to your components, with SSR support.
     - [runJobs](#runJobs)
     - [rehydrateJobs](#rehydrateJobs)
   - [Alternative](#alternatives)
+  - [Recipes](#recipes)
+    - [`redux-thunk`](#redux-thunk)
   - [FAQs](#faqs)
   - [Credits](#credits)
 
@@ -78,7 +80,7 @@ function Products(props) {
 
   if (job.inProgress) {
     //    👆
-    // If the work is still being processed (i.e. the Promise
+    // If the job is still being processed (i.e. the Promise
     // is not yet resolved) then the `job.inProgress` boolean flag
     // value will be set to `true`.
     return <div>Retrieving...</div>;
@@ -110,7 +112,7 @@ function Products(props) {
 export default job(
   // Provide a function that will create a "work" function.
   // The "work" function will be provided the props that were 
-  // passed into component and must return a Promise for any 
+  // passed into component and must return a Promise for 
   // asynchronous work, and any other value for synchronous
   // work.
   () => function work(props) {
@@ -132,7 +134,7 @@ This component can then be used like so:
 
 Below we will detail how to use this library for a _server side rendering_ application.
 
-We have created an "ssr" import point so that the server side rendering related modules of this library will only be bundled into your source when used.
+We have created a `/ssr` import point so that the server side rendering related modules of this library will only be bundled into your project when used.  This saves the "browser-only" implementations some precious bytes
 
 __Shared Code__
 
@@ -140,9 +142,8 @@ Let's say you had the following React application component you want to render o
 
 ```jsx
 import React from 'react';
-import { job } from 'react-jobs/ssr'; // ❗️ note the "/ssr"
+import { job } from 'react-jobs/ssr'; // 👈 ❗️ note the "/ssr"
 
-// We attach a "job" to our app component.
 function MyApp({ job }) {
   if (job.result) {
     return <div>{job.result}</div>;
@@ -150,7 +151,9 @@ function MyApp({ job }) {
   return null;
 }
 
-// Use the job the same in a similar fashion to the "browser-only" implementation.
+// Use the job the same in a similar fashion to the 
+// "browser-only" implementation.
+//             👇 
 export default job(
   () => function work(props) {
     return fetch('/stuff').then(r => r.json());
@@ -159,6 +162,8 @@ export default job(
 ```
 
 __Server__
+
+When rendering on the server do the following...
 
 ```js
 import { runJobs } from 'react-jobs/ssr'; // 👈
@@ -208,6 +213,8 @@ export default function expressMiddleware(req, res, next) {
 ```
 
 __Client__
+
+When rendering on the client/browser do the following...
 
 ```js
 import React from 'react';
@@ -427,6 +434,12 @@ TODO
 TODO
 
 ### [`redial`](https://github.com/markdalgleish/redial)
+
+TODO
+
+## Recipes
+
+### `redux-thunk`
 
 TODO
 

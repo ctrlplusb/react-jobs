@@ -1,7 +1,3 @@
-> This library is in an early alpha phase until we are all 100% with the API. I would welcome any feedback. :)
-
----
-
 # react-jobs 🕴
 
 Attach asynchronous/synchronous "jobs" to your components, with SSR support.
@@ -26,6 +22,7 @@ Attach asynchronous/synchronous "jobs" to your components, with SSR support.
   - [Recipes](#recipes)
     - [`redux-thunk`](#redux-thunk)
   - [FAQs](#faqs)
+  - [Changelog](/releases)
   - [Credits](#credits)
 
 ## Introduction

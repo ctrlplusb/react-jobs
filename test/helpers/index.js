@@ -5,7 +5,7 @@ import sinon from 'sinon';
 
 export function Foo({ job: { inProgress, result, error } } : Object) {
   if (inProgress) return <div>In progress...</div>;
-  if (error) return <div>Error: {error}</div>;
+  if (error) return <div>Error: {error.toString()}</div>;
   return <div>{result}</div>;
 }
 

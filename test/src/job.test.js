@@ -12,7 +12,7 @@ const workTime = 10; // ms
 describe('job()', () => {
   warningsAsErrors();
 
-  describe('options', () => {
+  describe('arguments', () => {
     it('returns a function', () => {
       const actual = typeof job(() => undefined);
       const expected = 'function';
@@ -74,18 +74,28 @@ describe('job()', () => {
         .catch(() => undefined);
     });
 
-    it('should set "error" when work fails', () => {
-      const FooWithJob = job(() => rejectAfter(workTime, 'error'))(Foo);
+    it('should set "error" when asynchronous work fails', () => {
+      const error = new Error('poop');
+      const FooWithJob = job(() => rejectAfter(workTime, error))(Foo);
       const renderWrapper = mount(<FooWithJob />);
       // Allow enough time for work to complete
       return resolveAfter(workTime + 5)
         .then(() => {
           const actual = renderWrapper.find(Foo).props();
-          const expected = { job: { inProgress: false, error: 'error' } };
+          const expected = { job: { inProgress: false, error } };
           expect(actual).toMatchObject(expected);
         })
         // swallow other errors
         .catch(() => undefined);
+    });
+
+    it('should set "error" when synchronous work fails', () => {
+      const error = new Error('poop');
+      const FooWithJob = job(() => { throw error; })(Foo);
+      const renderWrapper = mount(<FooWithJob />);
+      const actual = renderWrapper.find(Foo).props();
+      const expected = { job: { inProgress: false, error } };
+      expect(actual).toMatchObject(expected);
     });
   });
 });

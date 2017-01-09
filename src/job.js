@@ -46,7 +46,16 @@ export default function job(work : Work) {
 
       handleWork(props : Props) {
         const { onJobProcessed } = this.props;
-        const workResult = work(props);
+        let workResult;
+
+        try {
+          workResult = work(props);
+        } catch (error) {
+          // Either a syncrhnous error or an error setting up the asynchronous
+          // promise.
+          this.setState({ error });
+          return;
+        }
 
         if (isPromise(workResult)) {
           workResult
@@ -55,7 +64,6 @@ export default function job(work : Work) {
               return result;
             })
             .catch((error) => {
-              console.warn('Job failed:\n', error); // eslint-disable-line no-console
               this.setState({ inProgress: false, error });
             })
             .then(() => {

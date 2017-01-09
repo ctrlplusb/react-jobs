@@ -1,5 +1,6 @@
 /* @flow */
 
+// eslint-disable-next-line import/no-extraneous-dependencies
 import React, { Children, Element } from 'react';
 import { isPromise } from '../utils';
 import ServerProvider from './ServerProvider';

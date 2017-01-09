@@ -1,5 +1,6 @@
 /* @flow */
 
+// eslint-disable-next-line import/no-extraneous-dependencies
 import React, { Component, PropTypes } from 'react';
 import ClientProvider from './ClientProvider';
 import type {

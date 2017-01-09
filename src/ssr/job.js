@@ -1,6 +1,7 @@
 /* @flow */
 // @see https://github.com/facebook/react/issues/1137
 
+// eslint-disable-next-line import/no-extraneous-dependencies
 import React, { PropTypes } from 'react';
 import { getDisplayName } from '../utils';
 import clientOnlyJob from '../job';

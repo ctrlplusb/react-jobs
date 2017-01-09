@@ -1,5 +1,6 @@
 /* @flow */
 
+// eslint-disable-next-line import/no-extraneous-dependencies
 import React, { Component } from 'react';
 import { getDisplayName, isPromise } from './utils';
 import type { JobState } from './ssr/types';

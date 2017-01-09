@@ -39,8 +39,8 @@ This library provides you with a generic mechanism of attaching "jobs" to your R
  - Support for SSR applications with:
     - data preloading on the server.
     - "job" deferring (i.e. insist that job only gets executed on the client/browser).
-    - rehdration API for the browser/client to prevent React checksum issues.
- - Splits the browser and SSR APIs so that you don't end up including the entire library in your projects unnecessarily.
+    - rehydration API for the browser/client to prevent React checksum issues.
+ - Splits the browser and SSR APIs so that you don't end up including so that your project bundle will only include the parts of this library it needs depending on whether you go for a browser/SSR implementation.
 
 ## Installation
 

@@ -9,7 +9,7 @@ Attach asynchronous/synchronous "jobs" to your components, with SSR support.
 
 ```js
 export default withJob(
-  () => ({ categoryID }) => fetch(`/categories/${categoryID}`).then(r => r.json())
+  (props) => fetch(`/categories/${props.categoryID}`).then(r => r.json())
 )(Category)
 ```
 

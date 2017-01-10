@@ -10,7 +10,7 @@ import ServerProvider from '../../../src/ssr/ServerProvider';
 describe('<ServerProvider />', () => {
   describe('context', () => {
     it('should allow registering/fetching of job state', () => {
-      const expected = { inProgress: false, result: 'foo' };
+      const expected = { completed: true, inProgress: false, result: 'foo' };
       let actual;
       const jobID = 1;
       const Foo = (props, context : ServerProviderChildContext) => {

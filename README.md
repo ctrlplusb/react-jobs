@@ -96,6 +96,14 @@ function Products(props) {
     return <div>Oh noes!</div>;
   }
 
+  if (job.completed) {
+    //    👆
+    // This is only relevant if the promise can resolve to an undefined value.
+    // `job.completed` is set to `true` after the promise finishes
+    //    either via a resolution or a failure
+    if (!job.result) return <div>No result returned!</div>;
+  }
+
   // Yay! We have the results!
   return (
     <div>
@@ -261,6 +269,7 @@ It does not modify the component class passed to it; instead, it returns a new c
 The new component class will receive an additional prop called `job`.  The `job` prop is an object with the following properties:
 
   - `inProgress` _(Boolean)_: For an asynchronous job this will indicate if the job is currently in progress. If the asynchronous job is complete then it will have a value of `false`. It will always have a value of `false` for synchronous jobs.
+  - `completed` _(Boolean)_: It is initially set to `false`. After the job completes (with either a success or a failure), it will be set to `true`. Useful to check if your job might return an `undefined` value.
   - [`result`] _(Any)_: This property will only be defined for a successful execution of synchronous job or when an asynchronous job has completed successfully.  It will contain the value returned/resolved from the synchronous/asynchronous job.
   - [`error`] _(Error)_: If an error occurred whilst executing the job then this property will be defined and will contain the error.
 
@@ -312,7 +321,7 @@ export default withJob(
 ```js
 export default withJob(
   () => (props) => new Promise('/fetchSomething'),
-  { defer: true }  
+  { defer: true }
 )(YourComponent);
 ```
 

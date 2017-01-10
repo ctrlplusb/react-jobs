@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { mount } from 'enzyme';
-import { Foo, resolveAfter, rejectAfter, warningsAsErrors } from '../../helpers';
+import { Foo, resolveAfter, warningsAsErrors } from '../../helpers';
 import { withJob } from '../../../src/ssr';
 import ClientProvider from '../../../src/ssr/ClientProvider';
 

@@ -8,9 +8,13 @@ Attach asynchronous/synchronous "jobs" to your components, with SSR support.
 [![Codecov](https://img.shields.io/codecov/c/github/ctrlplusb/react-jobs.svg?style=flat-square)](https://codecov.io/github/ctrlplusb/react-jobs)
 
 ```js
+//               👇 wrap your components with async/sync work.
 export default withJob(
+  //     look ma! functions. compose me functionality. caching etc
+  // 👇 - plus we get the props your component will receive.
   (props) => fetch(`/categories/${props.categoryID}`).then(r => r.json())
-)(Category)
+)(Category) // 👈 we don't block rendering while the work resolves.
+            //    show a loading bar, or render a subtree no probs!
 ```
 
 ## TOCs

@@ -1,6 +1,6 @@
 {
   "name": "react-jobs",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Attach asynchronous/synchronous \"jobs\" to your components, with SSR support.",
   "license": "MIT",
   "main": "commonjs/index.js",
@@ -52,7 +52,7 @@
     "babel-jest": "18.0.0",
     "babel-loader": "6.2.10",
     "babel-polyfill": "6.20.0",
-    "babel-preset-env": "1.1.7",
+    "babel-preset-env": "1.1.8",
     "babel-preset-latest": "6.16.0",
     "babel-preset-react": "6.16.0",
     "babel-preset-stage-3": "6.17.0",

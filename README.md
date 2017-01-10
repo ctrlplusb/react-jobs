@@ -112,7 +112,7 @@ function Products(props) {
     //   
     // When this is true then the work has executed and completed,
     // with a success/failure.  When it is false then the work
-    // may still be in progress or has yet to be excuted.
+    // may still be in progress or has yet to be executed.
     //
     // Thanks to @smirea for recommending/spotting this! 🙏
   }

@@ -29,7 +29,7 @@
   ],
   "scripts": {
     "build": "babel-node ./tools/scripts/build.js",
-    "check": "yarn run lint && yarn run flow && yarn run test",
+    "check": "yarn run lint && yarn run test",
     "clean": "rimraf ./commonjs && rimraf ./umd && rimraf ./coverage && rimraf ./flow-coverage",
     "example": "echo 'Make sure to `cd example && yarn install`' && cd example && yarn run start",
     "flow": "babel-node ./tools/scripts/flow",

@@ -134,18 +134,15 @@ function Products(props) {
 // You use the "withJob" function to attach work to your component.
 //             👇
 export default withJob(
-  // Provide a function that will create a "work" function.
-  // The "work" function will be provided the props that were
-  // passed into component and must return a Promise for
-  // asynchronous work, and any other value for synchronous
+  // Provide a "work" function. It will be provided the props
+  // that were passed into component and must return a Promise
+  // for asynchronous work, or any other value for synchronous
   // work.
-  function createWork() {
-    return function work(props) {
-      // Fetch the products for the given `categoryID` prop,
-      return fetch(`/products/category/${props.categoryID}`)
-        // then convert the response to JSON.
-        .then(response => response.json());
-    }
+  function work(props) {
+    // Fetch the products for the given `categoryID` prop,
+    return fetch(`/products/category/${props.categoryID}`)
+      // then convert the response to JSON.
+      .then(response => response.json());
   }
 )(Products);
 ```
@@ -181,10 +178,8 @@ function MyApp({ job }) {
 // "browser-only" implementation.
 //             👇
 export default withJob(
-  function createWork() {
-    return function work(props) {
-      return fetch('/stuff').then(r => r.json());
-    }
+  function work(props) {
+    return fetch('/stuff').then(r => r.json());
   }
 )(MyApp);
 ```
@@ -302,8 +297,7 @@ import { withJob } from 'react-jobs/ssr';
 
 #### Arguments
 
- - `createWork() : work` _(Function)_: A function that when executed must return a `work` function. We use this technique so that the "work" for a job can be created/executed lazily. The `work` function that you must return can be described as follows:
-   - `work(props) : Promise<Result>|Result` _(Function)_: The work function contains the actual work that needs to be done for a job. It will be provided the props that are given to your component. For asynchronous work it must return a `Promise` that will resolve to the result of the work. For any other return value (including `undefined`) the work will be considered synchronous.
+ - `work(props) : Promise<Result>|Result` _(Function)_: A function containing the actual work that needs to be done for a job. It will be provided the props that are given to your component. For asynchronous work it must return a `Promise` that will resolve to the result of the work. For synchronous work return back any other value (including null/undefined).
 - `[options]` _(Object)_: A configuration object for the job. At the moment only the SSR version of `job` uses options. The options object has the following properties:
    - `[defer]` _(Boolean)_: Defaults to `false`. Indicates whether a server side execution of this job should defer execution of the job to the browser/client.
 
@@ -317,7 +311,7 @@ A higher-order React component class that passes the job state into your compone
 
 ```js
 export default withJob(
-  () => (props) => new Promise('/fetchSomething')
+  (props) => new Promise('/fetchSomething')
 )(YourComponent);
 ```
 
@@ -325,7 +319,7 @@ export default withJob(
 
 ```js
 export default withJob(
-  () => (props) => 'foo'
+  (props) => 'foo'
 )(YourComponent);
 ```
 
@@ -333,7 +327,7 @@ export default withJob(
 
 ```js
 export default withJob(
-  () => (props) => new Promise('/fetchSomething'),
+  (props) => new Promise('/fetchSomething'),
   { defer: true }
 )(YourComponent);
 ```
@@ -344,7 +338,7 @@ export default withJob(
 let resultCache = null;
 
 export default withJob(
-  () => (props) => {
+  (props) => {
     if (resultCache) {
       // We have a cached result, return it.
       // This becomes a synchronous job result, which is also

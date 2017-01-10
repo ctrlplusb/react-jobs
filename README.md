@@ -28,7 +28,7 @@ export default withJob(
   - [Recipes](#recipes)
     - [`redux-thunk`](#redux-thunk)
   - [FAQs](#faqs)
-  - [Changelog](/releases)
+  - [Changelog](https://github.com/ctrlplusb/react-jobs/releases)
   - [Credits](#credits)
 
 ## Introduction

@@ -98,10 +98,23 @@ function Products(props) {
 
   if (job.completed) {
     //    👆
-    // This is only relevant if the promise can resolve to an undefined value.
-    // `job.completed` is set to `true` after the promise finishes
-    //    either via a resolution or a failure
-    if (!job.result) return <div>No result returned!</div>;
+    // This is especially useful if your work results in an "undefined"
+    // value.  This would mean we would have the following values:
+    //   inProgress : false
+    //   result: undefined
+    //   error: undefined
+    //
+    // This could mean that the work hasn't started yet (i.e initial
+    // render, or it could mean the work resolved with an "undefined").
+    //
+    // To avoid confusion we add this extra flag.
+    //   completed: true|false
+    //   
+    // When this is true then the work has executed and completed,
+    // with a success/failure.  When it is false then the work
+    // may still be in progress or has yet to be excuted.
+    //
+    // Thanks to @smirea for recommending/spotting this! 🙏
   }
 
   // Yay! We have the results!

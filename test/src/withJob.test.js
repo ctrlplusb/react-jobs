@@ -56,7 +56,7 @@ describe('withJob()', () => {
     it('should set "inProgress" when processing work', () => {
       const FooWithJob = withJob(() => resolveAfter(workTime))(Foo);
       const actual = mount(<FooWithJob />).find(Foo).props();
-      const expected = { job: { inProgress: true } };
+      const expected = { job: { completed: false, inProgress: true } };
       expect(actual).toMatchObject(expected);
     });
 
@@ -67,7 +67,7 @@ describe('withJob()', () => {
       return resolveAfter(workTime + 5)
         .then(() => {
           const actual = renderWrapper.find(Foo).props();
-          const expected = { job: { inProgress: false, result: 'result' } };
+          const expected = { job: { completed: true, inProgress: false, result: 'result' } };
           expect(actual).toMatchObject(expected);
         })
         // swallow other errors
@@ -82,7 +82,7 @@ describe('withJob()', () => {
       return resolveAfter(workTime + 5)
         .then(() => {
           const actual = renderWrapper.find(Foo).props();
-          const expected = { job: { inProgress: false, error } };
+          const expected = { job: { completed: true, inProgress: false, error } };
           expect(actual).toMatchObject(expected);
         })
         // swallow other errors
@@ -94,7 +94,7 @@ describe('withJob()', () => {
       const FooWithJob = withJob(() => { throw error; })(Foo);
       const renderWrapper = mount(<FooWithJob />);
       const actual = renderWrapper.find(Foo).props();
-      const expected = { job: { inProgress: false, error } };
+      const expected = { job: { completed: true, inProgress: false, error } };
       expect(actual).toMatchObject(expected);
     });
   });

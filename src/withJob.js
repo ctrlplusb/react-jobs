@@ -27,7 +27,10 @@ export default function withJob(work : Work) {
 
       constructor(props : Props) {
         super(props);
-        this.state = { inProgress: false };
+        this.state = {
+          inProgress: false,
+          completed: false,
+        };
       }
 
       componentWillMount() {
@@ -54,18 +57,18 @@ export default function withJob(work : Work) {
         } catch (error) {
           // Either a syncrhnous error or an error setting up the asynchronous
           // promise.
-          this.setState({ error });
+          this.setState({ completed: true, error });
           return;
         }
 
         if (isPromise(workResult)) {
           workResult
             .then((result) => {
-              this.setState({ inProgress: false, result });
+              this.setState({ completed: true, inProgress: false, result });
               return result;
             })
             .catch((error) => {
-              this.setState({ inProgress: false, error });
+              this.setState({ completed: true, inProgress: false, error });
             })
             .then(() => {
               if (onJobProcessed) {
@@ -74,10 +77,10 @@ export default function withJob(work : Work) {
             });
 
           // Asynchronous result.
-          this.setState({ inProgress: true, executingJob: workResult });
+          this.setState({ completed: false, inProgress: true, executingJob: workResult });
         } else {
           // Synchronous result.
-          this.setState({ result: workResult });
+          this.setState({ completed: true, result: workResult });
         }
       }
 
@@ -86,11 +89,12 @@ export default function withJob(work : Work) {
       }
 
       getJobState() : JobState {
-        const { inProgress, result, error } = this.state;
-        return { inProgress, result, error };
+        const { completed, inProgress, result, error } = this.state;
+        return { completed, inProgress, result, error };
       }
 
       render() {
+        // Do not pass down internal props
         const jobState = this.getJobState();
         return <WrappedComponent {...this.props} job={jobState} />;
       }

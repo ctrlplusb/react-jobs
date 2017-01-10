@@ -6,6 +6,7 @@ import { Element } from 'react';
 export type React$Element = Element<*>;
 
 export type JobState = {
+  completed: boolean,
   inProgress: boolean,
   result?: any,
   error?: any,

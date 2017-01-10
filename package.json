@@ -18,7 +18,14 @@
   "homepage": "https://github.com/ctrlplusb/react-jobs#readme",
   "author": "Sean Matheson <sean@ctrlplusb.com>",
   "keywords": [
-    "library"
+    "react",
+    "component",
+    "ssr",
+    "universal",
+    "isomorphic",
+    "server side rendering",
+    "async",
+    "fetch"
   ],
   "scripts": {
     "build": "babel-node ./tools/scripts/build.js",

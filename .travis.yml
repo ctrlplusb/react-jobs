@@ -15,7 +15,9 @@ deploy:
 node_js:
 - '7'
 script:
-- yarn run flow:defs
+# Unfortunately flow falls over when a dep exists in peer deps and others. :(
+# @see https://github.com/flowtype/flow-typed/issues/528
+# - yarn run flow:defs
 - yarn run check
 after_success:
 - yarn run test:coverage:deploy

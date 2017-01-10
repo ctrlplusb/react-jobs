@@ -3,6 +3,7 @@ exports[`withJob() rendering should set the "result" immediately if the work doe
   <Foo
     job={
       Object {
+        "completed": true,
         "error": undefined,
         "inProgress": false,
         "result": "bob",

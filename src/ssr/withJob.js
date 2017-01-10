@@ -24,7 +24,7 @@ const getInitialState = (context, jobID, defer) => {
   const { reactJobsClient, reactJobsServer } = context;
 
   if (defer) {
-    return { inProgress: true };
+    return { completed: false, inProgress: true };
   }
 
   if (reactJobsServer) {

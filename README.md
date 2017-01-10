@@ -10,7 +10,7 @@ Attach asynchronous/synchronous "jobs" to your components, with SSR support.
 ```js
 //               👇 wrap your components with async/sync work.
 export default withJob(
-  //     look ma! functions. compose me functionality. caching etc
+  //     look ma! functions. compose me with functionality. caching etc
   // 👇 - plus we get the props your component will receive.
   (props) => fetch(`/categories/${props.categoryID}`).then(r => r.json())
 )(Category) // 👈 we don't block rendering while the work resolves.

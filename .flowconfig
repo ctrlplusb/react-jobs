@@ -36,5 +36,8 @@ module.name_mapper='^\(.*\)\.\(css\|eot\|gif\|ico\|jpg\|jpeg\|less\|otf\|mp3\|mp
 # Sometimes we expect a flow error, and don't want to fix it. e.g. in our tests.
 suppress_comment= \\(.\\|\n\\)*\\$FlowIgnore
 
+# Mark a flow error as to be fixed later
+suppress_comment= \\(.\\|\n\\)*\\$FlowFixMe
+
 [version]
 0.37.4

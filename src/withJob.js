@@ -96,7 +96,14 @@ export default function withJob(work : Work) {
       render() {
         // Do not pass down internal props
         const jobState = this.getJobState();
-        return <WrappedComponent {...this.props} job={jobState} />;
+        const {
+          // eslint-disable-next-line no-unused-vars
+          jobInitState,
+          // eslint-disable-next-line no-unused-vars
+          onJobProcessed,
+          ...propsWithoutInternal
+        } = this.props;
+        return <WrappedComponent {...propsWithoutInternal} job={jobState} />;
       }
     }
     ComponentWithJob.displayName = `${getDisplayName(WrappedComponent)}WithJob`;

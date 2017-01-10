@@ -97,5 +97,21 @@ describe('withJob()', () => {
       const expected = { job: { completed: true, inProgress: false, error } };
       expect(actual).toMatchObject(expected);
     });
+
+    it('should not pass down internal props', () => {
+      let actual = {};
+      const Bob = (props) => {
+        actual = props;
+        return <div>bob</div>;
+      };
+      const BobWithJob = withJob(() => true)(Bob);
+      const expected = { foo: 'foo', bar: 'bar' };
+      mount(<BobWithJob {...expected} />);
+      const actualProps = Object.keys(actual);
+      expect(actualProps.length).toEqual(3);
+      expect(actualProps).toContain('foo');
+      expect(actualProps).toContain('bar');
+      expect(actualProps).toContain('job');
+    });
   });
 });

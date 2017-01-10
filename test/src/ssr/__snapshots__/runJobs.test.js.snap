@@ -24,14 +24,7 @@ exports[`runJobs() should not render a job that is deferred 1`] = `
               "inProgress": true,
               "result": undefined,
             }
-          }
-          jobInitState={
-            Object {
-              "completed": false,
-              "inProgress": true,
-            }
-          }
-          onJobProcessed={[Function]}>
+          }>
           <div>
             In progress...
           </div>
@@ -70,16 +63,7 @@ exports[`runJobs() should render a job that fails 1`] = `
               "inProgress": false,
               "result": undefined,
             }
-          }
-          jobInitState={
-            Object {
-              "completed": true,
-              "error": "Poop!",
-              "inProgress": false,
-              "result": undefined,
-            }
-          }
-          onJobProcessed={[Function]}>
+          }>
           <div>
             Error: 
             Poop!
@@ -119,16 +103,7 @@ exports[`runJobs() should render a job that succeeds 1`] = `
               "inProgress": false,
               "result": "Hello world!",
             }
-          }
-          jobInitState={
-            Object {
-              "completed": true,
-              "error": undefined,
-              "inProgress": false,
-              "result": "Hello world!",
-            }
-          }
-          onJobProcessed={[Function]}>
+          }>
           <div>
             Hello world!
           </div>

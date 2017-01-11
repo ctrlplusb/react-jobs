@@ -113,5 +113,46 @@ describe('withJob()', () => {
       expect(actualProps).toContain('bar');
       expect(actualProps).toContain('job');
     });
+
+    it('should not fire work again when work is in progress', () => {
+      let fireCount = 0;
+      const Bob = () => <div>bob</div>;
+      const BobWithJob = withJob(() => {
+        fireCount += 1;
+        return resolveAfter(20);
+      })(Bob);
+      const renderWrapper = mount(<BobWithJob />);
+      expect(fireCount).toEqual(1);
+      // Set props to cause a re-render
+      renderWrapper.setProps({ foo: 'bar' });
+      expect(fireCount).toEqual(1);
+    });
+
+    it('should not fire work again when work is complete', () => {
+      let fireCount = 0;
+      const Bob = () => <div>bob</div>;
+      const BobWithJob = withJob(() => {
+        fireCount += 1;
+        return true;
+      })(Bob);
+      const renderWrapper = mount(<BobWithJob />);
+      expect(fireCount).toEqual(1);
+      // Set props to cause a re-render
+      renderWrapper.setProps({ foo: 'bar' });
+      expect(fireCount).toEqual(1);
+    });
+
+    it('should fire again for a remount', () => {
+      let fireCount = 0;
+      const Bob = () => <div>bob</div>;
+      const BobWithJob = withJob(() => {
+        fireCount += 1;
+        return true;
+      })(Bob);
+      mount(<BobWithJob />);
+      expect(fireCount).toEqual(1);
+      mount(<BobWithJob />);
+      expect(fireCount).toEqual(2);
+    });
   });
 });

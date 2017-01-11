@@ -49,6 +49,11 @@ export default function withJob(work : Work) {
       }
 
       handleWork(props : Props) {
+        if (this.state.inProgress || this.state.completed) {
+          // We don't want to fire work under these conditions.
+          return;
+        }
+
         const { onJobProcessed } = this.props;
         let workResult;
 

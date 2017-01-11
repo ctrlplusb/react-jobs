@@ -285,6 +285,13 @@ The new component class will receive an additional prop called `job`.  The `job`
   - [`result`] _(Any)_: This property will only be defined for a successful execution of synchronous job or when an asynchronous job has completed successfully.  It will contain the value returned/resolved from the synchronous/asynchronous job.
   - [`error`] _(Error)_: If an error occurred whilst executing the job then this property will be defined and will contain the error.
 
+The work will _only_ fire under the following conditions:
+
+ - Any time `componentWillMount` fires.
+ - Any time the `componentWillReceiveProps` fires AND `job.inProgress === false` AND `job.completed === false`
+
+> Note: If you don't want the work to fire more than once, under any condition, then consider creating a caching strategy to decorate your work functions with.
+
 #### Importing
 
 There are two versions of this API. One for "browser-only" applications, and another for "server side rendering" applications.

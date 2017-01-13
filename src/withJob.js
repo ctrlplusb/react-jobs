@@ -1,7 +1,8 @@
 /* @flow */
+/* eslint-disable import/no-extraneous-dependencies */
 
-// eslint-disable-next-line import/no-extraneous-dependencies
 import React, { Component } from 'react';
+// $FlowIgnore
 import shallowEqual from 'fbjs/lib/shallowEqual';
 import { getDisplayName, isPromise, propsWithoutInternal } from './utils';
 import type { JobState } from './ssr/types';
@@ -35,7 +36,7 @@ export default function withJob(work : Work, config : Config = defaultConfig) {
     throw new Error('You must provide a "createWork" function to the "withJob".');
   }
 
-  const { monitorProps } = config;
+  const { monitorProps = [] } = config;
 
   return function wrapComponentWithJob(WrappedComponent : Function) {
     class ComponentWithJob extends Component {

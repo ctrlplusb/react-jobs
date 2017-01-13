@@ -12,11 +12,11 @@ type Context = {
   reactJobsServer?: ReactJobsServerContext,
 };
 
-type Options = {
-  defer: boolean
+type Config = {
+  defer?: boolean
 };
 
-const defaultOptions = {
+const defaultConfig = {
   defer: false,
 };
 
@@ -46,10 +46,10 @@ const getInitialState = (context, jobID, defer) => {
   return undefined;
 };
 
-function withSSRBehaviour(WrappedComponent, options) {
+function withSSRBehaviour(WrappedComponent, config) {
   let jobIDHandle = null;
 
-  const { defer } = options || defaultOptions;
+  const { defer } = config || defaultConfig;
 
   const ComponentWithJobID = (props : Object, context : Context) => {
     const { reactJobsClient, reactJobsServer } = context;
@@ -96,9 +96,11 @@ function withSSRBehaviour(WrappedComponent, options) {
   return ComponentWithJobID;
 }
 
-export default function withJob(work : any, options?: Options) {
+export default function withJob(work : any, config?: Config) {
   return function wrapComponentWithSSRJob(Component : Function) {
+    // eslint-disable-next-line no-unused-vars
+    const { defer, ...rest } = config || defaultConfig;
     // We wrap the standard job implementation with our SSR behaviour.
-    return withSSRBehaviour(browserWithJob(work)(Component), options);
+    return withSSRBehaviour(browserWithJob(work, rest)(Component), config);
   };
 }

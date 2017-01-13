@@ -6,6 +6,13 @@ import { Foo, resolveAfter, warningsAsErrors } from '../../helpers';
 import { withJob } from '../../../src/ssr';
 import ClientProvider from '../../../src/ssr/ClientProvider';
 
+const contextStub = {
+  reactJobsClient: {
+    nextJobID: () => 1,
+    popJobRehydrationForSRR: () => undefined,
+  },
+};
+
 describe('ssr/withJob()', () => {
   warningsAsErrors();
 
@@ -70,6 +77,25 @@ describe('ssr/withJob()', () => {
       };
       mount(<ClientProvider><BobWithJob {...expected} /></ClientProvider>);
       expect(actual).toMatchObject(expected);
+    });
+
+    it.only('should fire again when a monitorProps changes', () => {
+      let fireCount = 0;
+      const Bob = () => <div>bob</div>;
+      const BobWithJob = withJob(
+        () => {
+          fireCount += 1;
+          return true;
+        },
+        { monitorProps: ['productId'] },
+      )(Bob);
+      const renderWrapper = mount(
+        <BobWithJob productId={1} />,
+        { context: contextStub },
+      );
+      expect(fireCount).toEqual(1);
+      renderWrapper.setProps({ productId: 2 });
+      expect(fireCount).toEqual(2);
     });
   });
 });

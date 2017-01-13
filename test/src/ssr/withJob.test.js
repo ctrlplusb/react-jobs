@@ -79,7 +79,7 @@ describe('ssr/withJob()', () => {
       expect(actual).toMatchObject(expected);
     });
 
-    it.only('should fire again when a monitorProps changes', () => {
+    it('should fire again when a monitorProps changes', () => {
       let fireCount = 0;
       const Bob = () => <div>bob</div>;
       const BobWithJob = withJob(

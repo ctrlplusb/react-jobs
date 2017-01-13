@@ -2,12 +2,16 @@
 
 // eslint-disable-next-line import/no-extraneous-dependencies
 import React, { Component } from 'react';
+import shallowEqual from 'fbjs/lib/shallowEqual';
 import { getDisplayName, isPromise, propsWithoutInternal } from './utils';
 import type { JobState } from './ssr/types';
 
 type Work = (props : Object) => any;
 
-type State = JobState & { executingJob?: Promise<any> };
+type State = JobState & {
+  executingJob?: Promise<any>,
+  monitorState?: { [key : string] : mixed },
+};
 
 type Props = {
   jobInitState?: JobState,
@@ -15,10 +19,23 @@ type Props = {
   [key: string]: any,
 };
 
-export default function withJob(work : Work) {
+type Config = {
+  monitorProps : Array<string>,
+};
+
+const getMonitorState = (props : Object) => Object.keys(props).reduce((acc, cur) =>
+  Object.assign(acc, { [cur]: props[cur] }),
+  {},
+);
+
+const defaultConfig : Config = { monitorProps: [] };
+
+export default function withJob(work : Work, config : Config = defaultConfig) {
   if (typeof work !== 'function') {
     throw new Error('You must provide a "createWork" function to the "withJob".');
   }
+
+  const { monitorProps } = config;
 
   return function wrapComponentWithJob(WrappedComponent : Function) {
     class ComponentWithJob extends Component {
@@ -36,6 +53,11 @@ export default function withJob(work : Work) {
       componentWillMount() {
         const { jobInitState } = this.props;
 
+        if (monitorProps.length > 0) {
+          const monitorState = getMonitorState(this.props);
+          this.setState({ monitorState });
+        }
+
         if (jobInitState) {
           this.setState(jobInitState);
           return;
@@ -45,15 +67,22 @@ export default function withJob(work : Work) {
       }
 
       componentWillReceiveProps(nextProps : Props) {
+        const monitorPropChanged = () => {
+          if (monitorProps.length === 0 || !this.state.monitorState) {
+            return false;
+          }
+          const newState = getMonitorState(nextProps);
+          this.setState({ monitorState: newState });
+          return !shallowEqual(this.state.monitorState, newState);
+        };
+        if (!monitorPropChanged() && (this.state.inProgress || this.state.completed)) {
+          // We don't want to fire work under these conditions.
+          return;
+        }
         this.handleWork(nextProps);
       }
 
       handleWork(props : Props) {
-        if (this.state.inProgress || this.state.completed) {
-          // We don't want to fire work under these conditions.
-          return;
-        }
-
         const { onJobProcessed } = this.props;
         let workResult;
 

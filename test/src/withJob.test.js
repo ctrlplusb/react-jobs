@@ -98,22 +98,6 @@ describe('withJob()', () => {
       expect(actual).toMatchObject(expected);
     });
 
-    it('should not pass down internal props', () => {
-      let actual = {};
-      const Bob = (props) => {
-        actual = props;
-        return <div>bob</div>;
-      };
-      const BobWithJob = withJob(() => true)(Bob);
-      const expected = { foo: 'foo', bar: 'bar' };
-      mount(<BobWithJob {...expected} />);
-      const actualProps = Object.keys(actual);
-      expect(actualProps.length).toEqual(3);
-      expect(actualProps).toContain('foo');
-      expect(actualProps).toContain('bar');
-      expect(actualProps).toContain('job');
-    });
-
     it('should not fire work again when work is in progress', () => {
       let fireCount = 0;
       const Bob = () => <div>bob</div>;
@@ -153,6 +137,26 @@ describe('withJob()', () => {
       expect(fireCount).toEqual(1);
       mount(<BobWithJob />);
       expect(fireCount).toEqual(2);
+    });
+
+    it('should fire again when a monitorProps changes', () => {
+      let fireCount = 0;
+      const Bob = () => <div>bob</div>;
+      const BobWithJob = withJob(
+        () => {
+          fireCount += 1;
+          return true;
+        },
+        { monitorProps: ['productId'] },
+      )(Bob);
+      const renderWrapper = mount(<BobWithJob productId={1} />);
+      expect(fireCount).toEqual(1);
+      renderWrapper.setProps({ productId: 2 });
+      expect(fireCount).toEqual(2);
+      renderWrapper.setProps({ productId: 1 });
+      expect(fireCount).toEqual(3);
+      renderWrapper.setProps({ productId: 1 });
+      expect(fireCount).toEqual(3);
     });
   });
 });

@@ -310,7 +310,7 @@ import { withJob } from 'react-jobs/ssr';
 #### Arguments
 
  - `work(props) : Promise<Result>|Result` _(Function)_: A function containing the actual work that needs to be done for a job. It will be provided the props that are given to your component. For asynchronous work it must return a `Promise` that will resolve to the result of the work. For synchronous work return back any other value (including null/undefined).
-- `[options]` _(Object)_: A configuration object for the job. At the moment only the SSR version of `job` uses options. The options object has the following properties:
+ - `[config]` _(Object)_: A configuration object for the job. At the moment only the SSR version of `job` uses options. The options object has the following properties:
    - `[defer]` _(Boolean)_: Defaults to `false`. Indicates whether a server side execution of this job should defer execution of the job to the browser/client.
    - `[monitorProps]` _(Array<string>)_: Defaults to []. The names of the props you wish to monitor.  Any time the value for the props being monitored changes the work will be fired again, even if it is already in progress or has completed.  For example, this is useful for cases where you pass down a new `productId` to a `Product` component.  The component is re-mounting but you want to fetch the data related to the `productId`.
 

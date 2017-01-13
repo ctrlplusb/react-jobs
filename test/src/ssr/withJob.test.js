@@ -28,23 +28,32 @@ describe('ssr/withJob()', () => {
 
   describe('rendering', () => {
     it('should not pass down internal props', () => {
-      let actual = {};
+      let actualCompProps = {};
       const Bob = (props) => {
-        actual = props;
+        actualCompProps = props;
         return <div>bob</div>;
       };
-      const BobWithJob = withJob(() => true)(Bob);
+
+      let actualWorkProps = {};
+      const BobWithJob = withJob((props) => { actualWorkProps = props; })(Bob);
+
       const expected = {
         foo: 'foo',
         bar: 'bar',
         job: {},
       };
       mount(<ClientProvider><BobWithJob {...expected} /></ClientProvider>);
-      const actualProps = Object.keys(actual);
-      expect(actualProps.length).toEqual(3);
-      expect(actualProps).toContain('foo');
-      expect(actualProps).toContain('bar');
-      expect(actualProps).toContain('job');
+
+      const assertProps = (actual) => {
+        const actualProps = Object.keys(actual);
+        expect(actualProps.length).toEqual(3);
+        expect(actualProps).toContain('foo');
+        expect(actualProps).toContain('bar');
+        expect(actualProps).toContain('job');
+      };
+
+      assertProps(actualCompProps);
+      assertProps(actualWorkProps);
     });
 
     it('should provide the expected initial state for a defer', () => {

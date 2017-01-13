@@ -2,7 +2,7 @@
 
 // eslint-disable-next-line import/no-extraneous-dependencies
 import React, { Component } from 'react';
-import { getDisplayName, isPromise } from './utils';
+import { getDisplayName, isPromise, propsWithoutInternal } from './utils';
 import type { JobState } from './ssr/types';
 
 type Work = (props : Object) => any;
@@ -58,7 +58,7 @@ export default function withJob(work : Work) {
         let workResult;
 
         try {
-          workResult = work(props);
+          workResult = work(propsWithoutInternal(props));
         } catch (error) {
           // Either a syncrhnous error or an error setting up the asynchronous
           // promise.
@@ -101,14 +101,12 @@ export default function withJob(work : Work) {
       render() {
         // Do not pass down internal props
         const jobState = this.getJobState();
-        const {
-          // eslint-disable-next-line no-unused-vars
-          jobInitState,
-          // eslint-disable-next-line no-unused-vars
-          onJobProcessed,
-          ...propsWithoutInternal
-        } = this.props;
-        return <WrappedComponent {...propsWithoutInternal} job={jobState} />;
+        return (
+          <WrappedComponent
+            {...propsWithoutInternal(this.props)}
+            job={jobState}
+          />
+        );
       }
     }
     ComponentWithJob.displayName = `${getDisplayName(WrappedComponent)}WithJob`;

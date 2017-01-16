@@ -54,12 +54,6 @@ function withSSRBehaviour(WrappedComponent, config) {
   const ComponentWithJobID = (props : Object, context : Context) => {
     const { reactJobsClient, reactJobsServer } = context;
 
-    // Every SSR job should have the client attached in order to provide
-    // the identifiers for the components.
-    if (!reactJobsClient) {
-      throw new Error('You are using an "ssr/job" without having wrapped your component render with the "runJobs" or "rehydrateJobs" helpers.  Please refer to the docs for more details.');
-    }
-
     // Establish a unique identifier for this job instance.
     const getJobID = () => {
       if (!jobIDHandle) {

@@ -42,7 +42,8 @@
     "test:coverage:deploy": "yarn run test:coverage && codecov"
   },
   "peerDependencies": {
-    "react": "^14.0.0 || ^15.0.0"
+    "react": "^14.0.0 || ^15.0.0",
+    "react-tree-walker": "^0.0.1"
   },
   "devDependencies": {
     "app-root-dir": "1.0.2",

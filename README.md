@@ -28,7 +28,6 @@ export default withJob(
     - [withJob(createWork)](#withjobcreatework)
     - [runJobs(app)](#runjobsapp)
     - [rehydrateJobs(app)](#rehydratejobsapp)
-  - [Addons](#addons)
   - [Alternatives](#alternatives)
   - [Recipes](#recipes)
     - [`redux-thunk`](#redux-thunk)
@@ -312,7 +311,7 @@ import { withJob } from 'react-jobs/ssr';
 
  - `work(props) : Promise<Result>|Result` _(Function)_: A function containing the actual work that needs to be done for a job. It will be provided the props that are given to your component. For asynchronous work it must return a `Promise` that will resolve to the result of the work. For synchronous work return back any other value (including null/undefined).
  - `[config]` _(Object)_: A configuration object for the job. It accepts the following properties:
-   - `[shouldWorkAgain]` _((prevProps, nextProps, currentJob) => boolean)_: A function that is executed with every `componentWillReceiveProps` lifecycle event. It receives the previous props, next props, and the current job state. If the function returns `true` then the `work` function will be executed again, otherwise it will not. If this function is not defined, then the work will never get executed for any `componentWillReceiveProps` events. There are some pre-baked implementations of this available through the [`addons`](#addons).
+   - `[shouldWorkAgain]` _((prevProps, nextProps, currentJob) => boolean)_: A function that is executed with every `componentWillReceiveProps` lifecycle event. It receives the previous props, next props, and the current job state. If the function returns `true` then the `work` function will be executed again, otherwise it will not. If this function is not defined, then the work will never get executed for any `componentWillReceiveProps` events.
    - `[defer]` _(Boolean)_: Defaults to `false`. Indicates whether a server side execution of this job should defer execution of the job to the browser/client.  This configuration value is only used by the `ssr/withJob`.
 
 #### Returns
@@ -334,6 +333,22 @@ export default withJob(
 ```js
 export default withJob(
   (props) => 'foo'
+)(YourComponent);
+```
+
+##### Using `shouldWorkAgain`
+
+```js
+export default withJob(
+  ({ productId }) => getProduct(productId),
+  {
+    shouldWorkAgain: function (prevProps, nextProps) {
+      // We will return true any time the productId changes
+      // This will allow our work to re-execute, and the
+      // appropriate product data can then be fetched.
+      return prevProps.productId !== nextProps.productId;
+    }
+  }  
 )(YourComponent);
 ```
 
@@ -365,6 +380,29 @@ export default withJob(
         resultCache = result;
         return result;
       });
+  }
+)(YourComponent);
+```
+
+##### Retrying work that fails
+
+You could use something like @sindresorhus's [`p-retry`](https://github.com/sindresorhus/p-retry) within your work.
+
+```js
+import pRetry from 'p-retry';
+
+export default withJob(
+  ({ productId }) => {
+    const run = () => fetch(`https://foo.com/products/${productId}`)
+      .then(response => {
+        // abort retrying if the resource doesn't exist
+        if (response.status === 404) {
+          throw new pRetry.AbortError(response.statusText);
+        }
+        return response.json();
+      });
+
+    return pRetry(run, {retries: 5}).then(result => {});
   }
 )(YourComponent);
 ```
@@ -444,72 +482,6 @@ rehydrateJobs(app).then(({ appWithJobs }) => {
     document.getElementById('app')
   );
 });
-```
-
-## Addons
-
-Below are a set of addons available for you to implement commonly used patterns.
-
-### `workAgainForMonitoredProps(propsToMonitor)`
-
-Produces a `shouldWorkAgain` implementation that monitors any changes to a selected set of props.  The monitored props are compared against previous values using a shallow equals approach.  Any time the value for the props being monitored changes the work will be fired again, even if the job is already in progress or has completed.  
-
-This is useful for cases where you pass down a new `productId` to a `Product` component.  The component is re-mounting but you want to fetch the data related to the `productId`.
-
-#### Arguments
-
-  - `propsToMonitor` _(Array<string>)_: An array containing the names of the props to be monitored. If one of the props is expected to be an object you can provide a dot-notation string to the nested prop that you would like to monitor.
-
-#### Examples
-
-##### Monitor a prop
-
-In the below example we ensure that our `Product` component will execute the work again any time the `productId` prop changes.
-
-```js
-import workAgainForMonitoredProps from 'react-jobs/addons/workAgainForMonitoredProps';
-
-export default withJob(
-  ({ productId }) => 'fetch product data...',
-  {
-    shouldWorkAgain: workAgainForMonitoredProps(['productId'])
-  }
-)(Product);
-```
-
-##### Monitor multiple props
-
-In the below example we ensure that our `SearchResults` component will execute the work again any time the `searchTerm` OR `searchLimit` prop changes.
-
-```js
-import workAgainForMonitoredProps from 'react-jobs/addons/workAgainForMonitoredProps';
-
-export default withJob(
-  ({ searchTerm, searchLimit }) => 'get search results...',
-  {
-    shouldWorkAgain: workAgainForMonitoredProps(['searchTerm', 'searchLimit'])
-  }
-)(Product);
-```
-
-##### Monitor nested object prop
-
-In the below example we receive a `params` object as prop. This `params` object is fed to us by our router match and it will contain a `productId`.  We want to respond to the `productId`.  To do so we use dot-notation to access the target prop. If any part of the dot-notation doesn't exist then a `null` value will be used.
-
-```js
-import workAgainForMonitoredProps from 'react-jobs/addons/workAgainForMonitoredProps';
-
-export default withJob(
-  ({ productId }) => 'fetch product data...',
-  {
-    shouldWorkAgain: workAgainForMonitoredProps(['params.productId'])
-  }
-)(Product);
-```
-
-```jsx
-const routerParams = { productId: 1 };
-render(<Product params={routerParams} />);
 ```
 
 ## Alternatives

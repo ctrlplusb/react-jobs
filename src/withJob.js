@@ -55,7 +55,13 @@ export default function withJob(work : Work, config : Config = defaultConfig) {
       }
 
       componentWillReceiveProps(nextProps : Props) {
-        if (!shouldWorkAgain || !shouldWorkAgain(this.props, nextProps, this.getJobState())) {
+        if (!shouldWorkAgain
+          || !shouldWorkAgain(
+            propsWithoutInternal(this.props),
+            propsWithoutInternal(nextProps),
+            this.getJobState(),
+          )
+        ) {
           // User has explicitly stated no!
           return;
         }

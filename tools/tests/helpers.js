@@ -17,14 +17,12 @@ export const rejectAfter = (time : number, error : any) => new Promise((resolve,
   setTimeout(() => reject(error || new Error('poop')), time);
 });
 
-export function warningsAsErrors() {
-  // Since react will console.error propType warnings, that which we'd rather have
-  // as errors, we use sinon.js to stub it into throwing these warning as errors
-  // instead.
+export function warningsToErrors() {
+  // Ensure console.warnings become thrown errors.
   beforeAll(() => {
     sinon.stub(console, 'error', (warning) => { throw new Error(warning); });
   });
 
-  // While not forgetting to restore it afterwards
+  // While not forgetting to restore it afterwards.
   afterAll(() => { console.error.restore(); });
 }

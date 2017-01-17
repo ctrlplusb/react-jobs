@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { mount } from 'enzyme';
-import { withJob, runJobs } from '../../../src/ssr';
-import { Foo, resolveAfter, rejectAfter } from '../../helpers';
+import { withJob, runJobs } from '../';
+import { Foo, resolveAfter, rejectAfter } from '../../../tools/tests/helpers';
 
 const workTime = 10; // ms
 

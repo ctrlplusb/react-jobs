@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "An example of my-library",
   "main": "index.js",
-  "engines": {
-    "node": ">=7.0.0"
-  },
   "scripts": {
     "start": "babel-node server.js"
   },
@@ -22,11 +19,11 @@
     "babel-preset-stage-3": "^6.17.0",
     "babel-register": "^6.18.0",
     "express": "^4.14.0",
-    "html-webpack-plugin": "^2.25.0",
-    "react": "^15.4.1",
-    "react-dom": "^15.4.1",
+    "html-webpack-plugin": "^2.26.0",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
     "webpack": "^2.2.0-rc.3",
     "webpack-dev-middleware": "^1.9.0",
-    "webpack-hot-middleware": "^2.14.0"
+    "webpack-hot-middleware": "^2.15.0"
   }
 }

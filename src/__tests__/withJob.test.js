@@ -2,13 +2,13 @@
 
 import React from 'react';
 import { mount } from 'enzyme';
-import { Foo, resolveAfter, rejectAfter, warningsAsErrors } from '../helpers';
-import { withJob } from '../../src';
+import { Foo, resolveAfter, rejectAfter, warningsToErrors } from '../../tools/tests/helpers';
+import withJob from '../withJob';
 
 const workTime = 10; // ms
 
 describe('withJob()', () => {
-  warningsAsErrors();
+  warningsToErrors();
 
   describe('arguments', () => {
     it('returns a function', () => {

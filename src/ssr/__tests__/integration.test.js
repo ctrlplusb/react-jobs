@@ -2,13 +2,13 @@
 
 import React from 'react';
 import { renderToString } from 'react-dom/server';
-import { Foo, resolveAfter, rejectAfter } from '../../helpers';
+import { Foo, resolveAfter, rejectAfter } from '../../../tools/tests/helpers';
 import {
   withJob,
   runJobs,
   rehydrateJobs,
-} from '../../../src/ssr';
-import { STATE_IDENTIFIER } from '../../../src/ssr/constants';
+} from '../';
+import { STATE_IDENTIFIER } from '../constants';
 
 const workTime = 10;
 

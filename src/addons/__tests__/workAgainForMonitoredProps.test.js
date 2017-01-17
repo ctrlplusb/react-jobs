@@ -1,7 +1,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import { withJob } from '../../../src/ssr';
-import workAgainForMonitoredProps from '../../../src/addons/workAgainForMonitoredProps';
+import { withJob } from '../../ssr';
+import workAgainForMonitoredProps from '../workAgainForMonitoredProps';
 
 const contextStub = {
   reactJobsClient: {

@@ -2,12 +2,12 @@
 
 import React from 'react';
 import { mount } from 'enzyme';
-import { Foo, resolveAfter, warningsAsErrors } from '../../helpers';
-import { withJob } from '../../../src/ssr';
-import ClientProvider from '../../../src/ssr/ClientProvider';
+import { Foo, resolveAfter, warningsToErrors } from '../../../tools/tests/helpers';
+import { withJob } from '../';
+import ClientProvider from '../ClientProvider';
 
 describe('ssr/withJob()', () => {
-  warningsAsErrors();
+  warningsToErrors();
 
   describe('higher order component', () => {
     const hoc = withJob(() => resolveAfter(1));

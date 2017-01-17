@@ -30,7 +30,7 @@ export default withJob(
     - [rehydrateJobs(app)](#rehydratejobsapp)
   - [Alternatives](#alternatives)
   - [Recipes](#recipes)
-    - [`redux-thunk`](#redux-thunk)
+    - [With Redux](#redux)
   - [FAQs](#faqs)
   - [Changelog](https://github.com/ctrlplusb/react-jobs/releases)
   - [Credits](#credits)
@@ -514,9 +514,13 @@ TODO
 
 TODO
 
+### [`redux-connect`](https://github.com/makeomatic/redux-connect)
+
+TODO
+
 ## Recipes
 
-### `redux-thunk`
+### With Redux (using [`redux-thunk`](https://github.com/gaeron/redux-thunk))
 
 TODO
 

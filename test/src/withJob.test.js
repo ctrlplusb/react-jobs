@@ -20,13 +20,13 @@ describe('withJob()', () => {
     it('should throws if no work is provided', () => {
       // $FlowIgnore: we expect this to flow error
       expect(() => withJob())
-        .toThrowError('You must provide a "createWork" function to the "withJob".');
+        .toThrowError('You must provide a "work" function to the "withJob".');
     });
 
     it('should throws if the work is invalid', () => {
       // $FlowIgnore: we expect this to flow error
       expect(() => withJob(1))
-        .toThrowError('You must provide a "createWork" function to the "withJob".');
+        .toThrowError('You must provide a "work" function to the "withJob".');
     });
   });
 
@@ -98,28 +98,13 @@ describe('withJob()', () => {
       expect(actual).toMatchObject(expected);
     });
 
-    it('should not fire work again when work is in progress', () => {
+    it('should not fire again when no "config.shouldWorkAgain" is provided', () => {
       let fireCount = 0;
-      const Bob = () => <div>bob</div>;
-      const BobWithJob = withJob(() => {
+      const Component = withJob(() => {
         fireCount += 1;
-        return resolveAfter(20);
-      })(Bob);
-      const renderWrapper = mount(<BobWithJob />);
-      expect(fireCount).toEqual(1);
-      // Set props to cause a re-render
-      renderWrapper.setProps({ foo: 'bar' });
-      expect(fireCount).toEqual(1);
-    });
-
-    it('should not fire work again when work is complete', () => {
-      let fireCount = 0;
-      const Bob = () => <div>bob</div>;
-      const BobWithJob = withJob(() => {
-        fireCount += 1;
-        return true;
-      })(Bob);
-      const renderWrapper = mount(<BobWithJob />);
+        return 'foo';
+      })(() => <div>bob</div>);
+      const renderWrapper = mount(<Component foo="foo" />);
       expect(fireCount).toEqual(1);
       // Set props to cause a re-render
       renderWrapper.setProps({ foo: 'bar' });
@@ -128,32 +113,38 @@ describe('withJob()', () => {
 
     it('should fire again for a remount', () => {
       let fireCount = 0;
-      const Bob = () => <div>bob</div>;
-      const BobWithJob = withJob(() => {
+      const Component = withJob(() => {
         fireCount += 1;
         return true;
-      })(Bob);
-      mount(<BobWithJob />);
+      })(() => <div>bob</div>);
+      mount(<Component />);
       expect(fireCount).toEqual(1);
-      mount(<BobWithJob />);
+      mount(<Component />);
       expect(fireCount).toEqual(2);
     });
 
-    it('should fire again when a monitorProps changes', () => {
+    it('should fire expectantly for a "shouldWorkAgain" implementation', () => {
+      const prevProductIds = [];
       let fireCount = 0;
-      const Bob = () => <div>bob</div>;
-      const BobWithJob = withJob(
-        () => {
+      const Component = withJob(
+        ({ productId }) => {
+          prevProductIds.push(productId);
           fireCount += 1;
           return true;
         },
-        { monitorProps: ['productId'] },
-      )(Bob);
-      const renderWrapper = mount(<BobWithJob productId={1} />);
+        {
+          shouldWorkAgain: (prevProps, nextProps, currentJob) =>
+            (currentJob.inProgress || currentJob.completed)
+            && prevProductIds.indexOf(nextProps.productId) === -1,
+        },
+      )(() => <div>bob</div>);
+      const renderWrapper = mount(<Component productId={1} />);
       expect(fireCount).toEqual(1);
       renderWrapper.setProps({ productId: 2 });
       expect(fireCount).toEqual(2);
-      renderWrapper.setProps({ productId: 1 });
+      renderWrapper.setProps({ productId: 3 });
+      expect(fireCount).toEqual(3);
+      renderWrapper.setProps({ productId: 2 });
       expect(fireCount).toEqual(3);
       renderWrapper.setProps({ productId: 1 });
       expect(fireCount).toEqual(3);

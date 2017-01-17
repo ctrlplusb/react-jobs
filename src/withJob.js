@@ -1,9 +1,6 @@
 /* @flow */
-/* eslint-disable import/no-extraneous-dependencies */
 
 import React, { Component } from 'react';
-// $FlowIgnore
-import shallowEqual from 'fbjs/lib/shallowEqual';
 import { getDisplayName, isPromise, propsWithoutInternal } from './utils';
 import type { JobState } from './ssr/types';
 
@@ -21,22 +18,17 @@ type Props = {
 };
 
 type Config = {
-  monitorProps : Array<string>,
+  shouldWorkAgain? : (Object, Object, Object) => boolean,
 };
-
-const getMonitorState = (props : Object) => Object.keys(props).reduce((acc, cur) =>
-  Object.assign(acc, { [cur]: props[cur] }),
-  {},
-);
 
 const defaultConfig : Config = { monitorProps: [] };
 
 export default function withJob(work : Work, config : Config = defaultConfig) {
   if (typeof work !== 'function') {
-    throw new Error('You must provide a "createWork" function to the "withJob".');
+    throw new Error('You must provide a "work" function to the "withJob".');
   }
 
-  const { monitorProps = [] } = config;
+  const { shouldWorkAgain } = config;
 
   return function wrapComponentWithJob(WrappedComponent : Function) {
     class ComponentWithJob extends Component {
@@ -54,11 +46,6 @@ export default function withJob(work : Work, config : Config = defaultConfig) {
       componentWillMount() {
         const { jobInitState } = this.props;
 
-        if (monitorProps.length > 0) {
-          const monitorState = getMonitorState(this.props);
-          this.setState({ monitorState });
-        }
-
         if (jobInitState) {
           this.setState(jobInitState);
           return;
@@ -68,18 +55,11 @@ export default function withJob(work : Work, config : Config = defaultConfig) {
       }
 
       componentWillReceiveProps(nextProps : Props) {
-        const monitorPropChanged = () => {
-          if (monitorProps.length === 0 || !this.state.monitorState) {
-            return false;
-          }
-          const newState = getMonitorState(nextProps);
-          this.setState({ monitorState: newState });
-          return !shallowEqual(this.state.monitorState, newState);
-        };
-        if (!monitorPropChanged() && (this.state.inProgress || this.state.completed)) {
-          // We don't want to fire work under these conditions.
+        if (!shouldWorkAgain || !shouldWorkAgain(this.props, nextProps, this.getJobState())) {
+          // User has explicitly stated no!
           return;
         }
+
         this.handleWork(nextProps);
       }
 
@@ -128,15 +108,17 @@ export default function withJob(work : Work, config : Config = defaultConfig) {
         return { completed, inProgress, result, error };
       }
 
-      render() {
-        // Do not pass down internal props
-        const jobState = this.getJobState();
-        return (
-          <WrappedComponent
-            {...propsWithoutInternal(this.props)}
-            job={jobState}
-          />
+      getPropsWithJobState(props : Object) {
+        return Object.assign(
+          {},
+          // Do not pass down internal props
+          propsWithoutInternal(props),
+          { job: this.getJobState() },
         );
+      }
+
+      render() {
+        return <WrappedComponent {...this.getPropsWithJobState(this.props)} />;
       }
     }
     ComponentWithJob.displayName = `${getDisplayName(WrappedComponent)}WithJob`;

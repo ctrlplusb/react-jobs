@@ -28,6 +28,7 @@ export default withJob(
     - [withJob(createWork)](#withjobcreatework)
     - [runJobs(app)](#runjobsapp)
     - [rehydrateJobs(app)](#rehydratejobsapp)
+  - [Addons](#addons)
   - [Alternatives](#alternatives)
   - [Recipes](#recipes)
     - [`redux-thunk`](#redux-thunk)

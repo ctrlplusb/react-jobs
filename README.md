@@ -30,7 +30,7 @@ export default withJob(
     - [rehydrateJobs(app)](#rehydratejobsapp)
   - [Alternatives](#alternatives)
   - [Recipes](#recipes)
-    - [With Redux](#redux)
+    - [With Redux](#with-redux-using-redux-thunk)
   - [FAQs](#faqs)
   - [Changelog](https://github.com/ctrlplusb/react-jobs/releases)
   - [Credits](#credits)

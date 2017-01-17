@@ -37,12 +37,13 @@ export default withJob(
 
 ## Introduction
 
-This library provides you with a generic mechanism of attaching "jobs" to your React Components, and includes support for server rendering (i.e. within SSR/universal/isomorphic) apps.
+This library provides you with a generic mechanism of attaching "jobs" to your React Components, and includes support for server rendering (i.e. within SSR/universal/isomorphic) apps.  A common use case for this is to manage the fetching/prefetching of data for your components.
 
 ## Features
 
  - Resolve additional data/props for your components in a asynchronous or synchronous manner.
  - Fire a generic piece of "work" any time your component is mounted.
+ - Provides a config mechanism so that you can determine if your "work" needs to be re-executed for new props received on your component.
  - Simple `function` and `Promise` based API which allows you to easily compose additional features such as caching or 3rd party integrations (e.g. Redux).
  - Doesn't block your component from rendering when running asynchronous jobs. Instead it passes a "job" prop to your component that represents the state of a job.  This allows you to show a "loading" component if you like, or continue rendering subtrees whilst the data loads. It's additionally trivial to cache asynchronous results to avoid your "loading" component flashing in/out of the DOM when a job has previously executed.
  - Separate data loading concerns from your components to ease testing.
@@ -287,8 +288,8 @@ The new component class will receive an additional prop called `job`.  The `job`
 
 The work will _only_ fire under the following conditions:
 
- - Any time `componentWillMount` fires.
- - Any time the `componentWillReceiveProps` fires AND `config.shouldWorkAgain` (see the docs below) returns `true`.
+ - Any time `componentWillMount` fires. i.e. any time your component mounts.
+ - Any time the `componentWillReceiveProps` fires AND `config.shouldWorkAgain` (see [`Arguments`](#arguments) docs) returns `true`.
 
 > Note: If you only ever want the work to fire once, then consider creating a caching strategy to decorate your work functions with.
 

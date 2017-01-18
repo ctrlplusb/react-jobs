@@ -1,6 +1,6 @@
 {
   "name": "react-jobs",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "Attach asynchronous/synchronous \"jobs\" to your components, with SSR support.",
   "license": "MIT",
   "main": "commonjs/index.js",
@@ -45,7 +45,7 @@
     "react": "^14.0.0 || ^15.0.0"
   },
   "dependencies": {
-    "react-tree-walker": "^0.0.1"
+    "react-tree-walker": "^1.0.0"
   },
   "devDependencies": {
     "app-root-dir": "1.0.2",

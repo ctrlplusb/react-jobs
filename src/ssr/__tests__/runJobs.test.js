@@ -39,4 +39,16 @@ describe('runJobs()', () => {
       expect(mount(appWithJobs)).toMatchSnapshot();
     });
   });
+
+  it('should fire once', () => {
+    let fireCounter = 0;
+    const FooWithJob = withJob(() => {
+      fireCounter += 1;
+      return resolveAfter(workTime, fireCounter);
+    })(Foo);
+    const app = <FooWithJob />;
+    return runJobs(app).then(() => {
+      expect(fireCounter).toBe(1);
+    });
+  });
 });

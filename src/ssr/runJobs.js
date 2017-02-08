@@ -37,7 +37,7 @@ function getJobs(
       if (instance && typeof instance.getExecutingJob === 'function' && !skipRoot) {
         const job = instance.getExecutingJob();
         if (isPromise(job)) {
-          jobs.push({ job, element, context });
+          jobs.push({ job, element: instance, context });
 
           // Tell walkTree to not recurse inside this component;  we will
           // wait for the query to execute before attempting it.

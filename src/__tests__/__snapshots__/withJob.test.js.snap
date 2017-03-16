@@ -1,3 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`withJob() rendering should set the "result" immediately if the work does not return a promise 1`] = `
 <FooWithJob>
   <Foo
@@ -8,7 +10,8 @@ exports[`withJob() rendering should set the "result" immediately if the work doe
         "inProgress": false,
         "result": "bob",
       }
-    }>
+    }
+  >
     <div>
       bob
     </div>

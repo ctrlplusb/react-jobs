@@ -1,3 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`runJobs() should not render a job that is deferred 1`] = `
 <ServerProvider
   runJobsExecContext={
@@ -5,7 +7,8 @@ exports[`runJobs() should not render a job that is deferred 1`] = `
       "getState": [Function],
       "registerJobState": [Function],
     }
-  }>
+  }
+>
   <ClientProvider>
     <FooWithJobWithJobID>
       <FooWithJob
@@ -15,7 +18,8 @@ exports[`runJobs() should not render a job that is deferred 1`] = `
             "inProgress": true,
           }
         }
-        onJobProcessed={[Function]}>
+        onJobProcessed={[Function]}
+      >
         <Foo
           job={
             Object {
@@ -24,7 +28,8 @@ exports[`runJobs() should not render a job that is deferred 1`] = `
               "inProgress": true,
               "result": undefined,
             }
-          }>
+          }
+        >
           <div>
             In progress...
           </div>
@@ -42,7 +47,8 @@ exports[`runJobs() should render a job that fails 1`] = `
       "getState": [Function],
       "registerJobState": [Function],
     }
-  }>
+  }
+>
   <ClientProvider>
     <FooWithJobWithJobID>
       <FooWithJob
@@ -54,7 +60,8 @@ exports[`runJobs() should render a job that fails 1`] = `
             "result": undefined,
           }
         }
-        onJobProcessed={[Function]}>
+        onJobProcessed={[Function]}
+      >
         <Foo
           job={
             Object {
@@ -63,7 +70,8 @@ exports[`runJobs() should render a job that fails 1`] = `
               "inProgress": false,
               "result": undefined,
             }
-          }>
+          }
+        >
           <div>
             Error: 
             Poop!
@@ -82,7 +90,8 @@ exports[`runJobs() should render a job that succeeds 1`] = `
       "getState": [Function],
       "registerJobState": [Function],
     }
-  }>
+  }
+>
   <ClientProvider>
     <FooWithJobWithJobID>
       <FooWithJob
@@ -94,7 +103,8 @@ exports[`runJobs() should render a job that succeeds 1`] = `
             "result": "Hello world!",
           }
         }
-        onJobProcessed={[Function]}>
+        onJobProcessed={[Function]}
+      >
         <Foo
           job={
             Object {
@@ -103,7 +113,8 @@ exports[`runJobs() should render a job that succeeds 1`] = `
               "inProgress": false,
               "result": "Hello world!",
             }
-          }>
+          }
+        >
           <div>
             Hello world!
           </div>

@@ -34,6 +34,7 @@ export default function withJob(work : Work, config : Config = defaultConfig) {
     class ComponentWithJob extends Component {
       props: Props;
       state: State;
+      unmounted: boolean;
 
       constructor(props : Props) {
         super(props);
@@ -52,6 +53,10 @@ export default function withJob(work : Work, config : Config = defaultConfig) {
         }
 
         this.handleWork(this.props);
+      }
+
+      componentWillUnmount() {
+        this.unmounted = true;
       }
 
       componentWillReceiveProps(nextProps : Props) {
@@ -85,14 +90,18 @@ export default function withJob(work : Work, config : Config = defaultConfig) {
         if (isPromise(workResult)) {
           workResult
             .then((result) => {
-              this.setState({ completed: true, inProgress: false, result });
+              if (!this.unmounted) {
+                this.setState({ completed: true, inProgress: false, result });
+              }
               return result;
             })
             .catch((error) => {
-              this.setState({ completed: true, inProgress: false, error });
+              if (!this.unmounted) {
+                this.setState({ completed: true, inProgress: false, error });
+              }
             })
             .then(() => {
-              if (onJobProcessed) {
+              if (!this.unmounted && onJobProcessed) {
                 onJobProcessed(this.getJobState());
               }
             });

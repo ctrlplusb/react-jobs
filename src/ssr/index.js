@@ -1,11 +1,7 @@
-/* @flow */
+/*  */
 
-import withJob from './withJob';
-import runJobs from './runJobs';
-import rehydrateJobs from './rehydrateJobs';
+import withJob from './withJob'
+import runJobs from './runJobs'
+import rehydrateJobs from './rehydrateJobs'
 
-export {
-  withJob,
-  runJobs,
-  rehydrateJobs,
-};
+export { withJob, runJobs, rehydrateJobs }

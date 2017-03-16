@@ -1,142 +1,125 @@
-/* @flow */
+/*  */
 
-import React, { Component } from 'react';
-import { getDisplayName, isPromise, propsWithoutInternal } from './utils';
-import type { JobState } from './ssr/types';
+import React, { Component } from 'react'
+import { getDisplayName, isPromise, propsWithoutInternal } from './utils'
 
-type Work = (props : Object) => any;
+const defaultConfig = { monitorProps: [] }
 
-type State = JobState & {
-  executingJob?: Promise<any>,
-  monitorState?: { [key : string] : mixed },
-};
-
-type Props = {
-  jobInitState?: JobState,
-  onJobProcessed?: (jobState: JobState) => void,
-  [key: string]: any,
-};
-
-type Config = {
-  shouldWorkAgain? : (Object, Object, Object) => boolean,
-};
-
-const defaultConfig : Config = { monitorProps: [] };
-
-export default function withJob(work : Work, config : Config = defaultConfig) {
+export default function withJob(work, config = defaultConfig) {
   if (typeof work !== 'function') {
-    throw new Error('You must provide a "work" function to the "withJob".');
+    throw new Error('You must provide a "work" function to the "withJob".')
   }
 
-  const { shouldWorkAgain } = config;
+  const { shouldWorkAgain } = config
 
-  return function wrapComponentWithJob(WrappedComponent : Function) {
+  return function wrapComponentWithJob(WrappedComponent) {
     class ComponentWithJob extends Component {
-      props: Props;
-      state: State;
-      unmounted: boolean;
-
-      constructor(props : Props) {
-        super(props);
+      constructor(props) {
+        super(props)
         this.state = {
           inProgress: false,
           completed: false,
-        };
+        }
       }
 
       componentWillMount() {
-        const { jobInitState } = this.props;
+        const { jobInitState } = this.props
 
         if (jobInitState) {
-          this.setState(jobInitState);
-          return;
+          this.setState(jobInitState)
+          return
         }
 
-        this.handleWork(this.props);
+        this.handleWork(this.props)
       }
 
       componentWillUnmount() {
-        this.unmounted = true;
+        this.unmounted = true
       }
 
-      componentWillReceiveProps(nextProps : Props) {
-        if (!shouldWorkAgain
-          || !shouldWorkAgain(
+      componentWillReceiveProps(nextProps) {
+        if (
+          !shouldWorkAgain ||
+          !shouldWorkAgain(
             propsWithoutInternal(this.props),
             propsWithoutInternal(nextProps),
             this.getJobState(),
           )
         ) {
           // User has explicitly stated no!
-          return;
+          return
         }
 
-        this.handleWork(nextProps);
+        this.handleWork(nextProps)
       }
 
-      handleWork(props : Props) {
-        const { onJobProcessed } = this.props;
-        let workResult;
+      handleWork(props) {
+        const { onJobProcessed } = this.props
+        let workResult
 
         try {
-          workResult = work(propsWithoutInternal(props));
+          workResult = work(propsWithoutInternal(props))
         } catch (error) {
           // Either a syncrhnous error or an error setting up the asynchronous
           // promise.
-          this.setState({ completed: true, error });
-          return;
+          this.setState({ completed: true, error })
+          return
         }
 
         if (isPromise(workResult)) {
           workResult
             .then((result) => {
               if (!this.unmounted) {
-                this.setState({ completed: true, inProgress: false, result });
+                this.setState({ completed: true, inProgress: false, result })
               }
-              return result;
+              return result
             })
             .catch((error) => {
               if (!this.unmounted) {
-                this.setState({ completed: true, inProgress: false, error });
+                this.setState({ completed: true, inProgress: false, error })
               }
             })
             .then(() => {
               if (!this.unmounted && onJobProcessed) {
-                onJobProcessed(this.getJobState());
+                onJobProcessed(this.getJobState())
               }
-            });
+            })
 
           // Asynchronous result.
-          this.setState({ completed: false, inProgress: true, executingJob: workResult });
+          this.setState({
+            completed: false,
+            inProgress: true,
+            executingJob: workResult,
+          })
         } else {
           // Synchronous result.
-          this.setState({ completed: true, result: workResult });
+          this.setState({ completed: true, result: workResult })
         }
       }
 
       getExecutingJob() {
-        return this.state.executingJob;
+        return this.state.executingJob
       }
 
-      getJobState() : JobState {
-        const { completed, inProgress, result, error } = this.state;
-        return { completed, inProgress, result, error };
+      getJobState() {
+        const { completed, inProgress, result, error } = this.state
+        return { completed, inProgress, result, error }
       }
 
-      getPropsWithJobState(props : Object) {
+      getPropsWithJobState(props) {
         return Object.assign(
           {},
           // Do not pass down internal props
           propsWithoutInternal(props),
           { job: this.getJobState() },
-        );
+        )
       }
 
       render() {
-        return <WrappedComponent {...this.getPropsWithJobState(this.props)} />;
+        return <WrappedComponent {...this.getPropsWithJobState(this.props)} />
       }
     }
-    ComponentWithJob.displayName = `${getDisplayName(WrappedComponent)}WithJob`;
-    return ComponentWithJob;
-  };
+    ComponentWithJob.displayName = `${getDisplayName(WrappedComponent)}WithJob`
+    return ComponentWithJob
+  }
 }

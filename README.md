@@ -1,3 +1,8 @@
+> ⚠️ WARNING ⚠️
+>
+> I am actively rewriting `react-jobs` from the ground up so that it's API is a bit simpler and it has interoperability with `react-async-bootstrapper` so that it can play nicely with other SSR pre-load/fetch/bootstrap libraries such as `react-async-component`.
+----------
+
 # react-jobs 🕴
 
 Attach asynchronous/synchronous "jobs" to your components, with SSR support.

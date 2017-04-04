@@ -1,5 +1,3 @@
-/*  */
-
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Children, Component, PropTypes } from 'react'
 

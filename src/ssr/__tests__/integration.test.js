@@ -1,5 +1,3 @@
-/*  */
-
 import React from 'react'
 import { renderToString } from 'react-dom/server'
 import { Foo, resolveAfter, rejectAfter } from '../../../tools/tests/helpers'

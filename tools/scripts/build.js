@@ -1,5 +1,3 @@
-/*  */
-
 import { readFileSync } from 'fs'
 import { inInstall } from 'in-publish'
 import prettyBytes from 'pretty-bytes'

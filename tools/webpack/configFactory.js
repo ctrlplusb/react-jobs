@@ -1,5 +1,3 @@
-/*  */
-
 import { resolve as resolvePath } from 'path'
 import webpack from 'webpack'
 import appRootDir from 'app-root-dir'

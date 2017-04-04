@@ -1,5 +1,3 @@
-/*  */
-
 import webpackConfigFactory from './configFactory'
 
 module.exports = function umdConfigFactory(options, args = {}) {

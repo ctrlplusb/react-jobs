@@ -1,5 +1,3 @@
-/*  */
-
 import React, { PropTypes } from 'react'
 import { mount } from 'enzyme'
 

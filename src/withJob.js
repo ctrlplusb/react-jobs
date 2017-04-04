@@ -1,5 +1,3 @@
-/*  */
-
 import React, { Component } from 'react'
 import { getDisplayName, isPromise, propsWithoutInternal } from './utils'
 

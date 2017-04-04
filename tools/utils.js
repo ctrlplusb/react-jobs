@@ -1,5 +1,3 @@
-/*  */
-
 import { execSync } from 'child_process'
 import appRootDir from 'app-root-dir'
 import { resolve as resolvePath } from 'path'

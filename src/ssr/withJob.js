@@ -1,4 +1,3 @@
-/*  */
 // @see https://github.com/facebook/react/issues/1137
 
 // eslint-disable-next-line import/no-extraneous-dependencies

@@ -1,6 +1,4 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-import React, { Element } from 'react'
-// eslint-disable-next-line import/no-extraneous-dependencies
+import React from 'react'
 import reactTreeWalker from 'react-tree-walker'
 import { isPromise } from '../utils'
 import ServerProvider from './ServerProvider'

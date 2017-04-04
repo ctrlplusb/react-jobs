@@ -1,5 +1,4 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-import React, { Element } from 'react'
+import React from 'react'
 import ClientProvider from './ClientProvider'
 import { STATE_IDENTIFIER } from './constants'
 

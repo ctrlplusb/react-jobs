@@ -16,7 +16,7 @@ function webpackConfigFactory({ target }) {
       filename: target === 'umd'
         ? `${libraryName}.js`
         : `${libraryName}.min.js`,
-      library: libraryName,
+      library: 'ReactJobs',
       libraryTarget: 'umd',
     },
     externals: {

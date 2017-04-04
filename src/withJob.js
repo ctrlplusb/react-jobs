@@ -1,34 +1,88 @@
-import React, { Component } from 'react'
+import React, { Component, PropTypes } from 'react'
 import { getDisplayName, isPromise, propsWithoutInternal } from './utils'
 
-const defaultConfig = { monitorProps: [] }
+const validSSRModes = ['resolve', 'defer', 'boundary']
+const neverWorkAgain = () => false
 
-export default function withJob(work, config = defaultConfig) {
-  if (typeof work !== 'function') {
-    throw new Error('You must provide a "work" function to the "withJob".')
+export default function withJob(config) {
+  if (typeof config !== 'object') {
+    throw new Error('You must provide a config object to withJob')
   }
 
-  const { shouldWorkAgain } = config
+  const {
+    work,
+    LoadingComponent,
+    ErrorComponent,
+    serverMode = 'resolve',
+    shouldWorkAgain = neverWorkAgain,
+  } = config
 
-  return function wrapComponentWithJob(WrappedComponent) {
+  if (typeof work !== 'function') {
+    throw new Error('You must provide a work function to withJob')
+  }
+
+  if (validSSRModes.indexOf(serverMode) === -1) {
+    throw new Error('Invalid serverMode provided to asyncComponent')
+  }
+
+  const env = typeof window === 'undefined' ? 'node' : 'browser'
+
+  return function wrapWithJob(WrappedComponent) {
+    let id
+
     class ComponentWithJob extends Component {
-      constructor(props) {
-        super(props)
-        this.state = {
-          inProgress: false,
-          completed: false,
+      static displayName = `WithJob(${getDisplayName(WrappedComponent)})`;
+
+      static contextTypes = {
+        jobs: PropTypes.shape({
+          getNextId: PropTypes.func.isRequired,
+          register: PropTypes.func.isRequired,
+          get: PropTypes.func.isRequired,
+          getRehydrate: React.PropTypes.func.isRequired,
+        }),
+      }
+
+      constructor(props, context) {
+        super(props, context)
+
+        if (context.jobs && !id) {
+          id = context.jobs.getNextId()
         }
       }
 
-      componentWillMount() {
-        const { jobInitState } = this.props
-
-        if (jobInitState) {
-          this.setState(jobInitState)
-          return
+      // @see react-async-bootstrapper
+      asyncBootstrap() {
+        if (env === 'browser') {
+          // No logic for browser, just continue
+          return true
         }
 
-        this.handleWork(this.props)
+        // node
+        return serverMode === 'defer'
+          ? false
+          : this.resolveWork(this.props)
+      }
+
+      componentWillMount() {
+        let result
+
+        if (this.context.jobs) {
+          result = env === 'browser'
+            ? this.context.jobs.getRehydrate(id)
+            : this.context.jobs.get(id)
+        }
+
+        this.state = {
+          data: result ? result.data : null,
+          error: null,
+          completed: result != null,
+        }
+      }
+
+      componentDidMount() {
+        if (!this.state.completed) {
+          this.resolveWork(this.props)
+        }
       }
 
       componentWillUnmount() {
@@ -37,87 +91,96 @@ export default function withJob(work, config = defaultConfig) {
 
       componentWillReceiveProps(nextProps) {
         if (
-          !shouldWorkAgain ||
-          !shouldWorkAgain(
+          shouldWorkAgain(
             propsWithoutInternal(this.props),
             propsWithoutInternal(nextProps),
             this.getJobState(),
           )
         ) {
-          // User has explicitly stated no!
-          return
+          this.resolveWork(nextProps)
         }
-
-        this.handleWork(nextProps)
       }
 
-      handleWork(props) {
-        const { onJobProcessed } = this.props
-        let workResult
+      resolveWork = (props) => {
+        let workDefinition
 
         try {
-          workResult = work(propsWithoutInternal(props))
+          workDefinition = work(props)
         } catch (error) {
-          // Either a syncrhnous error or an error setting up the asynchronous
-          // promise.
           this.setState({ completed: true, error })
-          return
+          // Ensures asyncBootstrap stops
+          return false
         }
 
-        if (isPromise(workResult)) {
-          workResult
-            .then((result) => {
-              if (!this.unmounted) {
-                this.setState({ completed: true, inProgress: false, result })
+        if (isPromise(workDefinition)) {
+          // Asynchronous result.
+          return workDefinition
+            .then((data) => {
+              if (this.unmounted) {
+                return undefined
               }
-              return result
+              this.setState({ completed: true, data })
+              if (this.context.jobs) {
+                this.context.jobs.register(id, { data })
+              }
+              // Ensures asyncBootstrap continues
+              return true
             })
             .catch((error) => {
-              if (!this.unmounted) {
-                this.setState({ completed: true, inProgress: false, error })
+              if (this.unmounted) {
+                return undefined
               }
-            })
-            .then(() => {
-              if (!this.unmounted && onJobProcessed) {
-                onJobProcessed(this.getJobState())
+              if (env === 'browser') {
+                setTimeout(
+                  () => {
+                    if (!this.unmounted) {
+                      this.setState({ completed: true, error })
+                    }
+                  },
+                  16,
+                )
+              } else {
+                // node
+                // We will at least log the error so that user isn't completely
+                // unaware of an error occurring.
+                // eslint-disable-next-line no-console
+                console.warn('Failed to resolve job')
+                // eslint-disable-next-line no-console
+                console.warn(error)
               }
+              // Ensures asyncBootstrap stops
+              return false
             })
-
-          // Asynchronous result.
-          this.setState({
-            completed: false,
-            inProgress: true,
-            executingJob: workResult,
-          })
-        } else {
-          // Synchronous result.
-          this.setState({ completed: true, result: workResult })
         }
-      }
 
-      getExecutingJob() {
-        return this.state.executingJob
-      }
+        // Synchronous result.
+        this.setState({ completed: true, data: workDefinition })
 
-      getJobState() {
-        const { completed, inProgress, result, error } = this.state
-        return { completed, inProgress, result, error }
-      }
+        // Ensures asyncBootstrap continues
+        return true
+      };
 
-      getPropsWithJobState(props) {
-        return Object.assign(
-          {},
-          // Do not pass down internal props
-          propsWithoutInternal(props),
-          { job: this.getJobState() },
-        )
-      }
+      getJobState = () => ({
+        completed: this.state.completed,
+        error: this.state.error,
+        data: this.state.data,
+      });
 
       render() {
-        return <WrappedComponent {...this.getPropsWithJobState(this.props)} />
+        const { data, error, completed } = this.state
+
+        if (error) {
+          return ErrorComponent
+            ? <ErrorComponent {...this.props} error={error} />
+            : null
+        }
+        if (!completed) {
+          return LoadingComponent ? <LoadingComponent {...this.props} /> : null
+        }
+        return <WrappedComponent {...this.props} jobResult={data} />
       }
     }
-    ComponentWithJob.displayName = `${getDisplayName(WrappedComponent)}WithJob`
+
     return ComponentWithJob
   }
 }

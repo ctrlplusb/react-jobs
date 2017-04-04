@@ -1,20 +1,61 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`withJob() rendering should render ErrorComponent when async work fails 1`] = `
+<WithJob(ResultRenderer)>
+  <ErrorComponent
+    error={[Error: poop]}
+  >
+    <div>
+      poop
+    </div>
+  </ErrorComponent>
+</WithJob(ResultRenderer)>
+`;
+
+exports[`withJob() rendering should render LoadingComponent when processing work 1`] = `
+<WithJob(ResultRenderer)>
+  <LoadingComponent>
+    <div>
+      Loading...
+    </div>
+  </LoadingComponent>
+</WithJob(ResultRenderer)>
+`;
+
+exports[`withJob() rendering should render nothing when processing work 1`] = `<WithJob(ResultRenderer) />`;
+
+exports[`withJob() rendering should render wrapped component when work completes successfully 1`] = `
+<WithJob(ResultRenderer)>
+  <ResultRenderer
+    jobResult="result"
+  >
+    <div>
+      result
+    </div>
+  </ResultRenderer>
+</WithJob(ResultRenderer)>
+`;
+
+exports[`withJob() rendering should set "error" when synchronous work fails 1`] = `
+<WithJob(ResultRenderer)>
+  <ErrorComponent
+    error={[Error: poop]}
+  >
+    <div>
+      poop
+    </div>
+  </ErrorComponent>
+</WithJob(ResultRenderer)>
+`;
+
 exports[`withJob() rendering should set the "result" immediately if the work does not return a promise 1`] = `
-<FooWithJob>
-  <Foo
-    job={
-      Object {
-        "completed": true,
-        "error": undefined,
-        "inProgress": false,
-        "result": "bob",
-      }
-    }
+<WithJob(ResultRenderer)>
+  <ResultRenderer
+    jobResult="bob"
   >
     <div>
       bob
     </div>
-  </Foo>
-</FooWithJob>
+  </ResultRenderer>
+</WithJob(ResultRenderer)>
 `;

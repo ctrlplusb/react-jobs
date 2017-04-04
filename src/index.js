@@ -1,5 +1,9 @@
-/* eslint-disable import/prefer-default-export */
-
 import withJob from './withJob'
+import JobProvider from './JobProvider'
+import createJobContext from './createJobContext'
 
-export { withJob }
+export {
+  withJob,
+  JobProvider,
+  createJobContext,
+}

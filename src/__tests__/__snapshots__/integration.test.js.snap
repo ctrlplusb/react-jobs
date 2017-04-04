@@ -1,0 +1,115 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`integration tests render server and client 1`] = `"<div><div>Hello<div><div>World</div></div></div><div>Goodbye</div></div>"`;
+
+exports[`integration tests render server and client 2`] = `
+Object {
+  "jobs": Object {
+    "1": Object {
+      "data": "Hello",
+    },
+    "2": Object {
+      "data": "World",
+    },
+    "3": Object {
+      "data": "Goodbye",
+    },
+  },
+}
+`;
+
+exports[`integration tests render server and client 3`] = `
+<JobProvider
+  jobContext={null}
+  rehydrateState={
+    Object {
+      "jobs": Object {},
+    }
+  }
+>
+  <div>
+    <WithJob(ResultRenderer)>
+      <ResultRenderer
+        jobResult="Hello"
+      >
+        <div>
+          Hello
+          <div>
+            <WithJob(ResultRenderer)>
+              <ResultRenderer
+                jobResult="World"
+              >
+                <div>
+                  World
+                </div>
+              </ResultRenderer>
+            </WithJob(ResultRenderer)>
+          </div>
+        </div>
+      </ResultRenderer>
+    </WithJob(ResultRenderer)>
+    <WithJob(ResultRenderer)>
+      <ResultRenderer
+        jobResult="Goodbye"
+      >
+        <div>
+          Goodbye
+        </div>
+      </ResultRenderer>
+    </WithJob(ResultRenderer)>
+    <WithJob(ResultRenderer) />
+  </div>
+</JobProvider>
+`;
+
+exports[`integration tests render server and client 4`] = `
+<JobProvider
+  jobContext={null}
+  rehydrateState={
+    Object {
+      "jobs": Object {},
+    }
+  }
+>
+  <div>
+    <WithJob(ResultRenderer)>
+      <ResultRenderer
+        jobResult="Hello"
+      >
+        <div>
+          Hello
+          <div>
+            <WithJob(ResultRenderer)>
+              <ResultRenderer
+                jobResult="World"
+              >
+                <div>
+                  World
+                </div>
+              </ResultRenderer>
+            </WithJob(ResultRenderer)>
+          </div>
+        </div>
+      </ResultRenderer>
+    </WithJob(ResultRenderer)>
+    <WithJob(ResultRenderer)>
+      <ResultRenderer
+        jobResult="Goodbye"
+      >
+        <div>
+          Goodbye
+        </div>
+      </ResultRenderer>
+    </WithJob(ResultRenderer)>
+    <WithJob(ResultRenderer)>
+      <ErrorComponent
+        error={[Error: Oh noes!]}
+      >
+        <div>
+          Oh noes!
+        </div>
+      </ErrorComponent>
+    </WithJob(ResultRenderer)>
+  </div>
+</JobProvider>
+`;

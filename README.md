@@ -1,6 +1,6 @@
 # react-jobs 💼
 
-Asynchronously resolve data for your componets, with support for server side rendering.
+Asynchronously resolve data for your components, with support for server side rendering.
 
 [![npm](https://img.shields.io/npm/v/react-jobs.svg?style=flat-square)](http://npm.im/react-jobs)
 [![MIT License](https://img.shields.io/npm/l/react-jobs.svg?style=flat-square)](http://opensource.org/licenses/MIT)

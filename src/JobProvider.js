@@ -7,6 +7,7 @@ class JobProvider extends Component {
     children: PropTypes.node.isRequired,
     jobContext: PropTypes.shape({
       getNextId: PropTypes.func.isRequired,
+      resetIds: PropTypes.func.isRequired,
       register: PropTypes.func.isRequired,
       get: PropTypes.func.isRequired,
       getState: PropTypes.func.isRequired,
@@ -32,6 +33,17 @@ class JobProvider extends Component {
       removeRehydrate: React.PropTypes.func.isRequired,
     }).isRequired,
   };
+
+  constructor(props, context) {
+    super(props, context)
+
+    // This is a workaround because each element instance of a job needs its
+    // own ids.  So between the bootstrapping and the render we need to reset
+    // the id counter to ensure the ids will match.
+    if (props.jobContext) {
+      props.jobContext.resetIds()
+    }
+  }
 
   componentWillMount() {
     this.jobContext = this.props.jobContext || createJobContext()

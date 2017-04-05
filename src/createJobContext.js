@@ -6,6 +6,9 @@ export default function createJobContext() {
       idPointer += 1
       return idPointer
     },
+    resetIds: () => {
+      idPointer = 0
+    },
     register: (jobID, result) => {
       jobs[jobID] = result
     },

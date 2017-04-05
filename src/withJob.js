@@ -46,7 +46,9 @@ export default function withJob(config) {
       constructor(props, context) {
         super(props, context)
 
-        if (context.jobs && !id) {
+        // Each instance needs it's own id as that is how we expect work to
+        // be executed.  It is not shared between element instances.
+        if (context.jobs) {
           id = context.jobs.getNextId()
         }
       }

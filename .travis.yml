@@ -7,10 +7,7 @@ cache:
 node_js:
 - '6'
 script:
-# Unfortunately flow falls over when a dep exists in peer deps and others. :(
-# @see https://github.com/flowtype/flow-typed/issues/528
-#- yarn run flow:defs
-- yarn run check
+- yarn run test
 after_success:
 # Deploy code coverage report to codecov.io
 - yarn run test:coverage:deploy

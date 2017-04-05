@@ -44,11 +44,7 @@ class JobProvider extends Component {
         getNextId: this.jobContext.getNextId,
         register: this.jobContext.register,
         get: this.jobContext.get,
-        getRehydrate: (id) => {
-          const rehydration = this.rehydrateState.jobs[id]
-          delete this.rehydrateState.jobs[id]
-          return rehydration
-        },
+        getRehydrate: id => this.rehydrateState.jobs[id],
         removeRehydrate: (id) => {
           delete this.rehydrateState.jobs[id]
         },

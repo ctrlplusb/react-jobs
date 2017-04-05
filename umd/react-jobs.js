@@ -171,6 +171,9 @@ var JobProvider = function (_Component) {
             var rehydration = _this2.rehydrateState.jobs[id];
             delete _this2.rehydrateState.jobs[id];
             return rehydration;
+          },
+          removeRehydrate: function removeRehydrate(id) {
+            delete _this2.rehydrateState.jobs[id];
           }
         }
       };
@@ -208,7 +211,8 @@ JobProvider.childContextTypes = {
     getNextId: _react.PropTypes.func.isRequired,
     register: _react.PropTypes.func.isRequired,
     get: _react.PropTypes.func.isRequired,
-    getRehydrate: _react2.default.PropTypes.func.isRequired
+    getRehydrate: _react2.default.PropTypes.func.isRequired,
+    removeRehydrate: _react2.default.PropTypes.func.isRequired
   }).isRequired
 };
 exports.default = JobProvider;
@@ -329,6 +333,10 @@ function withJob(config) {
           if (!this.state.completed) {
             this.resolveWork(this.props);
           }
+
+          if (this.context.jobs && env === 'browser') {
+            this.context.jobs.removeRehydrate(id);
+          }
         }
       }, {
         key: 'componentWillUnmount',
@@ -370,7 +378,8 @@ function withJob(config) {
         getNextId: _react.PropTypes.func.isRequired,
         register: _react.PropTypes.func.isRequired,
         get: _react.PropTypes.func.isRequired,
-        getRehydrate: _react2.default.PropTypes.func.isRequired
+        getRehydrate: _react2.default.PropTypes.func.isRequired,
+        removeRehydrate: _react2.default.PropTypes.func.isRequired
       })
     };
 

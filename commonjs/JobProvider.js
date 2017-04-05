@@ -25,10 +25,18 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var JobProvider = function (_Component) {
   _inherits(JobProvider, _Component);
 
-  function JobProvider() {
+  function JobProvider(props, context) {
     _classCallCheck(this, JobProvider);
 
-    return _possibleConstructorReturn(this, (JobProvider.__proto__ || Object.getPrototypeOf(JobProvider)).apply(this, arguments));
+    // This is a workaround because each element instance of a job needs its
+    // own ids.  So between the bootstrapping and the render we need to reset
+    // the id counter to ensure the ids will match.
+    var _this = _possibleConstructorReturn(this, (JobProvider.__proto__ || Object.getPrototypeOf(JobProvider)).call(this, props, context));
+
+    if (props.jobContext) {
+      props.jobContext.resetIds();
+    }
+    return _this;
   }
 
   _createClass(JobProvider, [{
@@ -70,6 +78,7 @@ JobProvider.propTypes = {
   children: _react.PropTypes.node.isRequired,
   jobContext: _react.PropTypes.shape({
     getNextId: _react.PropTypes.func.isRequired,
+    resetIds: _react.PropTypes.func.isRequired,
     register: _react.PropTypes.func.isRequired,
     get: _react.PropTypes.func.isRequired,
     getState: _react.PropTypes.func.isRequired

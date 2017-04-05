@@ -95,6 +95,9 @@ function createJobContext() {
       idPointer += 1;
       return idPointer;
     },
+    resetIds: function resetIds() {
+      idPointer = 0;
+    },
     register: function register(jobID, result) {
       jobs[jobID] = result;
     },
@@ -145,10 +148,18 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var JobProvider = function (_Component) {
   _inherits(JobProvider, _Component);
 
-  function JobProvider() {
+  function JobProvider(props, context) {
     _classCallCheck(this, JobProvider);
 
-    return _possibleConstructorReturn(this, (JobProvider.__proto__ || Object.getPrototypeOf(JobProvider)).apply(this, arguments));
+    // This is a workaround because each element instance of a job needs its
+    // own ids.  So between the bootstrapping and the render we need to reset
+    // the id counter to ensure the ids will match.
+    var _this = _possibleConstructorReturn(this, (JobProvider.__proto__ || Object.getPrototypeOf(JobProvider)).call(this, props, context));
+
+    if (props.jobContext) {
+      props.jobContext.resetIds();
+    }
+    return _this;
   }
 
   _createClass(JobProvider, [{
@@ -190,6 +201,7 @@ JobProvider.propTypes = {
   children: _react.PropTypes.node.isRequired,
   jobContext: _react.PropTypes.shape({
     getNextId: _react.PropTypes.func.isRequired,
+    resetIds: _react.PropTypes.func.isRequired,
     register: _react.PropTypes.func.isRequired,
     get: _react.PropTypes.func.isRequired,
     getState: _react.PropTypes.func.isRequired
@@ -286,11 +298,13 @@ function withJob(config) {
       function ComponentWithJob(props, context) {
         _classCallCheck(this, ComponentWithJob);
 
+        // Each instance needs it's own id as that is how we expect work to
+        // be executed.  It is not shared between element instances.
         var _this = _possibleConstructorReturn(this, (ComponentWithJob.__proto__ || Object.getPrototypeOf(ComponentWithJob)).call(this, props, context));
 
         _initialiseProps.call(_this);
 
-        if (context.jobs && !id) {
+        if (context.jobs) {
           id = context.jobs.getNextId();
         }
         return _this;

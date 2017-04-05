@@ -64,11 +64,13 @@ function withJob(config) {
       function ComponentWithJob(props, context) {
         _classCallCheck(this, ComponentWithJob);
 
+        // Each instance needs it's own id as that is how we expect work to
+        // be executed.  It is not shared between element instances.
         var _this = _possibleConstructorReturn(this, (ComponentWithJob.__proto__ || Object.getPrototypeOf(ComponentWithJob)).call(this, props, context));
 
         _initialiseProps.call(_this);
 
-        if (context.jobs && !id) {
+        if (context.jobs) {
           id = context.jobs.getNextId();
         }
         return _this;

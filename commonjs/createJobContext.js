@@ -12,6 +12,9 @@ function createJobContext() {
       idPointer += 1;
       return idPointer;
     },
+    resetIds: function resetIds() {
+      idPointer = 0;
+    },
     register: function register(jobID, result) {
       jobs[jobID] = result;
     },

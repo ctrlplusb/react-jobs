@@ -13,7 +13,7 @@ Asynchronously resolve data for your components, with support for server side re
 export default withJob({
   work: (props) => fetch(`/categories/${props.categoryID}`).then(r => r.json()),
   LoadingComponent: (props) => <div>Loading...</div>, // Optional
-  ErrorComponent: (error, props) => <div>{error.message}</div>, // Optional
+  ErrorComponent: ({ error }) => <div>{error.message}</div>, // Optional
 })(Category)
 ```
 
@@ -24,9 +24,6 @@ export default withJob({
   - [Installation](#installation)
   - [Usage](#usage)
   - [API](#api)
-    - [withJob(createWork)](#withjobcreatework)
-    - [runJobs(app)](#runjobsapp)
-    - [rehydrateJobs(app)](#rehydratejobsapp)
   - [Server Side Rendering](#server-side-rendering)
   - [FAQs](#faqs)
   - [Changelog](https://github.com/ctrlplusb/react-jobs/releases)
@@ -44,8 +41,9 @@ This library provides you with a generic mechanism of attaching jobs to asynchro
  - Separate data loading concerns from your components to ease testing.
  - Support for server sider rendering applications, with:
     - data preloading on the server.
-    - "job" deferring (i.e. insist that job only gets executed on the client/browser).
+    - "job" deferring (i.e. insist that job only gets resolved in the browser).
     - rehydration API for the browser/client to prevent React checksum issues.
+    - provides interoperability with [`react-async-component`](https://github.com/ctrlplusb/react-async-component) for your code splitting needs.
 
 ## Installation
 
@@ -89,7 +87,7 @@ export default withJob({
   work: (props) =>
     fetch(`/products/category/${props.categoryID}`)
       .then(response => response.json())
-})(Products);
+})(Products)
 ```
 
 This component can then be used like so:
@@ -113,13 +111,12 @@ When the job has completed successfully your component will be rendered and prov
     - `LoadingComponent` (_Component_, Optional, default: `null`) : A Component that will be displayed until the `work` is complete. All props will be passed to it.
     - `ErrorComponent` (_Component_, Optional, default: `null`) : A Component that will be displayed if any error occurred whilst trying to execute the `work`. All props will be passed to it as well as an `error` prop containing the `Error`.
     - `shouldWorkAgain` (_(prevProps, nextProps, jobStatus) => boolean_, Optional, default: `null`): A function that is executed with every `componentWillReceiveProps` lifecycle event. It receives the previous props, next props, and a `jobStatus` object. If the function returns `true` then the `work` function will be executed again, otherwise it will not. If this function is not defined, then the work will never get executed for any `componentWillReceiveProps` events. The `jobStatus` object has the following members:
-      - `status` (_string_): One of 'in-progress', 'succeeded', 'failed'.
-      - `result` (_Any_): The result of the jog if status is 'succeeded', else undefined.
-      - `error` (_Error_): The error that occurred if status is 'failed'.  
+      - `completed` (_Boolean_): Has the job completed execution?
+      - `data` (_Any_): The result if the job succeeded, else undefined.
+      - `error` (_Error_): The error if the job failed, else undefined.
     - `serverMode` (_Boolean_, Optional, default: `'resolve'`) : Only applies for server side rendering applications. Please see the documentation on server side rendering. The following values are allowed.
       - __`'resolve'`__ - The `work` will be executed on the server.
       - __`'defer'`__ - The `work` will not be executed on the server, being deferred to the browser.
-    We highly recommend that you consider using `defer` as much as you can.
 
 #### Important notes regarding behaviour
 

@@ -33,7 +33,7 @@
     "clean": "rimraf ./commonjs && rimraf ./umd && rimraf ./coverage && rimraf ./flow-coverage && rimraf ./umd",
     "lint": "eslint src",
     "precommit": "lint-staged",
-    "prepush": "test",
+    "prepush": "jest",
     "prepublish": "yarn run build",
     "test": "jest",
     "test:coverage": "yarn run test -- --coverage",

@@ -48,9 +48,7 @@ var JobProvider = function (_Component) {
           register: this.jobContext.register,
           get: this.jobContext.get,
           getRehydrate: function getRehydrate(id) {
-            var rehydration = _this2.rehydrateState.jobs[id];
-            delete _this2.rehydrateState.jobs[id];
-            return rehydration;
+            return _this2.rehydrateState.jobs[id];
           },
           removeRehydrate: function removeRehydrate(id) {
             delete _this2.rehydrateState.jobs[id];

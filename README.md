@@ -1,4 +1,4 @@
-> NOTE: This is an alpha release.  The previous "stable" is on the `0.x.x` branch.
+> NOTE: This is an beta release.  The previous "stable" is on the `0.x.x` branch.
 
 # react-jobs 💼
 

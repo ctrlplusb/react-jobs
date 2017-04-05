@@ -29,6 +29,7 @@ class JobProvider extends Component {
       register: PropTypes.func.isRequired,
       get: PropTypes.func.isRequired,
       getRehydrate: React.PropTypes.func.isRequired,
+      removeRehydrate: React.PropTypes.func.isRequired,
     }).isRequired,
   };
 
@@ -47,6 +48,9 @@ class JobProvider extends Component {
           const rehydration = this.rehydrateState.jobs[id]
           delete this.rehydrateState.jobs[id]
           return rehydration
+        },
+        removeRehydrate: (id) => {
+          delete this.rehydrateState.jobs[id]
         },
       },
     }

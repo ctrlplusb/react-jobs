@@ -39,8 +39,9 @@ export default function withJob(config) {
           register: PropTypes.func.isRequired,
           get: PropTypes.func.isRequired,
           getRehydrate: React.PropTypes.func.isRequired,
+          removeRehydrate: React.PropTypes.func.isRequired,
         }),
-      }
+      };
 
       constructor(props, context) {
         super(props, context)
@@ -58,9 +59,7 @@ export default function withJob(config) {
         }
 
         // node
-        return serverMode === 'defer'
-          ? false
-          : this.resolveWork(this.props)
+        return serverMode === 'defer' ? false : this.resolveWork(this.props)
       }
 
       componentWillMount() {
@@ -82,6 +81,10 @@ export default function withJob(config) {
       componentDidMount() {
         if (!this.state.completed) {
           this.resolveWork(this.props)
+        }
+
+        if (this.context.jobs && env === 'browser') {
+          this.context.jobs.removeRehydrate(id)
         }
       }
 

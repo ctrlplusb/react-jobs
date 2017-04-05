@@ -13,7 +13,7 @@ Asynchronously resolve data for your components, with support for server side re
 export default withJob({
   work: (props) => fetch(`/categories/${props.categoryID}`).then(r => r.json()),
   LoadingComponent: (props) => <div>Loading...</div>, // Optional
-  ErrorComponent: (error, props) => <div>{error.message}</div>, // Optional
+  ErrorComponent: ({ error }) => <div>{error.message}</div>, // Optional
 })(Category)
 ```
 

@@ -16,6 +16,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _utils = require('./utils');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -152,10 +156,10 @@ function withJob(config) {
 
     ComponentWithJob.displayName = 'WithJob(' + (0, _utils.getDisplayName)(WrappedComponent) + ')';
     ComponentWithJob.contextTypes = {
-      jobs: _react.PropTypes.shape({
-        getNextId: _react.PropTypes.func.isRequired,
-        register: _react.PropTypes.func.isRequired,
-        get: _react.PropTypes.func.isRequired,
+      jobs: _propTypes2.default.shape({
+        getNextId: _propTypes2.default.func.isRequired,
+        register: _propTypes2.default.func.isRequired,
+        get: _propTypes2.default.func.isRequired,
         getRehydrate: _react2.default.PropTypes.func.isRequired,
         removeRehydrate: _react2.default.PropTypes.func.isRequired
       })

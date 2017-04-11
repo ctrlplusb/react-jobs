@@ -10,6 +10,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _createJobContext = require('./createJobContext');
 
 var _createJobContext2 = _interopRequireDefault(_createJobContext);
@@ -75,16 +79,16 @@ var JobProvider = function (_Component) {
 }(_react.Component);
 
 JobProvider.propTypes = {
-  children: _react.PropTypes.node.isRequired,
-  jobContext: _react.PropTypes.shape({
-    getNextId: _react.PropTypes.func.isRequired,
-    resetIds: _react.PropTypes.func.isRequired,
-    register: _react.PropTypes.func.isRequired,
-    get: _react.PropTypes.func.isRequired,
-    getState: _react.PropTypes.func.isRequired
+  children: _propTypes2.default.node.isRequired,
+  jobContext: _propTypes2.default.shape({
+    getNextId: _propTypes2.default.func.isRequired,
+    resetIds: _propTypes2.default.func.isRequired,
+    register: _propTypes2.default.func.isRequired,
+    get: _propTypes2.default.func.isRequired,
+    getState: _propTypes2.default.func.isRequired
   }),
-  rehydrateState: _react.PropTypes.shape({
-    jobs: _react.PropTypes.object.isRequired
+  rehydrateState: _propTypes2.default.shape({
+    jobs: _propTypes2.default.object.isRequired
   })
 };
 JobProvider.defaultProps = {
@@ -94,10 +98,10 @@ JobProvider.defaultProps = {
   }
 };
 JobProvider.childContextTypes = {
-  jobs: _react.PropTypes.shape({
-    getNextId: _react.PropTypes.func.isRequired,
-    register: _react.PropTypes.func.isRequired,
-    get: _react.PropTypes.func.isRequired,
+  jobs: _propTypes2.default.shape({
+    getNextId: _propTypes2.default.func.isRequired,
+    register: _propTypes2.default.func.isRequired,
+    get: _propTypes2.default.func.isRequired,
     getRehydrate: _react2.default.PropTypes.func.isRequired,
     removeRehydrate: _react2.default.PropTypes.func.isRequired
   }).isRequired

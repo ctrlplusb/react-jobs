@@ -1,13 +1,13 @@
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("react"));
+		module.exports = factory(require("prop-types"), require("react"));
 	else if(typeof define === 'function' && define.amd)
-		define(["react"], factory);
+		define(["prop-types", "react"], factory);
 	else if(typeof exports === 'object')
-		exports["ReactJobs"] = factory(require("react"));
+		exports["ReactJobs"] = factory(require("prop-types"), require("react"));
 	else
-		root["ReactJobs"] = factory(root["React"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_1__) {
+		root["ReactJobs"] = factory(root["PropTypes"], root["React"]);
+})(this, function(__WEBPACK_EXTERNAL_MODULE_1__, __WEBPACK_EXTERNAL_MODULE_2__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 4);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -118,6 +118,12 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_1__;
 
 /***/ }),
 /* 2 */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE_2__;
+
+/***/ }),
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -129,9 +135,13 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = __webpack_require__(1);
+var _react = __webpack_require__(2);
 
 var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(1);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var _createJobContext = __webpack_require__(0);
 
@@ -198,16 +208,16 @@ var JobProvider = function (_Component) {
 }(_react.Component);
 
 JobProvider.propTypes = {
-  children: _react.PropTypes.node.isRequired,
-  jobContext: _react.PropTypes.shape({
-    getNextId: _react.PropTypes.func.isRequired,
-    resetIds: _react.PropTypes.func.isRequired,
-    register: _react.PropTypes.func.isRequired,
-    get: _react.PropTypes.func.isRequired,
-    getState: _react.PropTypes.func.isRequired
+  children: _propTypes2.default.node.isRequired,
+  jobContext: _propTypes2.default.shape({
+    getNextId: _propTypes2.default.func.isRequired,
+    resetIds: _propTypes2.default.func.isRequired,
+    register: _propTypes2.default.func.isRequired,
+    get: _propTypes2.default.func.isRequired,
+    getState: _propTypes2.default.func.isRequired
   }),
-  rehydrateState: _react.PropTypes.shape({
-    jobs: _react.PropTypes.object.isRequired
+  rehydrateState: _propTypes2.default.shape({
+    jobs: _propTypes2.default.object.isRequired
   })
 };
 JobProvider.defaultProps = {
@@ -217,10 +227,10 @@ JobProvider.defaultProps = {
   }
 };
 JobProvider.childContextTypes = {
-  jobs: _react.PropTypes.shape({
-    getNextId: _react.PropTypes.func.isRequired,
-    register: _react.PropTypes.func.isRequired,
-    get: _react.PropTypes.func.isRequired,
+  jobs: _propTypes2.default.shape({
+    getNextId: _propTypes2.default.func.isRequired,
+    register: _propTypes2.default.func.isRequired,
+    get: _propTypes2.default.func.isRequired,
     getRehydrate: _react2.default.PropTypes.func.isRequired,
     removeRehydrate: _react2.default.PropTypes.func.isRequired
   }).isRequired
@@ -228,7 +238,7 @@ JobProvider.childContextTypes = {
 exports.default = JobProvider;
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -246,11 +256,15 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 exports.default = withJob;
 
-var _react = __webpack_require__(1);
+var _react = __webpack_require__(2);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _utils = __webpack_require__(5);
+var _propTypes = __webpack_require__(1);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _utils = __webpack_require__(6);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -386,10 +400,10 @@ function withJob(config) {
 
     ComponentWithJob.displayName = 'WithJob(' + (0, _utils.getDisplayName)(WrappedComponent) + ')';
     ComponentWithJob.contextTypes = {
-      jobs: _react.PropTypes.shape({
-        getNextId: _react.PropTypes.func.isRequired,
-        register: _react.PropTypes.func.isRequired,
-        get: _react.PropTypes.func.isRequired,
+      jobs: _propTypes2.default.shape({
+        getNextId: _propTypes2.default.func.isRequired,
+        register: _propTypes2.default.func.isRequired,
+        get: _propTypes2.default.func.isRequired,
         getRehydrate: _react2.default.PropTypes.func.isRequired,
         removeRehydrate: _react2.default.PropTypes.func.isRequired
       })
@@ -466,7 +480,7 @@ function withJob(config) {
 }
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -477,11 +491,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.createJobContext = exports.JobProvider = exports.withJob = undefined;
 
-var _withJob = __webpack_require__(3);
+var _withJob = __webpack_require__(4);
 
 var _withJob2 = _interopRequireDefault(_withJob);
 
-var _JobProvider = __webpack_require__(2);
+var _JobProvider = __webpack_require__(3);
 
 var _JobProvider2 = _interopRequireDefault(_JobProvider);
 
@@ -496,7 +510,7 @@ exports.JobProvider = _JobProvider2.default;
 exports.createJobContext = _createJobContext2.default;
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

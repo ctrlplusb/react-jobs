@@ -39,8 +39,8 @@ export default function withJob(config) {
           getNextId: PropTypes.func.isRequired,
           register: PropTypes.func.isRequired,
           get: PropTypes.func.isRequired,
-          getRehydrate: React.PropTypes.func.isRequired,
-          removeRehydrate: React.PropTypes.func.isRequired,
+          getRehydrate: PropTypes.func.isRequired,
+          removeRehydrate: PropTypes.func.isRequired,
         }),
       };
 

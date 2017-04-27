@@ -236,7 +236,7 @@ export default function expressMiddleware(req, res, next) {
 
   // 👇 Ensure you wrap your application with the provider.
   const app = (
-    <JobProvider asyncContext={asyncContext}>
+    <JobProvider jobContext={jobContext}>
       <MyApp />
     </JobProvider>
   )

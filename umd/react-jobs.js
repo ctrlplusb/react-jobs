@@ -16,9 +16,9 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	function __webpack_require__(moduleId) {
 /******/
 /******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId])
+/******/ 		if(installedModules[moduleId]) {
 /******/ 			return installedModules[moduleId].exports;
-/******/
+/******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			i: moduleId,
@@ -231,8 +231,8 @@ JobProvider.childContextTypes = {
     getNextId: _propTypes2.default.func.isRequired,
     register: _propTypes2.default.func.isRequired,
     get: _propTypes2.default.func.isRequired,
-    getRehydrate: _react2.default.PropTypes.func.isRequired,
-    removeRehydrate: _react2.default.PropTypes.func.isRequired
+    getRehydrate: _propTypes2.default.func.isRequired,
+    removeRehydrate: _propTypes2.default.func.isRequired
   }).isRequired
 };
 exports.default = JobProvider;
@@ -404,8 +404,8 @@ function withJob(config) {
         getNextId: _propTypes2.default.func.isRequired,
         register: _propTypes2.default.func.isRequired,
         get: _propTypes2.default.func.isRequired,
-        getRehydrate: _react2.default.PropTypes.func.isRequired,
-        removeRehydrate: _react2.default.PropTypes.func.isRequired
+        getRehydrate: _propTypes2.default.func.isRequired,
+        removeRehydrate: _propTypes2.default.func.isRequired
       })
     };
 

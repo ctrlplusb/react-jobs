@@ -16,24 +16,24 @@ class JobProvider extends Component {
     rehydrateState: PropTypes.shape({
       jobs: PropTypes.object.isRequired,
     }),
-  };
+  }
 
   static defaultProps = {
     jobContext: null,
     rehydrateState: {
       jobs: {},
     },
-  };
+  }
 
   static childContextTypes = {
     jobs: PropTypes.shape({
       getNextId: PropTypes.func.isRequired,
       register: PropTypes.func.isRequired,
       get: PropTypes.func.isRequired,
-      getRehydrate: React.PropTypes.func.isRequired,
-      removeRehydrate: React.PropTypes.func.isRequired,
+      getRehydrate: PropTypes.func.isRequired,
+      removeRehydrate: PropTypes.func.isRequired,
     }).isRequired,
-  };
+  }
 
   constructor(props, context) {
     super(props, context)

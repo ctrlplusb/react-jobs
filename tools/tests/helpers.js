@@ -18,7 +18,7 @@ export const rejectAfter = (time, error) =>
 export function warningsToErrors() {
   // Ensure console.warnings become thrown errors.
   beforeAll(() => {
-    sinon.stub(console, 'error', (warning) => {
+    sinon.stub(console, 'error').callsFake((warning) => {
       throw new Error(warning)
     })
   })

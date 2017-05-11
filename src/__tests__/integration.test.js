@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 
 import React from 'react'
-import { renderToString, renderToStaticMarkup } from 'react-dom/server'
+import { renderToStaticMarkup } from 'react-dom/server'
 import asyncBootstrapper from 'react-async-bootstrapper'
 import { mount } from 'enzyme'
 import { resolveAfter, rejectAfter } from '../../tools/tests/helpers'
@@ -21,7 +21,6 @@ function ResultRenderer({ jobResult, children }) {
   )
 }
 const ErrorComponent = ({ error }) => <div>{error ? error.message : null}</div>
-const LoadingComponent = () => <div>Loading...</div>
 
 const createComponents = () => ({
   Hello: withJob({ work: () => resolveAfter(workTime, 'Hello') })(
@@ -57,7 +56,7 @@ const createApp = (context, state) => {
 describe('integration tests', () => {
   it('render server and client', () => {
     // we have to delete the window to emulate a server only environment
-    let windowTemp = global.window
+    const windowTemp = global.window
     delete global.window
 
     // Server side render
@@ -101,12 +100,14 @@ describe('integration tests', () => {
         .then(
           clientRenderWrapper =>
             new Promise(resolve =>
-              setTimeout(() => resolve(clientRenderWrapper), 100)),
+              setTimeout(() => resolve(clientRenderWrapper), 100),
+            ),
         )
         // Now a full render should have occured on client
         // SNAPSHOT 4
         .then(clientRenderWrapper =>
-          expect(clientRenderWrapper).toMatchSnapshot())
+          expect(clientRenderWrapper).toMatchSnapshot(),
+        )
     )
   })
 })

@@ -120,7 +120,7 @@ When the job has completed successfully your component will be rendered and prov
 
 #### Important notes regarding behaviour
 
-The `work` will fires under the following conditions:
+The `work` will fire under the following conditions:
 
  - Any time `componentWillMount` fires. i.e. any time your component mounts. If your component is mounted and then remounted later, it _will_ execute the work again. You may want work to only be executed once, in which case I suggest you store your work result in a cache or state management system such as `redux`.  You can then check to see if the result exists in cache/state and resolve the existing value rather than perform a fetch for data.
 

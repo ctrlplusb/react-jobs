@@ -32,7 +32,7 @@ export default function withJob(config) {
     let id
 
     class ComponentWithJob extends Component {
-      static displayName = `WithJob(${getDisplayName(WrappedComponent)})`
+      static displayName = `WithJob(${getDisplayName(WrappedComponent)})`;
 
       static contextTypes = {
         jobs: PropTypes.shape({
@@ -42,7 +42,7 @@ export default function withJob(config) {
           getRehydrate: PropTypes.func.isRequired,
           removeRehydrate: PropTypes.func.isRequired,
         }),
-      }
+      };
 
       constructor(props, context) {
         super(props, context)
@@ -139,11 +139,14 @@ export default function withJob(config) {
                 return undefined
               }
               if (env === 'browser') {
-                setTimeout(() => {
-                  if (!this.unmounted) {
-                    this.setState({ completed: true, error })
-                  }
-                }, 16)
+                setTimeout(
+                  () => {
+                    if (!this.unmounted) {
+                      this.setState({ completed: true, error })
+                    }
+                  },
+                  16,
+                )
               } else {
                 // node
                 // We will at least log the error so that user isn't completely
@@ -163,13 +166,13 @@ export default function withJob(config) {
 
         // Ensures asyncBootstrap continues
         return true
-      }
+      };
 
       getJobState = () => ({
         completed: this.state.completed,
         error: this.state.error,
         data: this.state.data,
-      })
+      });
 
       render() {
         const { data, error, completed } = this.state

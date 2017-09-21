@@ -74,11 +74,11 @@ export default function withJob(config) {
             : this.context.jobs.get(id)
         }
 
-        this.state = {
+        this.setState({
           data: result ? result.data : null,
           error: null,
           completed: result != null,
-        }
+        })
       }
 
       componentDidMount() {

@@ -110,6 +110,8 @@ export default function withJob(config) {
       resolveWork = (props) => {
         let workDefinition
 
+        this.setState({ completed: false, data: null, error: null })
+
         try {
           workDefinition = work(props)
         } catch (error) {
@@ -160,7 +162,7 @@ export default function withJob(config) {
         }
 
         // Synchronous result.
-        this.setState({ completed: true, data: workDefinition })
+        this.setState({ completed: true, data: workDefinition, error: null })
 
         // Ensures asyncBootstrap continues
         return true

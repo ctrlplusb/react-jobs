@@ -13,10 +13,7 @@ function ResultRenderer({ jobResult, children }) {
   return (
     <div>
       {jobResult}
-      {children &&
-        <div>
-          {children}
-        </div>}
+      {children && <div>{children}</div>}
     </div>
   )
 }

@@ -13,10 +13,7 @@ function ResultRenderer({ jobResult, children }) {
   return (
     <div>
       {jobResult}
-      {children &&
-        <div>
-          {children}
-        </div>}
+      {children && <div>{children}</div>}
     </div>
   )
 }
@@ -68,7 +65,7 @@ describe('withJob()', () => {
       const expected = { foo: 'bar', baz: 'qux' }
       let actual
       const ResultRendererWithJob = withJob({
-        work: (props) => {
+        work: props => {
           actual = props
         },
       })(ResultRenderer)

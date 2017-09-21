@@ -42,7 +42,7 @@
     ]
   },
   "lint-staged": {
-    "*.js": ["prettier --write", "git add"]
+    "src/**/*.js": ["prettier --write", "git add"]
   },
   "peerDependencies": {
     "prop-types": "^15.0.0",

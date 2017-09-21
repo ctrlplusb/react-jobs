@@ -29,10 +29,10 @@
     "lint": "eslint src",
     "precommit": "lint-staged",
     "prepush": "jest",
-    "prepublish": "yarn run build",
+    "prepublish": "npm run build",
     "test": "jest",
-    "test:coverage": "yarn run test -- --coverage",
-    "test:coverage:deploy": "yarn run test:coverage && codecov"
+    "test:coverage": "npm run test -- --coverage",
+    "test:coverage:deploy": "npm run test:coverage && codecov"
   },
   "peerDependencies": {
     "prop-types": "^15.0.0",

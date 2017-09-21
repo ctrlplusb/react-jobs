@@ -34,21 +34,10 @@
     "test:coverage": "yarn run test -- --coverage",
     "test:coverage:deploy": "yarn run test:coverage && codecov"
   },
-  "jest": {
-    "collectCoverageFrom": ["src/**/*.{js,jsx}"],
-    "snapshotSerializers": ["<rootDir>/node_modules/enzyme-to-json/serializer"],
-    "testPathIgnorePatterns": [
-      "<rootDir>/(commonjs|coverage|flow-typed|node_modules|tools|umd)/"
-    ]
-  },
-  "lint-staged": {
-    "src/**/*.js": ["prettier --write", "git add"]
-  },
   "peerDependencies": {
     "prop-types": "^15.0.0",
     "react": "^14.0.0 || ^15.0.0"
   },
-  "dependencies": {},
   "devDependencies": {
     "app-root-dir": "1.0.2",
     "babel-cli": "^6.26.0",
@@ -70,7 +59,7 @@
     "eslint": "^4.7.1",
     "eslint-config-airbnb": "^15.1.0",
     "eslint-plugin-import": "^2.7.0",
-    "eslint-plugin-jsx-a11y": "^6.0.2",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
     "eslint-plugin-react": "^7.3.0",
     "gzip-size": "^4.0.0",
     "husky": "^0.14.3",
@@ -92,6 +81,16 @@
     "webpack": "^3.6.0",
     "webpack-dev-middleware": "^1.12.0",
     "webpack-hot-middleware": "^2.19.1"
+  },
+  "jest": {
+    "collectCoverageFrom": ["src/**/*.{js,jsx}"],
+    "snapshotSerializers": ["<rootDir>/node_modules/enzyme-to-json/serializer"],
+    "testPathIgnorePatterns": [
+      "<rootDir>/(commonjs|coverage|flow-typed|node_modules|tools|umd)/"
+    ]
+  },
+  "lint-staged": {
+    "src/**/*.js": ["prettier --write", "git add"]
   },
   "eslintConfig": {
     "root": true,

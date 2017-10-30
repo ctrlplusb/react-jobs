@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`integration tests render server and client 1`] = `"<div><div>Hello<div><div>World</div></div></div><div>Goodbye</div></div>"`;
+exports[`integration tests render server and client 1`] = `"<div><div>Hello<div><div>World</div></div></div><div>Goodbye</div><div>Oh noes!</div></div>"`;
 
 exports[`integration tests render server and client 2`] = `
 Object {
@@ -13,6 +13,23 @@ Object {
     },
     "3": Object {
       "data": "Goodbye",
+    },
+    "4": Object {
+      "error": Object {
+        "message": "Oh noes!",
+        "stack": "Error: Oh noes!
+    at work (/Users/joaol/code/react-jobs/src/__tests__/integration.test.js:33:53)
+    at ComponentWithJob.resolveWork.props [as resolveWork] (/Users/joaol/code/react-jobs/src/withJob.js:196:580)
+    at ComponentWithJob.asyncBootstrap (/Users/joaol/code/react-jobs/src/withJob.js:65:54)
+    at visitor (/Users/joaol/code/react-jobs/node_modules/react-async-bootstrapper/commonjs/index.js:17:23)
+    at /Users/joaol/code/react-jobs/node_modules/react-tree-walker/commonjs/index.js:163:12
+    at new Promise (<anonymous>)
+    at reactTreeWalker (/Users/joaol/code/react-jobs/node_modules/react-tree-walker/commonjs/index.js:70:10)
+    at mapper (/Users/joaol/code/react-jobs/node_modules/react-tree-walker/commonjs/index.js:88:29)
+    at /Users/joaol/code/react-jobs/node_modules/react-tree-walker/commonjs/index.js:52:28
+    at /Users/joaol/code/react-jobs/node_modules/react-tree-walker/commonjs/index.js:38:14
+    at <anonymous>",
+      },
     },
   },
 }
@@ -57,7 +74,31 @@ exports[`integration tests render server and client 3`] = `
         </div>
       </ResultRenderer>
     </WithJob(ResultRenderer)>
-    <WithJob(ResultRenderer) />
+    <WithJob(ResultRenderer)>
+      <ErrorComponent
+        error={
+          Object {
+            "message": "Oh noes!",
+            "stack": "Error: Oh noes!
+    at work (/Users/joaol/code/react-jobs/src/__tests__/integration.test.js:33:53)
+    at ComponentWithJob.resolveWork.props [as resolveWork] (/Users/joaol/code/react-jobs/src/withJob.js:196:580)
+    at ComponentWithJob.asyncBootstrap (/Users/joaol/code/react-jobs/src/withJob.js:65:54)
+    at visitor (/Users/joaol/code/react-jobs/node_modules/react-async-bootstrapper/commonjs/index.js:17:23)
+    at /Users/joaol/code/react-jobs/node_modules/react-tree-walker/commonjs/index.js:163:12
+    at new Promise (<anonymous>)
+    at reactTreeWalker (/Users/joaol/code/react-jobs/node_modules/react-tree-walker/commonjs/index.js:70:10)
+    at mapper (/Users/joaol/code/react-jobs/node_modules/react-tree-walker/commonjs/index.js:88:29)
+    at /Users/joaol/code/react-jobs/node_modules/react-tree-walker/commonjs/index.js:52:28
+    at /Users/joaol/code/react-jobs/node_modules/react-tree-walker/commonjs/index.js:38:14
+    at <anonymous>",
+          }
+        }
+      >
+        <div>
+          Oh noes!
+        </div>
+      </ErrorComponent>
+    </WithJob(ResultRenderer)>
   </div>
 </JobProvider>
 `;
@@ -103,7 +144,23 @@ exports[`integration tests render server and client 4`] = `
     </WithJob(ResultRenderer)>
     <WithJob(ResultRenderer)>
       <ErrorComponent
-        error={[Error: Oh noes!]}
+        error={
+          Object {
+            "message": "Oh noes!",
+            "stack": "Error: Oh noes!
+    at work (/Users/joaol/code/react-jobs/src/__tests__/integration.test.js:33:53)
+    at ComponentWithJob.resolveWork.props [as resolveWork] (/Users/joaol/code/react-jobs/src/withJob.js:196:580)
+    at ComponentWithJob.asyncBootstrap (/Users/joaol/code/react-jobs/src/withJob.js:65:54)
+    at visitor (/Users/joaol/code/react-jobs/node_modules/react-async-bootstrapper/commonjs/index.js:17:23)
+    at /Users/joaol/code/react-jobs/node_modules/react-tree-walker/commonjs/index.js:163:12
+    at new Promise (<anonymous>)
+    at reactTreeWalker (/Users/joaol/code/react-jobs/node_modules/react-tree-walker/commonjs/index.js:70:10)
+    at mapper (/Users/joaol/code/react-jobs/node_modules/react-tree-walker/commonjs/index.js:88:29)
+    at /Users/joaol/code/react-jobs/node_modules/react-tree-walker/commonjs/index.js:52:28
+    at /Users/joaol/code/react-jobs/node_modules/react-tree-walker/commonjs/index.js:38:14
+    at <anonymous>",
+          }
+        }
       >
         <div>
           Oh noes!

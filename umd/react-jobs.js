@@ -261,7 +261,7 @@ function withJob(config) {
 
           this.setState({
             data: result ? result.data : null,
-            error: null,
+            error: result ? result.error : null,
             completed: result != null
           });
         }
@@ -295,7 +295,6 @@ function withJob(config) {
               data = _state.data,
               error = _state.error,
               completed = _state.completed;
-
 
           if (error) {
             return ErrorComponent ? _react2.default.createElement(ErrorComponent, _extends({}, this.props, { error: error })) : null;
@@ -366,7 +365,17 @@ function withJob(config) {
               // eslint-disable-next-line no-console
               console.warn('Failed to resolve job');
               // eslint-disable-next-line no-console
-              console.warn(error);
+              console.warn(error.message);
+              // eslint-disable-next-line no-console
+              console.warn(error.stack);
+              if (_this2.context.jobs) {
+                _this2.context.jobs.register(id, {
+                  error: {
+                    message: error.message,
+                    stack: error.stack
+                  }
+                });
+              }
             }
             // Ensures asyncBootstrap stops
             return false;

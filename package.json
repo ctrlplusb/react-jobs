@@ -1,11 +1,16 @@
 {
   "name": "react-jobs",
   "version": "1.0.0",
-  "description":
-    "Attach asynchronous/synchronous \"jobs\" to your components, with SSR support.",
+  "description": "Attach asynchronous/synchronous \"jobs\" to your components, with SSR support.",
   "license": "MIT",
   "main": "commonjs/index.js",
-  "files": ["*.js", "*.md", "umd", "commonjs", "ssr.js"],
+  "files": [
+    "*.js",
+    "*.md",
+    "umd",
+    "commonjs",
+    "ssr.js"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/ctrlplusb/react-jobs.git"
@@ -24,8 +29,7 @@
   ],
   "scripts": {
     "build": "babel-node ./tools/scripts/build.js",
-    "clean":
-      "rimraf ./commonjs && rimraf ./umd && rimraf ./coverage && rimraf ./flow-coverage && rimraf ./umd",
+    "clean": "rimraf ./commonjs && rimraf ./umd && rimraf ./coverage && rimraf ./flow-coverage && rimraf ./umd",
     "lint": "eslint src",
     "precommit": "lint-staged",
     "prepush": "jest",
@@ -36,7 +40,7 @@
   },
   "peerDependencies": {
     "prop-types": "^15.0.0",
-    "react": "^14.0.0 || ^15.0.0"
+    "react": "^14.0.0 || ^15.0.0 || ^16.0.0"
   },
   "devDependencies": {
     "app-root-dir": "1.0.2",
@@ -83,14 +87,21 @@
     "webpack-hot-middleware": "^2.19.1"
   },
   "jest": {
-    "collectCoverageFrom": ["src/**/*.{js,jsx}"],
-    "snapshotSerializers": ["<rootDir>/node_modules/enzyme-to-json/serializer"],
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx}"
+    ],
+    "snapshotSerializers": [
+      "<rootDir>/node_modules/enzyme-to-json/serializer"
+    ],
     "testPathIgnorePatterns": [
       "<rootDir>/(commonjs|coverage|flow-typed|node_modules|tools|umd)/"
     ]
   },
   "lint-staged": {
-    "src/**/*.js": ["prettier --write", "git add"]
+    "src/**/*.js": [
+      "prettier --write",
+      "git add"
+    ]
   },
   "eslintConfig": {
     "root": true,
@@ -103,7 +114,10 @@
     "extends": "airbnb",
     "rules": {
       "array-callback-return": 0,
-      "arrow-parens": ["error", "as-needed"],
+      "arrow-parens": [
+        "error",
+        "as-needed"
+      ],
       "camelcase": 0,
       "import/prefer-default-export": 0,
       "import/no-extraneous-dependencies": 0,
@@ -114,7 +128,10 @@
       "no-nested-ternary": 0,
       "react/no-array-index-key": 0,
       "react/react-in-jsx-scope": 0,
-      "semi": [2, "never"],
+      "semi": [
+        2,
+        "never"
+      ],
       "react/forbid-prop-types": 0,
       "react/jsx-filename-extension": 0,
       "react/sort-comp": 0

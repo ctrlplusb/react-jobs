@@ -18,6 +18,8 @@ function ResultRenderer({ jobResult, children }) {
   )
 }
 const ErrorComponent = ({ error }) => <div>{error ? error.message : null}</div>
+const error = new Error('Oh noes!')
+error.stack = 'fake stack'
 
 const createComponents = () => ({
   Hello: withJob({ work: () => resolveAfter(workTime, 'Hello') })(
@@ -30,7 +32,7 @@ const createComponents = () => ({
     ResultRenderer,
   ),
   Fail: withJob({
-    work: () => rejectAfter(workTime, new Error('Oh noes!')),
+    work: () => rejectAfter(workTime, error),
     ErrorComponent,
   })(ResultRenderer),
 })

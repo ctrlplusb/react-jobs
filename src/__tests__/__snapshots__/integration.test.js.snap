@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`integration tests render server and client 1`] = `"<div><div>Hello<div><div>World</div></div></div><div>Goodbye</div></div>"`;
+exports[`integration tests render server and client 1`] = `"<div><div>Hello<div><div>World</div></div></div><div>Goodbye</div><div>Oh noes!</div></div>"`;
 
 exports[`integration tests render server and client 2`] = `
 Object {
@@ -13,6 +13,12 @@ Object {
     },
     "3": Object {
       "data": "Goodbye",
+    },
+    "4": Object {
+      "error": Object {
+        "message": "Oh noes!",
+        "stack": "fake stack",
+      },
     },
   },
 }
@@ -57,7 +63,20 @@ exports[`integration tests render server and client 3`] = `
         </div>
       </ResultRenderer>
     </WithJob(ResultRenderer)>
-    <WithJob(ResultRenderer) />
+    <WithJob(ResultRenderer)>
+      <ErrorComponent
+        error={
+          Object {
+            "message": "Oh noes!",
+            "stack": "fake stack",
+          }
+        }
+      >
+        <div>
+          Oh noes!
+        </div>
+      </ErrorComponent>
+    </WithJob(ResultRenderer)>
   </div>
 </JobProvider>
 `;
@@ -103,7 +122,12 @@ exports[`integration tests render server and client 4`] = `
     </WithJob(ResultRenderer)>
     <WithJob(ResultRenderer)>
       <ErrorComponent
-        error={[Error: Oh noes!]}
+        error={
+          Object {
+            "message": "Oh noes!",
+            "stack": "fake stack",
+          }
+        }
       >
         <div>
           Oh noes!

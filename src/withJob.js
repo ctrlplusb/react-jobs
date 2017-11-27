@@ -178,15 +178,15 @@ export default function withJob(config) {
       render() {
         const { data, error, completed } = this.state
 
-        if (error) {
+        if (ErrorComponent && error) {
           return ErrorComponent
             ? <ErrorComponent {...this.props} error={error} />
             : null
         }
-        if (!completed) {
+        if (LoadingComponent && !completed) {
           return LoadingComponent ? <LoadingComponent {...this.props} /> : null
         }
-        return <WrappedComponent {...this.props} jobResult={data} />
+        return <WrappedComponent {...this.props} jobLoading={!completed} jobError={error} jobResult={data} />
       }
     }
 

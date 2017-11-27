@@ -298,13 +298,13 @@ function withJob(config) {
               completed = _state.completed;
 
 
-          if (error) {
+          if (ErrorComponent && error) {
             return ErrorComponent ? _react2.default.createElement(ErrorComponent, _extends({}, this.props, { error: error })) : null;
           }
-          if (!completed) {
+          if (LoadingComponent && !completed) {
             return LoadingComponent ? _react2.default.createElement(LoadingComponent, this.props) : null;
           }
-          return _react2.default.createElement(WrappedComponent, _extends({}, this.props, { jobResult: data }));
+          return _react2.default.createElement(WrappedComponent, _extends({}, this.props, { jobLoading: !completed, jobError: error, jobResult: data }));
         }
       }]);
 

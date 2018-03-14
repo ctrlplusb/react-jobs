@@ -78,6 +78,7 @@ export default function withJob(config) {
           data: result ? result.data : null,
           error: null,
           completed: result != null,
+          workingProps: null,
         })
       }
 
@@ -110,12 +111,12 @@ export default function withJob(config) {
       resolveWork = (props) => {
         let workDefinition
 
-        this.setState({ completed: false, data: null, error: null })
+        this.setState({ completed: false, data: null, error: null, workingProps: props })
 
         try {
           workDefinition = work(props)
         } catch (error) {
-          this.setState({ completed: true, error })
+          this.setState({ completed: true, error, workingProps: null })
           // Ensures asyncBootstrap stops
           return false
         }
@@ -124,10 +125,10 @@ export default function withJob(config) {
           // Asynchronous result.
           return workDefinition
             .then((data) => {
-              if (this.unmounted) {
+              if (this.unmounted || this.state.workingProps !== props) {
                 return undefined
               }
-              this.setState({ completed: true, data })
+              this.setState({ completed: true, data, workingProps: null })
               if (this.context.jobs) {
                 this.context.jobs.register(id, { data })
               }
@@ -135,14 +136,14 @@ export default function withJob(config) {
               return true
             })
             .catch((error) => {
-              if (this.unmounted) {
+              if (this.unmounted || this.state.workingProps !== props) {
                 return undefined
               }
               if (env === 'browser') {
                 setTimeout(
                   () => {
                     if (!this.unmounted) {
-                      this.setState({ completed: true, error })
+                      this.setState({ completed: true, error, workingProps: null })
                     }
                   },
                   16,
@@ -162,7 +163,7 @@ export default function withJob(config) {
         }
 
         // Synchronous result.
-        this.setState({ completed: true, data: workDefinition, error: null })
+        this.setState({ completed: true, data: workDefinition, error: null, workingProps: null })
 
         // Ensures asyncBootstrap continues
         return true

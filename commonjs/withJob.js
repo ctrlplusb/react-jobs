@@ -106,7 +106,8 @@ function withJob(config) {
           this.setState({
             data: result ? result.data : null,
             error: null,
-            completed: result != null
+            completed: result != null,
+            workingProps: null
           });
         }
       }, {
@@ -171,12 +172,12 @@ function withJob(config) {
       this.resolveWork = function (props) {
         var workDefinition = void 0;
 
-        _this2.setState({ completed: false, data: null, error: null });
+        _this2.setState({ completed: false, data: null, error: null, workingProps: props });
 
         try {
           workDefinition = work(props);
         } catch (error) {
-          _this2.setState({ completed: true, error: error });
+          _this2.setState({ completed: true, error: error, workingProps: null });
           // Ensures asyncBootstrap stops
           return false;
         }
@@ -184,23 +185,23 @@ function withJob(config) {
         if ((0, _utils.isPromise)(workDefinition)) {
           // Asynchronous result.
           return workDefinition.then(function (data) {
-            if (_this2.unmounted) {
+            if (_this2.unmounted || _this2.state.workingProps !== props) {
               return undefined;
             }
-            _this2.setState({ completed: true, data: data });
+            _this2.setState({ completed: true, data: data, workingProps: null });
             if (_this2.context.jobs) {
               _this2.context.jobs.register(id, { data: data });
             }
             // Ensures asyncBootstrap continues
             return true;
           }).catch(function (error) {
-            if (_this2.unmounted) {
+            if (_this2.unmounted || _this2.state.workingProps !== props) {
               return undefined;
             }
             if (env === 'browser') {
               setTimeout(function () {
                 if (!_this2.unmounted) {
-                  _this2.setState({ completed: true, error: error });
+                  _this2.setState({ completed: true, error: error, workingProps: null });
                 }
               }, 16);
             } else {
@@ -218,7 +219,7 @@ function withJob(config) {
         }
 
         // Synchronous result.
-        _this2.setState({ completed: true, data: workDefinition, error: null });
+        _this2.setState({ completed: true, data: workDefinition, error: null, workingProps: null });
 
         // Ensures asyncBootstrap continues
         return true;

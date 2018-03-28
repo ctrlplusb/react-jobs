@@ -208,7 +208,7 @@ export default withJob({
 
 This library has been designed for interoperability with [`react-async-bootstrapper`](https://github.com/ctrlplusb/react-async-bootstrapper).
 
-`react-async-bootstrapper` allows us to do a "pre-render parse" of our React Element tree and execute an `asyncBootstrap` function that are attached to a components within the tree. In our case the "bootstrapping" process involves the resolution of our jobs prior to the render on the server. We use this 3rd party library as it allows interoperability with other libraries which also require a "bootstrapping" process (e.g. code splitting as supported by [`react-async-component`](https://github.com/ctrlplusb/react-async-component)).
+`react-async-bootstrapper` allows us to do a "pre-render parse" of our React Element tree and execute a `bootstrap` function that are attached to a components within the tree. In our case the "bootstrapping" process involves the resolution of our jobs prior to the render on the server. We use this 3rd party library as it allows interoperability with other libraries which also require a "bootstrapping" process (e.g. code splitting as supported by [`react-async-component`](https://github.com/ctrlplusb/react-async-component)).
 
 Firstly, install `react-async-bootstrapper`:
 

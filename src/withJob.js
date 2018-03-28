@@ -32,7 +32,7 @@ export default function withJob(config) {
     let id
 
     class ComponentWithJob extends Component {
-      static displayName = `WithJob(${getDisplayName(WrappedComponent)})`;
+      static displayName = `WithJob(${getDisplayName(WrappedComponent)})`
 
       static contextTypes = {
         jobs: PropTypes.shape({
@@ -42,7 +42,7 @@ export default function withJob(config) {
           getRehydrate: PropTypes.func.isRequired,
           removeRehydrate: PropTypes.func.isRequired,
         }),
-      };
+      }
 
       constructor(props, context) {
         super(props, context)
@@ -55,7 +55,7 @@ export default function withJob(config) {
       }
 
       // @see react-async-bootstrapper
-      asyncBootstrap() {
+      bootstrap() {
         if (env === 'browser') {
           // No logic for browser, just continue
           return true
@@ -69,9 +69,10 @@ export default function withJob(config) {
         let result
 
         if (this.context.jobs) {
-          result = env === 'browser'
-            ? this.context.jobs.getRehydrate(id)
-            : this.context.jobs.get(id)
+          result =
+            env === 'browser'
+              ? this.context.jobs.getRehydrate(id)
+              : this.context.jobs.get(id)
         }
 
         this.setState({
@@ -107,7 +108,7 @@ export default function withJob(config) {
         }
       }
 
-      resolveWork = (props) => {
+      resolveWork = props => {
         let workDefinition
 
         this.setState({ completed: false, data: null, error: null })
@@ -116,14 +117,14 @@ export default function withJob(config) {
           workDefinition = work(props)
         } catch (error) {
           this.setState({ completed: true, error })
-          // Ensures asyncBootstrap stops
+          // Ensures bootstrap stops
           return false
         }
 
         if (isPromise(workDefinition)) {
           // Asynchronous result.
           return workDefinition
-            .then((data) => {
+            .then(data => {
               if (this.unmounted) {
                 return undefined
               }
@@ -131,22 +132,19 @@ export default function withJob(config) {
               if (this.context.jobs) {
                 this.context.jobs.register(id, { data })
               }
-              // Ensures asyncBootstrap continues
+              // Ensures bootstrap continues
               return true
             })
-            .catch((error) => {
+            .catch(error => {
               if (this.unmounted) {
                 return undefined
               }
               if (env === 'browser') {
-                setTimeout(
-                  () => {
-                    if (!this.unmounted) {
-                      this.setState({ completed: true, error })
-                    }
-                  },
-                  16,
-                )
+                setTimeout(() => {
+                  if (!this.unmounted) {
+                    this.setState({ completed: true, error })
+                  }
+                }, 16)
               } else {
                 // node
                 // We will at least log the error so that user isn't completely
@@ -156,7 +154,7 @@ export default function withJob(config) {
                 // eslint-disable-next-line no-console
                 console.warn(error)
               }
-              // Ensures asyncBootstrap stops
+              // Ensures bootstrap stops
               return false
             })
         }
@@ -164,23 +162,23 @@ export default function withJob(config) {
         // Synchronous result.
         this.setState({ completed: true, data: workDefinition, error: null })
 
-        // Ensures asyncBootstrap continues
+        // Ensures bootstrap continues
         return true
-      };
+      }
 
       getJobState = () => ({
         completed: this.state.completed,
         error: this.state.error,
         data: this.state.data,
-      });
+      })
 
       render() {
         const { data, error, completed } = this.state
 
         if (error) {
-          return ErrorComponent
-            ? <ErrorComponent {...this.props} error={error} />
-            : null
+          return ErrorComponent ? (
+            <ErrorComponent {...this.props} error={error} />
+          ) : null
         }
         if (!completed) {
           return LoadingComponent ? <LoadingComponent {...this.props} /> : null

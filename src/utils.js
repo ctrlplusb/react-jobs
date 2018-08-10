@@ -5,7 +5,7 @@ export function getDisplayName(WrappedComponent) {
 export const isPromise = x =>
   typeof x === 'object' && typeof x.then === 'function'
 
-export const propsWithoutInternal = (props) => {
+export const propsWithoutInternal = props => {
   // eslint-disable-next-line no-unused-vars
   const { jobInitState, onJobProcessed, ...rest } = props
   return rest

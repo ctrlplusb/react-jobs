@@ -4,7 +4,7 @@ import React from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import asyncBootstrapper from 'react-async-bootstrapper'
 import { mount } from 'enzyme'
-import { resolveAfter, rejectAfter } from '../../tools/tests/helpers'
+import { resolveAfter, rejectAfter } from '../lib/test-helpers'
 import { withJob, createJobContext, JobProvider } from '../'
 
 const workTime = 10
@@ -102,9 +102,10 @@ describe('integration tests', () => {
         )
         // Now a full render should have occured on client
         // SNAPSHOT 4
-        .then(clientRenderWrapper =>
-          expect(clientRenderWrapper).toMatchSnapshot(),
-        )
+        .then(clientRenderWrapper => {
+          clientRenderWrapper.update()
+          expect(clientRenderWrapper).toMatchSnapshot()
+        })
     )
   })
 })

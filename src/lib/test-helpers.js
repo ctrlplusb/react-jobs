@@ -1,5 +1,4 @@
 import React from 'react'
-import sinon from 'sinon'
 
 export function Foo({ job: { inProgress, result, error } }) {
   if (inProgress) return <div>In progress...</div>
@@ -17,14 +16,9 @@ export const rejectAfter = (time, error) =>
 
 export function warningsToErrors() {
   // Ensure console.warnings become thrown errors.
-  beforeAll(() => {
-    sinon.stub(console, 'error').callsFake((warning) => {
-      throw new Error(warning)
+  beforeEach(() => {
+    global.console.warn = jest.fn(msg => {
+      throw new Error(msg)
     })
-  })
-
-  // While not forgetting to restore it afterwards.
-  afterAll(() => {
-    console.error.restore()
   })
 }

@@ -1,10 +1,12 @@
+/* eslint-disable react/prop-types */
+
 import React from 'react'
 import { mount } from 'enzyme'
 import {
   resolveAfter,
   rejectAfter,
   warningsToErrors,
-} from '../../tools/tests/helpers'
+} from '../lib/test-helpers'
 import withJob from '../withJob'
 
 const workTime = 10 // ms
@@ -20,7 +22,7 @@ function ResultRenderer({ jobResult, children }) {
 const ErrorComponent = ({ error }) => <div>{error ? error.message : null}</div>
 const LoadingComponent = () => <div>Loading...</div>
 
-describe('withJob()', () => {
+fdescribe('withJob()', () => {
   warningsToErrors()
 
   describe('arguments', () => {
@@ -96,7 +98,8 @@ describe('withJob()', () => {
       })(ResultRenderer)
       const renderWrapper = mount(<ResultRendererWithJob />)
       // Allow enough time for work to complete
-      return resolveAfter(workTime + 5).then(() => {
+      return resolveAfter(workTime + 50).then(() => {
+        renderWrapper.update()
         expect(renderWrapper).toMatchSnapshot()
       })
     })
@@ -110,6 +113,7 @@ describe('withJob()', () => {
       const renderWrapper = mount(<ResultRendererWithJob />)
       // Allow enough time for work to complete
       return resolveAfter(workTime + 5 + 16).then(() => {
+        renderWrapper.update()
         expect(renderWrapper).toMatchSnapshot()
       })
     })
@@ -125,6 +129,7 @@ describe('withJob()', () => {
       const renderWrapper = mount(<ResultRendererWithJob />)
       // Allow enough time for error state to be set
       return resolveAfter(16 + 1).then(() => {
+        renderWrapper.update()
         expect(renderWrapper).toMatchSnapshot()
       })
     })

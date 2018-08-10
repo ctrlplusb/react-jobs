@@ -11,6 +11,5 @@ npm-debug.log
 # Jest
 coverage
 
-# Flow
-flow-coverage
-flow-typed
+# Build
+dist

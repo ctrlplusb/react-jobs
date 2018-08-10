@@ -58,7 +58,7 @@ class JobProvider extends Component {
         register: this.jobContext.register,
         get: this.jobContext.get,
         getRehydrate: id => this.rehydrateState.jobs[id],
-        removeRehydrate: (id) => {
+        removeRehydrate: id => {
           delete this.rehydrateState.jobs[id]
         },
       },

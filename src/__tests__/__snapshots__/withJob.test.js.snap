@@ -59,3 +59,13 @@ exports[`withJob() rendering should set the "result" immediately if the work doe
   </ResultRenderer>
 </WithJob(ResultRenderer)>
 `;
+
+exports[`withJob() rendering should set the "result" immediately if the work return null 1`] = `
+<WithJob(ResultRenderer)>
+  <ResultRenderer
+    jobResult={null}
+  >
+    <div />
+  </ResultRenderer>
+</WithJob(ResultRenderer)>
+`;

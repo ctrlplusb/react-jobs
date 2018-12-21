@@ -3,7 +3,7 @@ export function getDisplayName(WrappedComponent) {
 }
 
 export const isPromise = x =>
-  typeof x === 'object' && typeof x.then === 'function'
+  x && typeof x === 'object' && typeof x.then === 'function'
 
 export const propsWithoutInternal = props => {
   // eslint-disable-next-line no-unused-vars

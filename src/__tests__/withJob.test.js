@@ -63,6 +63,13 @@ fdescribe('withJob()', () => {
       expect(mount(<ResultRendererWithJob />)).toMatchSnapshot()
     })
 
+    it('should set the "result" immediately if the work return null', () => {
+      const ResultRendererWithJob = withJob({ work: () => null })(
+        ResultRenderer,
+      )
+      expect(mount(<ResultRendererWithJob />)).toMatchSnapshot()
+    })
+
     it('should provide the props to the work function', () => {
       const expected = { foo: 'bar', baz: 'qux' }
       let actual

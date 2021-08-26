@@ -31,7 +31,7 @@
     "clean": "rimraf ./dist && rimraf ./coverage",
     "lint": "eslint src",
     "precommit": "lint-staged && npm run test",
-    "prepublish": "npm run build",
+    "prepare": "npm run build",
     "test": "jest",
     "test:coverage": "npm run test -- --coverage",
     "test:coverage:deploy": "npm run test:coverage && codecov"

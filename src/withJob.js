@@ -65,7 +65,7 @@ export default function withJob(config) {
         return serverMode === 'defer' ? false : this.resolveWork(this.props)
       }
 
-      componentWillMount() {
+      UNSAFE_componentWillMount() {
         let result
 
         if (this.context.jobs) {
@@ -96,7 +96,7 @@ export default function withJob(config) {
         this.unmounted = true
       }
 
-      componentWillReceiveProps(nextProps) {
+      UNSAFE_componentWillReceiveProps(nextProps) {
         if (
           shouldWorkAgain(
             propsWithoutInternal(this.props),
